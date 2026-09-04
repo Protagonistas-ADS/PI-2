@@ -1,2 +1,2 @@
-# PI2
+# PI-2
 Projeto Integrador - continuação
