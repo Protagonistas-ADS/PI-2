@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Pastas de desenvolvimento
+dist/
+node_modules/
+.env
