@@ -1,8 +1,11 @@
+// Imports para ver como fica
+import TelaInicial from "./pages/TelaInicial";
+
 export function App() {
 
   return (
     <>
-      <h1>TUDO CERTO AQUI</h1>
+      <TelaInicial />
     </>
   )
 }

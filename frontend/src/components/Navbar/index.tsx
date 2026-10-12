@@ -1,0 +1,84 @@
+import { useState } from "react";
+import {
+    Cabecalho,
+    ConteudoCabecalho,
+    Logo,
+    SimboloLogo,
+    IdentificacaoMarca,
+    NomeMarca,
+    SufixoMarca,
+    DescricaoMarca,
+    BotaoMenu,
+    Navegacao,
+    ListaLinks,
+    ItemLink,
+} from "./style";
+import { FiX, FiMenu } from "react-icons/fi";
+
+interface ItemNavegacao {
+    texto: string;
+    href: string;
+    ativo: boolean;
+}
+
+interface NavbarProps {
+    links: ItemNavegacao[];
+}
+
+function Navbar({ links }: NavbarProps) {
+    const [menuAberto, setMenuAberto] = useState(false);
+
+    function alternarMenu() {
+        setMenuAberto((valor) => !valor);
+    }
+
+    function fecharMenu() {
+        setMenuAberto(false);
+    }
+
+    return (
+        <Cabecalho>
+            <ConteudoCabecalho>
+                <Logo href="/"> 
+                    <SimboloLogo>P.M</SimboloLogo>
+
+                    <IdentificacaoMarca>
+                        <NomeMarca>
+                            Palet<SufixoMarca>Mais</SufixoMarca>
+                        </NomeMarca>
+
+                        <DescricaoMarca>Paletes de Madeira</DescricaoMarca>
+                    </IdentificacaoMarca>
+                </Logo>
+
+                <BotaoMenu
+                    type="button"
+                    onClick={alternarMenu}
+                >
+                    {menuAberto ? <FiX color="white" size={24} /> : <FiMenu color="white" size={24}/>}
+                </BotaoMenu>
+
+                <Navegacao
+                    id="navegacao-principal"
+                    $menuAberto={menuAberto}
+                >
+                    <ListaLinks>
+                        {links.map((link) => (
+                            <li key={`${link.href}-${link.texto}`}>
+                                <ItemLink
+                                    href={link.href}
+                                    $ativo={link.ativo ?? false}
+                                    onClick={fecharMenu}
+                                >
+                                    {link.texto}
+                                </ItemLink>
+                            </li>
+                        ))}
+                    </ListaLinks>
+                </Navegacao>
+            </ConteudoCabecalho>
+        </Cabecalho>
+    )
+} 
+
+export default Navbar;
