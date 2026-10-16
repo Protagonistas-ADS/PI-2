@@ -1,4 +1,6 @@
 import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+import { ContainerPagina, Conteudo } from "./style";
 
 function TelaInicial() {
 
@@ -10,9 +12,15 @@ function TelaInicial() {
     ];
 
     return (
-        <>
+        <ContainerPagina>
             <Navbar links={linksNavegacao} />
-        </>
+
+        <Conteudo>
+            
+        </Conteudo>
+
+            <Footer />
+        </ContainerPagina>
     );
 }
 
