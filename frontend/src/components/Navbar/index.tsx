@@ -40,11 +40,11 @@ function Navbar({ links }: NavbarProps) {
         <Cabecalho>
             <ConteudoCabecalho>
                 <Logo href="/"> 
-                    <SimboloLogo>P.M</SimboloLogo>
+                    <SimboloLogo>S.F</SimboloLogo>
 
                     <IdentificacaoMarca>
                         <NomeMarca>
-                            Palet<SufixoMarca>Mais</SufixoMarca>
+                            S.<SufixoMarca>FERRARETTO</SufixoMarca>
                         </NomeMarca>
 
                         <DescricaoMarca>Paletes de Madeira</DescricaoMarca>
