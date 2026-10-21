@@ -9,7 +9,6 @@ interface LinkProps {
 }
 
 
-
 export const Cabecalho = styled.header`
     position: sticky;
     top: 0;
@@ -63,6 +62,7 @@ export const SimboloLogo = styled.span`
 
     font-size: 1.4rem;
     font-weight: bold;
+    font-family: "montserrat";
 `;
 
 export const IdentificacaoMarca = styled.div`
@@ -76,7 +76,7 @@ export const NomeMarca = styled.span`
     font-weight: bold;
 `;
 
-export const SufixoMarca = styled.span`
+export const Laranja = styled.span`
     color: #e8912a;
 `;
 
