@@ -16,6 +16,7 @@ import {
 import { FiX, FiMenu } from "react-icons/fi";
 
 interface ItemNavegacao {
+    id: number;
     texto: string;
     href: string;
     ativo: boolean;
@@ -64,7 +65,7 @@ function Navbar({ links }: NavbarProps) {
                 >
                     <ListaLinks>
                         {links.map((link) => (
-                            <li key={`${link.href}-${link.texto}`}>
+                            <li key={link.id}>
                                 <ItemLink
                                     href={link.href}
                                     $ativo={link.ativo ?? false}
