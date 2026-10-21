@@ -45,7 +45,8 @@ export const SimboloLogo = styled.span`
     color: #2a4a3c;
 
     font-size: 1.4rem;
-    font-weight: bold
+    font-weight: bold;
+    font-family: "montserrat";
 `;
 
 export const IdentificacaoMarca = styled.div`
@@ -161,7 +162,7 @@ export const RodapeInferior = styled.div`
     border-top: 1px solid #ffffffb2;
 
     color: #ffffffb2;
-    font-size: 0.8rem;
+    font-size: 1rem;
     line-height: 1.5;
     text-align: center;
 `;

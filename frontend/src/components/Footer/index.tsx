@@ -114,7 +114,7 @@ function Footer() {
             </ConteudoRodape>
 
             <RodapeInferior>
-                &copy; { new Date().getFullYear()} S.FERRARETTO. Todos os direitos reservados
+                &copy; 2026 S.FERRARETTO. Todos os direitos reservados
             </RodapeInferior>
         </Rodape>
     );
