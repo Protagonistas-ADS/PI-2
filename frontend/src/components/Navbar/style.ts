@@ -76,7 +76,7 @@ export const NomeMarca = styled.span`
     font-weight: bold;
 `;
 
-export const Laranja = styled.span`
+export const SufixoMarca = styled.span`
     color: #e8912a;
 `;
 
