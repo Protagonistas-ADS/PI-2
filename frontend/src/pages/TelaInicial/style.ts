@@ -59,6 +59,61 @@ export const BotaoOrcamento = styled.a`
     }
 `;
 
-export const Laranja = styled.span`
+export const SufixoMarca = styled.span`
     color: #e8912a;
+`;
+
+
+export const Sobre = styled.section`
+    padding: 70px 8%;
+    background-color: #2a4a3c;
+    color: #f0e6d5;
+`;
+
+export const ConteudoSobre = styled.div`
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+
+    h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+
+    p {
+        max-width: 750px;
+        margin: 0 auto 16px;
+        line-height: 1.8;
+        font-weight: bold;
+    }
+`;
+
+export const Cards = styled.div`
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 40px;
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+`;
+
+export const Card = styled.div`
+    padding: 30px 24px;
+    background-color: #f0e6d5;
+    color: #2a4a3c;
+    border-radius: 8px;
+
+    h3 {
+        font-size: 1.15rem;
+        margin-bottom: 12px;
+    }
+
+    p {
+        color: #5b6b63;
+        line-height: 1.6;
+        margin: 0;
+    }
 `;

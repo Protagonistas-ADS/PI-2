@@ -82,7 +82,7 @@ export const AreaContato = styled.section`
 
 export const TituloArea = styled.h2`
     color: #e8912a;
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: bold;
 `;
 

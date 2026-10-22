@@ -6,7 +6,7 @@ import {
     SimboloLogo,
     IdentificacaoMarca,
     NomeMarca,
-    Laranja,
+    SufixoMarca,
     DescricaoMarca,
     BotaoMenu,
     Navegacao,
@@ -45,7 +45,7 @@ function Navbar({ links }: NavbarProps) {
 
                     <IdentificacaoMarca>
                         <NomeMarca>
-                            S.<Laranja>FERRARETTO</Laranja>
+                            S.<SufixoMarca>FERRARETTO</SufixoMarca>
                         </NomeMarca>
 
                         <DescricaoMarca>Paletes de Madeira</DescricaoMarca>
