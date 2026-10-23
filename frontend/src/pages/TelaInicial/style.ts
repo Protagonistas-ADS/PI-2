@@ -16,14 +16,9 @@ export const Hero = styled.section`
     align-items: center;
     padding: 60px;
 
-    background-image:
-        linear-gradient(
-            to right,
-            rgba(32, 48, 41, 0.9),
-            #ada79f
-        );
+    background-color: #F0E6D6;
 
-    color: white;
+    color: #2a4a3c;
 `;
 
 export const ConteudoHero = styled.div`
@@ -35,9 +30,9 @@ export const ConteudoHero = styled.div`
     }
 
     p {
-        font-size: 1.1rem;
+        font-size: 1.5rem;
         line-height: 1.6;
-        letter-spacing: 1.2px;
+        letter-spacing: 1px;
         margin-bottom: 30px;
         font-weight: bold;
     }
@@ -50,9 +45,11 @@ export const BotaoOrcamento = styled.a`
     color: white;
     text-decoration: none;
     font-weight: bold;
+    font-size: 1.2rem;
     border-radius: 5px;
     cursor: pointer;
     transition: all 0.2s ease;
+    color: #F0E6D6;
 
     &:hover {
         background-color: #cf7717;
@@ -116,4 +113,65 @@ export const Card = styled.div`
         line-height: 1.6;
         margin: 0;
     }
+`;
+
+export const CTA = styled.section`
+    background-color: #21352B;
+    color: #ffffff;
+    min-height: 500px;
+
+    display: flex;
+    align-items: center;
+    padding: 60px 8%;
+`;
+
+export const ConteudoCTA = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+
+    h2 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+
+    p {
+        max-width: 750px;
+        margin: 0 auto 16px;
+        line-height: 1.8;
+        font-weight: bold;
+        color: #f0e6d5;
+        font-size: 1.4rem;
+    }
+`;
+
+export const BotaoCTA = styled.a`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background-color: #e8912a;
+    padding: 14px 24px;
+    border-radius: 8px;
+    margin-top: 24px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background-color: #cf7717;
+    }
+`;
+
+export const Destaques = styled.section`
+
+`;
+
+export const ConteudoDestaques = styled.div`
 `;

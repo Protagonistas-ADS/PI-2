@@ -31,7 +31,7 @@ import {
 function Footer() {
     return (
         <Rodape>
-            <ConteudoRodape>
+            <ConteudoRodape id="contatos">
 
                 <AreaLogo>
                     <SimboloLogo>S.F</SimboloLogo>
