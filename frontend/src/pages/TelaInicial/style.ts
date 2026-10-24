@@ -155,13 +155,19 @@ export const BotaoCTA = styled.a`
     justify-content: center;
     align-items: center;
     gap: 10px;
-    background-color: #e8912a;
+
     padding: 14px 24px;
-    border-radius: 8px;
     margin-top: 24px;
+    
+    background-color: #e8912a;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #F0E6D6;
+
     font-size: 1.3rem;
     font-weight: bold;
-    cursor: pointer;
+
     transition: all 0.2s ease;
 
     &:hover {
