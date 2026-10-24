@@ -22,9 +22,9 @@ import {
 
 function TelaInicial() {
 
+    {/*{ id: 2, texto: "Destaques", href: "#destaques", ativo: false },*/}
     const linksNavegacao = [
-        { id: 1, texto: "Inicio", href: "#inicio", ativo: true },
-        { id: 2, texto: "Destaques", href: "#destaques", ativo: false },
+        { id: 1, texto: "Home", href: "/", ativo: true },
         { id: 3, texto: "Catálogo", href: "/catalogo", ativo: false },
         { id: 4, texto: "Contatos", href: "#contatos", ativo: false },
     ];
@@ -43,8 +43,8 @@ function TelaInicial() {
                             com qualidade e confiança para sua empresa.
                         </p>
 
-                        <BotaoOrcamento href="#contatos">
-                            Entrar em Contato
+                        <BotaoOrcamento href="/catalogo">
+                            Ver Catálogo
                         </BotaoOrcamento>
                     </ConteudoHero>
                 </Hero>
@@ -78,11 +78,14 @@ function TelaInicial() {
                         </Cards>
                     </ConteudoSobre>
                 </Sobre>
+
+                {/*
                 <Destaques>
                     <ConteudoDestaques id="destaques">
                     <h1>Destaques aqui</h1>
                     </ConteudoDestaques>
                 </Destaques>
+                */}
 
                 <CTA>
                     <ConteudoCTA>
@@ -90,7 +93,7 @@ function TelaInicial() {
 
                         <p>Conheça nossa linha completa de paletes de madeira e encontre a solução ideal para o seu negócio.</p>
 
-                        <BotaoCTA>
+                        <BotaoCTA href="/catalogo">
                             Explorar Catálogo
                             <LuArrowRight />
                         </BotaoCTA>
