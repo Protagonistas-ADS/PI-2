@@ -48,7 +48,7 @@ function Navbar({ links }: NavbarProps) {
                             S.<SufixoMarca>FERRARETTO</SufixoMarca>
                         </NomeMarca>
 
-                        <DescricaoMarca>Paletes de Madeira</DescricaoMarca>
+                        <DescricaoMarca>PALETES DE MADEIRA</DescricaoMarca>
                     </IdentificacaoMarca>
                 </Logo>
 
