@@ -1,6 +1,11 @@
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-
+import {
+    ContainerPagina,
+    Conteudo,
+    SessaoBusca,
+    ConteudoBusca
+} from "./style";
 function Catalogo() {
 
 
@@ -11,12 +16,24 @@ function Catalogo() {
     ];
 
 
-
     return (
-        <>
+        <ContainerPagina>
             <Navbar links={linksNavegacao} />
+
+            <Conteudo>
+                <SessaoBusca>
+                    <ConteudoBusca>
+                        <p>TODOS OS PRODUTOS</p>
+
+                        <h2>Catálogo Completo</h2>
+
+                        <p>Explore nossa linha completa de paletes de madeira</p>
+                    </ConteudoBusca>
+                </SessaoBusca>
+            </Conteudo>
+
             <Footer />
-        </>
+        </ContainerPagina>
     )
 }
 

@@ -71,7 +71,6 @@ export const DescricaoMarca = styled.span`
     font-size: 0.6rem;
     font-weight: bold;
     letter-spacing: 0.1rem;
-    text-transform: uppercase;
 `;
 
 export const AreaContato = styled.section`
