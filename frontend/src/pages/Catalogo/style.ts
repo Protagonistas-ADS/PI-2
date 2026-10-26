@@ -48,5 +48,5 @@ export const ConteudoBusca = styled.div`
 
 export const SessaoProdutos = styled.section`
     padding: 60px 8%;
-    background-color: #fff;
+    background-color: #f2f2f2;
 `;
