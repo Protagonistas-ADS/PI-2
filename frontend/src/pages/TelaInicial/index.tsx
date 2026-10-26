@@ -48,6 +48,7 @@ function TelaInicial() {
                         </BotaoOrcamento>
                     </ConteudoHero>
                 </Hero>
+
                 <Sobre>
                     <ConteudoSobre>
                         <h2>Conheça a S.<SufixoMarca>FERRARETTO</SufixoMarca></h2>
@@ -55,6 +56,7 @@ function TelaInicial() {
                         <p>
                             Trabalhamos com paletes de madeira para atender às necessidades de armazenamento e movimentação de produtos da sua empresa.
                         </p>
+
                         <p>
                             Buscamos oferecer soluções práticas, resistentes e adequadas para a rotina de cada cliente.
                         </p>

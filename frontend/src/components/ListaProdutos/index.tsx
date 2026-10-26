@@ -34,7 +34,7 @@ function ListaProdutos({ produtos, aoSaberMais }: ListaProdutosProps) {
 
                     {produto.quantidadeEstoque <= 0 && (
                         <EtiquetaEsgotado>
-                            Esgotado
+                            Em falta
                         </EtiquetaEsgotado>
                     )}
 

@@ -38,7 +38,7 @@ export const EtiquetaEsgotado = styled.span`
     padding: 6px 12px;
     border-radius: 6px;
 
-    background-color: #a83232;
+    background-color: #ad1717;
     color: #ffffff;
     font-size: 0.85rem;
     font-weight: bold;
