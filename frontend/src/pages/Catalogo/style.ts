@@ -45,3 +45,8 @@ export const ConteudoBusca = styled.div`
         font-weight: bold;
     }
 `;
+
+export const SessaoProdutos = styled.section`
+    padding: 60px 8%;
+    background-color: #fff;
+`;
