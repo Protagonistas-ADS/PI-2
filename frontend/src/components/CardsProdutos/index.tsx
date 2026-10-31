@@ -17,12 +17,12 @@ interface Produto {
     quantidadeEstoque: number;
 }
 
-interface ListaProdutosProps {
+interface CardsProdutosProps {
     produtos: Produto[];
     aoSaberMais: (produto: Produto) => void;
 }
 
-function ListaProdutos({ produtos, aoSaberMais }: ListaProdutosProps) {
+function CardsProdutos({ produtos, aoSaberMais }: CardsProdutosProps) {
     return (
         <GradeProdutos>
             {produtos.map((produto) => (
@@ -58,4 +58,4 @@ function ListaProdutos({ produtos, aoSaberMais }: ListaProdutosProps) {
     )
 }
 
-export default ListaProdutos;
+export default CardsProdutos;
