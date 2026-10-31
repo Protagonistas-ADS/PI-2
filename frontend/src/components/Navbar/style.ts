@@ -53,49 +53,6 @@ export const Logo = styled.a`
     }
 `;
 
-export const SimboloLogo = styled.span`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 2.5rem;
-    height: 2.5rem;
-    flex-shrink: 0;
-
-    border-radius: 0.3rem;
-    background-color: #e8912a;
-    color: #2a4a3c;
-
-    font-size: 1.4rem;
-    font-weight: bold;
-    font-family: "montserrat";
-`;
-
-export const IdentificacaoMarca = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
-
-export const NomeMarca = styled.span`
-    color: #ffffff;
-    font-size: 1.5rem;
-    font-weight: bold;
-`;
-
-export const SufixoMarca = styled.span`
-    color: #e8912a;
-`;
-
-export const DescricaoMarca = styled.span`
-    margin-top: 0.2rem;
-
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 0.6rem;
-    font-weight: bold;
-    letter-spacing: 0.1em;
-    
-`;
-
 export const BotaoMenu = styled.button`
     padding: 0.5rem;
     border: none;
