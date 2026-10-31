@@ -3,17 +3,13 @@ import {
     Cabecalho,
     ConteudoCabecalho,
     Logo,
-    SimboloLogo,
-    IdentificacaoMarca,
-    NomeMarca,
-    SufixoMarca,
-    DescricaoMarca,
     BotaoMenu,
     Navegacao,
     ListaLinks,
     ItemLink,
 } from "./style";
 import { FiX, FiMenu } from "react-icons/fi";
+import FerrarettoLogo from "../../assets/FerrarettoLogo.png";
 
 interface ItemNavegacao {
     id: number;
@@ -40,16 +36,8 @@ function Navbar({ links }: NavbarProps) {
     return (
         <Cabecalho>
             <ConteudoCabecalho>
-                <Logo href="/"> 
-                    <SimboloLogo>S.F</SimboloLogo>
-
-                    <IdentificacaoMarca>
-                        <NomeMarca>
-                            S.<SufixoMarca>FERRARETTO</SufixoMarca>
-                        </NomeMarca>
-
-                        <DescricaoMarca>PALETES DE MADEIRA</DescricaoMarca>
-                    </IdentificacaoMarca>
+                <Logo href="/">     
+                    <img src={FerrarettoLogo} alt="Logo da empresa" />
                 </Logo>
 
                 <BotaoMenu

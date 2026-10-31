@@ -26,53 +26,6 @@ export const ConteudoRodape = styled.div`
     }
 `;
 
-export const AreaLogo = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-`;
-
-export const SimboloLogo = styled.span`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    width: 2.5rem;
-    height: 2.5rem;
-
-    border-radius: 0.3rem;
-    background-color: #e8912a;
-    color: #2a4a3c;
-
-    font-size: 1.4rem;
-    font-weight: bold;
-    font-family: "montserrat";
-`;
-
-export const IdentificacaoMarca = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
-
-export const NomeMarca = styled.span`
-    color: #ffffff;
-    font-size: 1.5rem;
-    font-weight: bold;
-`;
-
-export const SufixoMarca = styled.span`
-    color: #e8912a;
-`;
-
-export const DescricaoMarca = styled.span`
-    margin-top: 0.2rem;
-
-    color: #ffffffb2;
-    font-size: 0.6rem;
-    font-weight: bold;
-    letter-spacing: 0.1rem;
-`;
-
 export const AreaContato = styled.section`
     display: flex;
     flex-direction: column;
@@ -164,4 +117,19 @@ export const RodapeInferior = styled.div`
     font-size: 1rem;
     line-height: 1.5;
     text-align: center;
+`;
+
+export const Logo = styled.a`
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+
+    
+    text-decoration: none;
+
+    img {
+        width: 300px;
+        height: auto;
+        object-fit: contain;
+    }
 `;

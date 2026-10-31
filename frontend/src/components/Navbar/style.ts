@@ -45,6 +45,12 @@ export const Logo = styled.a`
 
     
     text-decoration: none;
+
+    img {
+        width: 300px;
+        height: auto;
+        object-fit: contain;
+    }
 `;
 
 export const SimboloLogo = styled.span`

@@ -11,12 +11,6 @@ import {
 import {
     Rodape,
     ConteudoRodape,
-    AreaLogo,
-    SimboloLogo,
-    IdentificacaoMarca,
-    NomeMarca,
-    SufixoMarca,
-    DescricaoMarca,
     AreaContato,
     TituloArea,
     ListaContato,
@@ -26,24 +20,18 @@ import {
     ListaRedesSociais,
     LinkRedeSocial,
     RodapeInferior,
+    Logo
 } from "./style";
+import FerrarettoLogo from "../../assets/FerrarettoLogo.png";
 
 function Footer() {
     return (
         <Rodape>
             <ConteudoRodape id="contatos">
 
-                <AreaLogo>
-                    <SimboloLogo>S.F</SimboloLogo>
-
-                    <IdentificacaoMarca>
-                        <NomeMarca>
-                            S.<SufixoMarca>FERRARETTO</SufixoMarca>
-                        </NomeMarca>
-
-                        <DescricaoMarca>PALETES DE MADEIRA</DescricaoMarca>
-                    </IdentificacaoMarca>
-                </AreaLogo>
+                <Logo href="/">     
+                    <img src={FerrarettoLogo} alt="Logo da empresa" />
+                </Logo>
 
                 <AreaContato>
                     <TituloArea>Contato</TituloArea>
