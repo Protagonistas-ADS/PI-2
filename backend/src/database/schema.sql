@@ -52,7 +52,8 @@ CREATE TABLE IF NOT EXISTS lote (
 CREATE TABLE IF NOT EXISTS cotacao (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cliente_id INT NOT NULL,
-    status ENUM('pendente','respondida','convertida','recusada','cancelada') NOT NULL DEFAULT 'pendente',
+    validade DATETIME,
+    status ENUM('pendente','respondida','convertida','recusada','cancelada', 'expirada') NOT NULL DEFAULT 'pendente',
     -- validade DATE,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_cotacao_cliente
