@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode, SyntheticEvent } from "react";
 import { Link } from "react-router-dom";
 import { ContainerFormulario, Logo } from "./style";
 import FerrarettoLogo from "../../assets/FerrarettoLogo.png";
@@ -7,7 +7,7 @@ interface FormularioGeralProps {
     titulo: string;
     textoLink: string;
     destinoLink: string;
-    onSubmit: () => void;
+    onSubmit: (event: SyntheticEvent<HTMLFormElement>) => void;
     children: ReactNode;
 }
 

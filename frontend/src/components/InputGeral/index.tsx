@@ -8,6 +8,7 @@ interface InputGeralProps {
     value: string;
     onChange: (event: ChangeEvent<HTMLInputElement>) => void;
     required?: boolean;
+    minLength?: number;
 }
 
 function InputGeral({
@@ -16,7 +17,8 @@ function InputGeral({
     placeholder,
     value,
     onChange,
-    required = false
+    required = false,
+    minLength
 }: InputGeralProps) {
     return (
         <div>
@@ -28,6 +30,7 @@ function InputGeral({
                 value={value}
                 onChange={onChange}
                 required={required}
+                minLength={minLength}
             />
         </div>
     );
