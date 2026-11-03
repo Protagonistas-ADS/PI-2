@@ -1,6 +1,6 @@
 import { useState, type SyntheticEvent } from "react";
 
-import { AutenticarLogin } from "../../services/usuariosApi";
+import { autenticarLogin } from "../../services/usuariosApi";
 import BotaoGeral from "../../components/BotaoGeral";
 import FormularioGeral from "../../components/FormularioGeral";
 import InputGeral from "../../components/InputGeral";
@@ -21,7 +21,7 @@ function Login() {
             event.preventDefault();
     
             try {
-                await AutenticarLogin({ email, senha })
+                await autenticarLogin({ email, senha })
     
                 alert("Logado com sucesso!");
             } catch (error) {
