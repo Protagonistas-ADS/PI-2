@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import ListaProdutos from "../../components/ListaProdutos";
+import CardsProdutos from "../../components/CardsProdutos";
 import ModalProduto from "../../components/ModalProduto";
 import {
     ContainerPagina,
@@ -64,7 +64,7 @@ function Catalogo() {
                 </SessaoBusca>
 
                 <SessaoProdutos>
-                    <ListaProdutos 
+                    <CardsProdutos 
                         produtos={produtos}
                         aoSaberMais={abrirModal}
                     />

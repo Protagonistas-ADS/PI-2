@@ -16,17 +16,18 @@ import {
     CTA,
     ConteudoCTA,
     BotaoCTA,
-    Destaques,
-    ConteudoDestaques,
+    //Destaques,
+    //ConteudoDestaques,
 } from "./style";
 
 function TelaInicial() {
 
     {/*{ id: 2, texto: "Destaques", href: "#destaques", ativo: false },*/}
+    {/*{ id: 1, texto: "Início", href: "/", ativo: true },*/}
     const linksNavegacao = [
-        { id: 1, texto: "Home", href: "/", ativo: true },
-        { id: 3, texto: "Catálogo", href: "/catalogo", ativo: false },
-        { id: 4, texto: "Contatos", href: "#contatos", ativo: false },
+        { id: 3, texto: "Contatos", href: "#contatos", ativo: false },
+        { id: 4, texto: "Entrar", href: "/login", ativo: false },
+        { id: 5, texto: "Criar Conta", href: "/cadastro", ativo: false },
     ];
 
     return (
@@ -43,8 +44,8 @@ function TelaInicial() {
                             com qualidade e confiança para sua empresa.
                         </p>
 
-                        <BotaoOrcamento href="/catalogo">
-                            Ver Catálogo
+                        <BotaoOrcamento href="/cadastro">
+                            Fazer Cadastro
                         </BotaoOrcamento>
                     </ConteudoHero>
                 </Hero>
@@ -95,7 +96,7 @@ function TelaInicial() {
 
                         <p>Conheça nossa linha completa de paletes de madeira e encontre a solução ideal para o seu negócio.</p>
 
-                        <BotaoCTA href="/catalogo">
+                        <BotaoCTA href="/login">
                             Explorar Catálogo
                             <LuArrowRight />
                         </BotaoCTA>
