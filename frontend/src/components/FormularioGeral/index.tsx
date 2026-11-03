@@ -1,6 +1,6 @@
 import type { ReactNode, SyntheticEvent } from "react";
 import { Link } from "react-router-dom";
-import { ContainerFormulario, Logo } from "./style";
+import { ContainerFormulario, Logo, Formulario } from "./style";
 import FerrarettoLogo from "../../assets/FerrarettoLogo.png";
 
 interface FormularioGeralProps {
@@ -24,13 +24,13 @@ function FormularioGeral({
                 <img src={FerrarettoLogo} alt="Logo da empresa" />
             </Logo>
 
-            <h2>{titulo}</h2>
+            <h1 style={{margin:"12px 0"}}>{titulo}</h1>
 
-            <form onSubmit={onSubmit}>
+            <Formulario onSubmit={onSubmit}>
                 {children}
-            </form>
+            </Formulario>
 
-            <Link to={destinoLink}>
+            <Link style={{margin:"10px 0 0", textDecoration:"underline", fontWeight:"bold", color:"#2A4A3C"}} to={destinoLink}>
                 {textoLink}
             </Link>
         </ContainerFormulario>

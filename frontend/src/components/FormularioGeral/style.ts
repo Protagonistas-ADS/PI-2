@@ -32,3 +32,11 @@ export const Logo = styled.a`
         object-fit: contain;
     }
 `;
+
+export const Formulario = styled.form`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+`;
