@@ -1,5 +1,4 @@
-import { useState } from "react";
-import type { SyntheticEvent } from "react";
+import { useState, type SyntheticEvent } from "react";
 
 import {
     ContainerPagina,
@@ -23,7 +22,6 @@ function Cadastro() {
         event.preventDefault();
 
         try {
-            console.log(nome, email, senha);
             await cadastrarUsuario({ nome, email, senha })
 
             alert("Cadastro realizado com sucesso!");
