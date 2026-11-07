@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS pedido (
     CONSTRAINT fk_pedido_cliente
     FOREIGN KEY (cliente_id) REFERENCES usuario(id),
     CONSTRAINT fk_pedido_cotacao
-    FOREIGN KEY (cotacao_id) REFERENCES cotacao(id),
+    FOREIGN KEY (cotacao_id) REFERENCES cotacao(id)
     -- CONSTRAINT fk_pedido_endereco
     -- FOREIGN KEY (endereco_id) REFERENCES endereco(id)
 );
