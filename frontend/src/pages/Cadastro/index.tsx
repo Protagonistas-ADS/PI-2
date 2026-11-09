@@ -1,4 +1,5 @@
 import { useState, type SyntheticEvent } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
     ContainerPagina,
@@ -18,13 +19,15 @@ function Cadastro() {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
 
+    const navigate = useNavigate();
+
     async function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
         event.preventDefault();
 
         try {
-            await cadastrarUsuario({ nome, email, senha })
+            await cadastrarUsuario({ nome, email, senha });
 
-            alert("Cadastro realizado com sucesso!");
+            navigate('/login');
         } catch (error) {
             alert("Erro ao realizar cadastro.");
             console.error("ERRO AQUI", error);
