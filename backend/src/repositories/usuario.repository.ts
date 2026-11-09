@@ -14,7 +14,7 @@ const UsuarioRepository = {
 
     async Cadastrar(nome: string, email: string, senha: string) {
         await db.execute(`
-            INSERT INTO usuario (nome, email, senha, tipo)
+            INSERT INTO usuario (nome, email, senha, perfil)
             VALUES (?, ?, ?, ?)   
         `, [nome, email, senha, 'cliente']);
     },
