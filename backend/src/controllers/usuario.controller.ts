@@ -15,6 +15,18 @@ const UsuarioController = {
         } catch (error) {
             next(error);
         }
+    },
+
+    async Login(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { email, senha } = req.body;
+
+            const resultado = await UsuarioService.Login(email, senha);
+
+            return res.status(200).json(resultado);
+        } catch (error) {
+            next(error);
+        }
     }
 }
 

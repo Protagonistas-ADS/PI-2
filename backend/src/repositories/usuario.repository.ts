@@ -19,9 +19,9 @@ const UsuarioRepository = {
         `, [nome, email, senha, 'cliente']);
     },
 
-    async BuscarPorEmail(email: string) {
+    async BuscarPorEmail(email: string): Promise<Usuario | null> {
         const [resultado] = await db.execute<Usuario[]>(`
-            SELECT id, nome, email, senha, tipo
+            SELECT id, nome, email, senha, perfil
             FROM usuario
             WHERE email = ?
         `, [email]);
