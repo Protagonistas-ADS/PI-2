@@ -18,7 +18,17 @@ export async function cadastrarUsuario(dados: CadastroUsuario) {
 }
 
 export async function autenticarLogin(dados: LoginUsuario) {
-    const response = await api.post("/usuarios", dados);
+    const response = await api.post("/usuarios/login", dados);
 
     return response.data;
+}
+
+export async function buscarUsuarioLogado(token: string) {
+    const response = await api.get("/usuarios/logado", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+
+    return response.data.usuario;
 }

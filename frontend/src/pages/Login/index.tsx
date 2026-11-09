@@ -1,4 +1,5 @@
-import { useState, type SyntheticEvent } from "react";
+import { use, useState, type SyntheticEvent } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { autenticarLogin } from "../../services/usuariosApi";
 import BotaoGeral from "../../components/BotaoGeral";
@@ -16,17 +17,23 @@ function Login() {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
 
+    const navigate = useNavigate();
+
 
     async function handleLogin(event: SyntheticEvent<HTMLFormElement>) {
             event.preventDefault();
-    
+            
             try {
-                await autenticarLogin({ email, senha })
-    
-                alert("Logado com sucesso!");
+                const data = await autenticarLogin({ email, senha });
+
+                
+                
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("payload", JSON.stringify(data.payload));
+                navigate("/catalogo");
             } catch (error) {
                 alert("Erro ao realizar login.");
-                console.error("ERRO AQUI", error);
+                console.error("Erro ao realizar login", error);
             }
         }
 

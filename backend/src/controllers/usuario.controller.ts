@@ -27,6 +27,18 @@ const UsuarioController = {
         } catch (error) {
             next(error);
         }
+    },
+
+    async BuscarUsuarioLogado(req: Request, res: Response, next: NextFunction) {
+        try {
+
+            return res.status(201).json({
+                usuario: req.usuario
+            });
+
+        } catch (error) {
+            next(error);
+        }
     }
 }
 
