@@ -16,6 +16,7 @@ interface ItemNavegacao {
     texto: string;
     href: string;
     ativo: boolean;
+    aoClicar?: () => void;
 }
 
 interface NavbarProps {
@@ -37,7 +38,7 @@ function Navbar({ linkLogo, links }: NavbarProps) {
     return (
         <Cabecalho>
             <ConteudoCabecalho>
-                <Logo href={linkLogo}>     
+                <Logo href={linkLogo}>
                     <img src={FerrarettoLogo} alt="Logo da empresa" />
                 </Logo>
 
@@ -45,7 +46,7 @@ function Navbar({ linkLogo, links }: NavbarProps) {
                     type="button"
                     onClick={alternarMenu}
                 >
-                    {menuAberto ? <FiX color="white" size={24} /> : <FiMenu color="white" size={24}/>}
+                    {menuAberto ? <FiX color="white" size={24} /> : <FiMenu color="white" size={24} />}
                 </BotaoMenu>
 
                 <Navegacao
@@ -58,7 +59,10 @@ function Navbar({ linkLogo, links }: NavbarProps) {
                                 <ItemLink
                                     href={link.href}
                                     $ativo={link.ativo ?? false}
-                                    onClick={fecharMenu}
+                                    onClick={() => {
+                                        fecharMenu;
+                                        link.aoClicar?.()
+                                    }}
                                 >
                                     {link.texto}
                                 </ItemLink>
@@ -69,6 +73,6 @@ function Navbar({ linkLogo, links }: NavbarProps) {
             </ConteudoCabecalho>
         </Cabecalho>
     )
-} 
+}
 
 export default Navbar;
