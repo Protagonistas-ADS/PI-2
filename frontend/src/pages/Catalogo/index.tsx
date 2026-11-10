@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import CardsProdutos from "../../components/CardsProdutos";
@@ -23,9 +24,9 @@ interface Produto {
 
 // Banco para teste
 const bancoProdutos: Produto[] = [
-    {id: 1, nome: 'produto1', imagem: ProdutoImagemExemplo, descricao: 'primeiro produto', preco: 15.44, quantidadeEstoque: 0},
-    {id: 2, nome: 'produto2', imagem: ProdutoImagemExemplo, descricao: 'segundo produto', preco: 20.44, quantidadeEstoque: 16},
-    {id: 3, nome: 'produto3', imagem: ProdutoImagemExemplo, descricao: 'terceiro produto', preco: 35.43, quantidadeEstoque: 92},
+    { id: 1, nome: 'produto1', imagem: ProdutoImagemExemplo, descricao: 'primeiro produto', preco: 15.44, quantidadeEstoque: 0 },
+    { id: 2, nome: 'produto2', imagem: ProdutoImagemExemplo, descricao: 'segundo produto', preco: 20.44, quantidadeEstoque: 16 },
+    { id: 3, nome: 'produto3', imagem: ProdutoImagemExemplo, descricao: 'terceiro produto', preco: 35.43, quantidadeEstoque: 92 },
 ];
 
 
@@ -33,12 +34,7 @@ function Catalogo() {
     const [produtos, setProdutos] = useState<Produto[]>(bancoProdutos);
     const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
 
-    const linksNavegacao = [
-        { id: 2, texto: "Pedidos/Cotações", href: "/catalogo", ativo: false },
-        { id: 1, texto: "Perfil", href: "/catalogo", ativo: false },
-        { id: 3, texto: "Contatos", href: "#contatos", ativo: false },
-        { id: 4, texto: "Sair", href: "/login", ativo: false },
-    ];
+    const navigate = useNavigate();
 
     function abrirModal(produto: Produto) {
         setProdutoSelecionado(produto);
@@ -48,6 +44,17 @@ function Catalogo() {
         setProdutoSelecionado(null);
     }
 
+    function handleLogout() {
+        localStorage.removeItem("token");
+        navigate('/login');
+    }
+
+    const linksNavegacao = [
+        { id: 2, texto: "Pedidos/Cotações", href: "/catalogo", ativo: false },
+        { id: 1, texto: "Perfil", href: "/catalogo", ativo: false },
+        { id: 3, texto: "Contatos", href: "#contatos", ativo: false },
+        { id: 4, texto: "Sair", href: "/login", ativo: false, aoClicar: handleLogout },
+    ];
 
     return (
         <ContainerPagina>
@@ -65,15 +72,15 @@ function Catalogo() {
                 </SessaoBusca>
 
                 <SessaoProdutos>
-                    <CardsProdutos 
+                    <CardsProdutos
                         produtos={produtos}
                         aoSaberMais={abrirModal}
                     />
 
                     {produtoSelecionado && (
-                        <ModalProduto 
-                            produto={produtoSelecionado} 
-                            aoFechar={fecharModal} 
+                        <ModalProduto
+                            produto={produtoSelecionado}
+                            aoFechar={fecharModal}
                         />
                     )}
                 </SessaoProdutos>
