@@ -69,7 +69,7 @@ function Cadastro() {
 
                 <InputGeral
                     type="password"
-                    placeholder="Mínimo 6 caracteres"
+                    placeholder="Senha - Mínimo 6 caracteres"
                     value={senha}
                     onChange={(event) => setSenha(event.target.value)}
                     required
