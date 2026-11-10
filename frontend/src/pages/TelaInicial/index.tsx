@@ -25,14 +25,14 @@ function TelaInicial() {
     {/*{ id: 2, texto: "Destaques", href: "#destaques", ativo: false },*/}
     {/*{ id: 1, texto: "Início", href: "/", ativo: true },*/}
     const linksNavegacao = [
-        { id: 3, texto: "Contatos", href: "#contatos", ativo: false },
         { id: 4, texto: "Entrar", href: "/login", ativo: false },
         { id: 5, texto: "Criar Conta", href: "/cadastro", ativo: false },
+        { id: 3, texto: "Contatos", href: "#contatos", ativo: false },
     ];
 
     return (
         <ContainerPagina>
-            <Navbar links={linksNavegacao} />
+            <Navbar linkLogo="/" links={linksNavegacao} />
 
             <Conteudo>
                 <Hero>
@@ -104,7 +104,7 @@ function TelaInicial() {
                 </CTA>
             </Conteudo>
 
-            <Footer />
+            <Footer linkLogo="/" />
         </ContainerPagina>
     );
 }

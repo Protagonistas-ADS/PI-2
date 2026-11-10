@@ -24,12 +24,16 @@ import {
 } from "./style";
 import FerrarettoLogo from "../../assets/FerrarettoLogo.png";
 
-function Footer() {
+interface FooterProps {
+    linkLogo: string;
+}
+
+function Footer({linkLogo}: FooterProps) {
     return (
         <Rodape>
             <ConteudoRodape id="contatos">
 
-                <Logo href="/">     
+                <Logo href={linkLogo}>     
                     <img src={FerrarettoLogo} alt="Logo da empresa" />
                 </Logo>
 

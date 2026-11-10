@@ -12,9 +12,15 @@ function Rotas() {
             <Route path="/cadastro" element={<Cadastro />} />
             <Route path="/login" element={<Login />} />
 
-            <Route element={<RotaProtegida />}>
-                <Route path="/catalogo" element={<Catalogo />} />
-            </Route>
+            <Route
+                path="/catalogo"
+                element={
+                    <RotaProtegida>
+                        <Catalogo />
+                    </RotaProtegida>
+                } 
+            />
+            
         </Routes>
     );
 }

@@ -34,23 +34,24 @@ function Catalogo() {
     const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
 
     const linksNavegacao = [
-        { id: 3, texto: "Home", href: "/", ativo: false },
-        { id: 1, texto: "Catálogo", href: "/catalogo", ativo: true },
-        { id: 4, texto: "Contatos", href: "#contatos", ativo: false },
+        { id: 2, texto: "Pedidos/Cotações", href: "/catalogo", ativo: false },
+        { id: 1, texto: "Perfil", href: "/catalogo", ativo: false },
+        { id: 3, texto: "Contatos", href: "#contatos", ativo: false },
+        { id: 4, texto: "Sair", href: "/login", ativo: false },
     ];
 
-    function abrirModal(produto: Produto): void {
+    function abrirModal(produto: Produto) {
         setProdutoSelecionado(produto);
     }
 
-    function fecharModal(): void {
+    function fecharModal() {
         setProdutoSelecionado(null);
     }
 
 
     return (
         <ContainerPagina>
-            <Navbar links={linksNavegacao} />
+            <Navbar linkLogo="/catalogo" links={linksNavegacao} />
 
             <Conteudo>
                 <SessaoBusca>
@@ -78,7 +79,7 @@ function Catalogo() {
                 </SessaoProdutos>
             </Conteudo>
 
-            <Footer />
+            <Footer linkLogo="/catalogo" />
         </ContainerPagina>
     )
 }

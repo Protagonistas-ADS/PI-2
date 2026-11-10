@@ -19,10 +19,11 @@ interface ItemNavegacao {
 }
 
 interface NavbarProps {
+    linkLogo: string;
     links: ItemNavegacao[];
 }
 
-function Navbar({ links }: NavbarProps) {
+function Navbar({ linkLogo, links }: NavbarProps) {
     const [menuAberto, setMenuAberto] = useState(false);
 
     function alternarMenu() {
@@ -36,7 +37,7 @@ function Navbar({ links }: NavbarProps) {
     return (
         <Cabecalho>
             <ConteudoCabecalho>
-                <Logo href="/">     
+                <Logo href={linkLogo}>     
                     <img src={FerrarettoLogo} alt="Logo da empresa" />
                 </Logo>
 
