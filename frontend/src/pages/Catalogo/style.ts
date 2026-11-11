@@ -54,7 +54,7 @@ export const SessaoProdutos = styled.section`
 export const BotaoCarrinho = styled.button`
     position: fixed;
     right: 30px;
-    top: 140px;
+    top: 150px;
     z-index: 900;
 
     display: flex;
@@ -81,8 +81,8 @@ export const BotaoCarrinho = styled.button`
     }
 
     @media (max-width: 600px) {
+        top: auto;
         right: 16px;
-        bottom: 16px;
         padding: 14px 18px;
     }
 `;
