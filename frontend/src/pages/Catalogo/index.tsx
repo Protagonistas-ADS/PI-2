@@ -1,17 +1,23 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { FiShoppingCart } from "react-icons/fi";
+
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import CardsProdutos from "../../components/CardsProdutos";
 import ModalProduto from "../../components/ModalProduto";
+
 import {
     ContainerPagina,
     Conteudo,
     SessaoBusca,
     ConteudoBusca,
     SessaoProdutos,
+    BotaoCarrinho
 } from "./style";
 import ProdutoImagemExemplo from "../../assets/PaleteBackground.png";
+
 
 interface Produto {
     readonly id: number;
@@ -20,6 +26,11 @@ interface Produto {
     descricao: string;
     preco: number;
     quantidadeEstoque: number;
+}
+
+interface ItemCarrinho {
+    produto: Produto;
+    quantidade: number;
 }
 
 // Banco para teste
@@ -33,6 +44,8 @@ const bancoProdutos: Produto[] = [
 function Catalogo() {
     const [produtos, setProdutos] = useState<Produto[]>(bancoProdutos);
     const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
+    const [carrinho, setCarrinho] = useState<ItemCarrinho[]>([]);
+    const [carrinhoAberto, setCarrinhoAberto] = useState(false);
 
     const navigate = useNavigate();
 
@@ -49,46 +62,75 @@ function Catalogo() {
         navigate('/login');
     }
 
-    const linksNavegacao = [
-        { id: 2, texto: "Pedidos/Cotações", href: "/catalogo", ativo: false },
-        { id: 1, texto: "Perfil", href: "/catalogo", ativo: false },
-        { id: 3, texto: "Contatos", href: "#contatos", ativo: false },
-        { id: 4, texto: "Sair", href: "/login", ativo: false, aoClicar: handleLogout },
-    ];
+    function adicionarNoCarrinho(produto: Produto, quantidade: number) {
+        setCarrinho((carrinhoAtual) => {
+            const itemExistente = carrinhoAtual.find((item) => item.produto.id === produto.id);
 
-    return (
-        <ContainerPagina>
-            <Navbar linkLogo="/catalogo" links={linksNavegacao} />
+            if (itemExistente) {
+                return carrinhoAtual.map((item) => item.produto.id === produto.id
+                    ? { ...itemExistente, quantidade: itemExistente.quantidade + quantidade }
+                    : item
+                );
+            }
 
-            <Conteudo>
-                <SessaoBusca>
-                    <ConteudoBusca>
-                        <p>TODOS OS PRODUTOS</p>
+            return [...carrinhoAtual, { produto, quantidade }];
+        });
+    }
 
-                        <h2>Catálogo Completo</h2>
 
-                        <p>Explore nossa linha completa de paletes de madeira</p>
-                    </ConteudoBusca>
-                </SessaoBusca>
+const linksNavegacao = [
+    { id: 2, texto: "Pedidos/Cotações", href: "/catalogo", ativo: false },
+    { id: 1, texto: "Perfil", href: "/catalogo", ativo: false },
+    { id: 3, texto: "Contatos", href: "#contatos", ativo: false },
+    { id: 4, texto: "Sair", href: "/login", ativo: false, aoClicar: handleLogout },
+];
 
-                <SessaoProdutos>
-                    <CardsProdutos
-                        produtos={produtos}
-                        aoSaberMais={abrirModal}
+return (
+    <ContainerPagina>
+        <Navbar linkLogo="/catalogo" links={linksNavegacao} />
+
+        {carrinho.length > 0 && (
+            <BotaoCarrinho
+                type="button"
+                onClick={() => setCarrinhoAberto(true)}
+            >
+                <FiShoppingCart />
+                Carrinho ({carrinho.reduce(
+                    (total, item) => total + item.quantidade, 0
+                )})
+            </BotaoCarrinho>
+        )}
+
+        <Conteudo>
+            <SessaoBusca>
+                <ConteudoBusca>
+                    <p>TODOS OS PRODUTOS</p>
+
+                    <h2>Catálogo Completo</h2>
+
+                    <p>Explore nossa linha completa de paletes de madeira</p>
+                </ConteudoBusca>
+            </SessaoBusca>
+
+            <SessaoProdutos>
+                <CardsProdutos
+                    produtos={produtos}
+                    aoSaberMais={abrirModal}
+                />
+
+                {produtoSelecionado && (
+                    <ModalProduto
+                        produto={produtoSelecionado}
+                        aoFechar={fecharModal}
+                        aoAdicionar={adicionarNoCarrinho}
                     />
+                )}
+            </SessaoProdutos>
+        </Conteudo>
 
-                    {produtoSelecionado && (
-                        <ModalProduto
-                            produto={produtoSelecionado}
-                            aoFechar={fecharModal}
-                        />
-                    )}
-                </SessaoProdutos>
-            </Conteudo>
-
-            <Footer linkLogo="/catalogo" />
-        </ContainerPagina>
-    )
+        <Footer linkLogo="/catalogo" />
+    </ContainerPagina>
+)
 }
 
 export default Catalogo;
