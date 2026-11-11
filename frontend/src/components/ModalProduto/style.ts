@@ -90,3 +90,21 @@ export const BotaoContato = styled.button`
         background-color: #d97713;
     }
 `;
+
+export const CampoQuantidade = styled.input`
+    width: 100%;
+    padding: 12px;
+
+    border: 1px solid #cbd5ce;
+    border-radius: 8px;
+
+    background-color: #ffffff;
+    color: #21352b;
+    font-size: 1rem;
+
+    &:focus {
+        outline: none;
+        border-color: #5d806b;
+        box-shadow: 0 0 0 2px rgba(93, 128, 107, 0.15);
+    }
+`;

@@ -50,3 +50,39 @@ export const SessaoProdutos = styled.section`
     padding: 60px 8%;
     background-color: #f2f2f2;
 `;
+
+export const BotaoCarrinho = styled.button`
+    position: fixed;
+    right: 30px;
+    top: 140px;
+    z-index: 900;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    padding: 16px 24px;
+
+    border: none;
+    border-radius: 12px;
+    background-color: #ed8b22;
+    color: #ffffff;
+
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+    &:hover {
+        background-color: #d97713;
+        transform: translateY(-2px);
+    }
+
+    @media (max-width: 600px) {
+        right: 16px;
+        bottom: 16px;
+        padding: 14px 18px;
+    }
+`;
