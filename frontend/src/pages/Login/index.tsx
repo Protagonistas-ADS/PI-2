@@ -1,7 +1,7 @@
 import { use, useState, type SyntheticEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { autenticarLogin } from "../../services/usuariosApi";
+import { autenticarLogin } from "../../services/usuarioApi";
 import BotaoGeral from "../../components/BotaoGeral";
 import FormularioGeral from "../../components/FormularioGeral";
 import InputGeral from "../../components/InputGeral";

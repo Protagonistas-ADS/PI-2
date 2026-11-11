@@ -6,7 +6,7 @@ import {
     ContainerVoltar
 } from "./style";
 
-import { cadastrarUsuario } from "../../services/usuariosApi";
+import { cadastrarUsuario } from "../../services/usuarioApi";
 
 import BotaoGeral from "../../components/BotaoGeral";
 import FormularioGeral from "../../components/FormularioGeral";

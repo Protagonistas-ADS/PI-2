@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
-import { buscarUsuarioLogado } from "../../services/usuariosApi";
+import { buscarUsuarioLogado } from "../../services/usuarioApi";
 
 interface RotaPublicaProps {
     children: ReactNode;

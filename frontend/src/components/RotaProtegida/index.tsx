@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
-import { buscarUsuarioLogado } from "../../services/usuariosApi";
+import { buscarUsuarioLogado } from "../../services/usuarioApi";
 
 interface RotaProtegidaProps {
     children: ReactNode;
