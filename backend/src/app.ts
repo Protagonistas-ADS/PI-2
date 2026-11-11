@@ -1,3 +1,4 @@
+
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
@@ -15,7 +16,7 @@ app.use(cors());
 app.use("/usuarios", UsuarioRoutes);
 app.use("/produtos", ProdutoRoutes);
 
-//Middleware de erro
+// Middleware de erro
 app.use(erroMiddleware);
 
 export default app;
