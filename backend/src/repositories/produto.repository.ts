@@ -8,6 +8,12 @@ const ProdutoRepository = {
             VALUES (?, ?, ?, ?)
         `, [nome, descricao, preco, quantidade]);
     },
+
+    async Listar() {
+        await db.execute(`
+            SELECT * FROM lote    
+        `)
+    }
 }
 
 export default ProdutoRepository;
