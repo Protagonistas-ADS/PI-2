@@ -15,6 +15,18 @@ const ProdutoController = {
         } catch (error) {
             next(error);
         }
+    },
+    
+    async Listar(req: Request, res: Response, next: NextFunction) {
+        try {
+            await ProdutoService.Listar();
+
+            res.status(200).json({
+                mensagem: "Produtos listados com sucesso."
+            });
+        } catch (error) {
+            next(error);
+        }
     }
 }
 

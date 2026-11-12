@@ -6,6 +6,7 @@ import { autenticacaoMiddleware } from "../middlewares/autenticar.middleware";
 
 const router = Router();
 
+router.get("/", autenticacaoMiddleware, ProdutoController.Listar);
 router.post("/", autenticacaoMiddleware, validarSchema(ProdutoSchema), ProdutoController.Criar);
 
 export default router;
