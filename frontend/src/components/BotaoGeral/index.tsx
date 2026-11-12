@@ -2,13 +2,15 @@ import type { ReactNode } from "react";
 import { BotaoLink, BotaoAcao } from "./style";
 
 interface BotaoGeralProps {
-    texto: string;
+    texto?: string;
     destino?: string;
     icone?: ReactNode;
     onClick?: () => void;
     width?: string;
     height?: string;
     type?: "button" | "submit";
+    margin?: string;
+    padding?: string;
 }
 
 function BotaoGeral({
@@ -18,7 +20,9 @@ function BotaoGeral({
     onClick,
     width = "fit-content",
     height = "auto",
-    type = "button"
+    type = "button",
+    margin,
+    padding,
 }: BotaoGeralProps) {
 
     if (destino) {
@@ -27,6 +31,8 @@ function BotaoGeral({
                 to={destino} 
                 width={width} 
                 height={height}
+                $margin={margin}
+                $padding={padding}
             >
                 {icone}
                 {texto}
@@ -40,6 +46,8 @@ function BotaoGeral({
             onClick={onClick}
             width={width}
             height={height}
+            $margin={margin}
+            $padding={padding}
         >
             {icone}
             {texto}

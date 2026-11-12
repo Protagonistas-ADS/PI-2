@@ -32,10 +32,25 @@ const UsuarioController = {
     async BuscarUsuarioLogado(req: Request, res: Response, next: NextFunction) {
         try {
 
-            return res.status(201).json({
+            return res.status(200).json({
                 usuario: req.usuario
             });
 
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    async Atualizar(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = req.usuario.id;
+            const dados = req.body;
+
+            await UsuarioService.Atualizar(id, dados);
+
+            return res.status(200).json({
+                mensagem: "Usuário atualizado com sucesso."
+            });
         } catch (error) {
             next(error);
         }

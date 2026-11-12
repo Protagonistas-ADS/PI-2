@@ -60,7 +60,7 @@ function Navbar({ linkLogo, links }: NavbarProps) {
                                     href={link.href}
                                     $ativo={link.ativo ?? false}
                                     onClick={() => {
-                                        fecharMenu;
+                                        fecharMenu();
                                         link.aoClicar?.()
                                     }}
                                 >

@@ -1,8 +1,11 @@
 import { Routes, Route } from "react-router-dom";
+
 import TelaInicial from "../pages/TelaInicial";
-import Catalogo from "../pages/Catalogo/index";
+import Catalogo from "../pages/Catalogo";
 import Cadastro from "../pages/Cadastro";
-import Login from "../pages/Login/index";
+import Login from "../pages/Login";
+import Perfil from "../pages/Perfil";
+
 import RotaProtegida from "../components/RotaProtegida";
 import RotaPublica from "../components/RotaPublica";
 
@@ -38,6 +41,14 @@ function Rotas() {
                 element={
                     <RotaProtegida>
                         <Catalogo />
+                    </RotaProtegida>
+                }
+            />
+            <Route 
+                path="/perfil"
+                element={
+                    <RotaProtegida>
+                        <Perfil />
                     </RotaProtegida>
                 }
             />

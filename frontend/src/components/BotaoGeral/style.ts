@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 interface BotaoProps {
     width: string;
     height: string;
+    $margin?: string | undefined;
+    $padding?: string | undefined;
 }
 
 export const BotaoAcao = styled.button<BotaoProps>`
@@ -15,7 +17,9 @@ export const BotaoAcao = styled.button<BotaoProps>`
     width: ${({ width }) => width};
     height: ${({ height }) => height};
 
-    padding: 10px 18px;
+    margin: ${({ $margin }) => $margin};
+
+    padding: ${({ $padding }) => $padding ?? "10px 18px"};
     border: none;
     border-radius: 8px;
 

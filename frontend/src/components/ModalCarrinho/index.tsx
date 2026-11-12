@@ -81,7 +81,7 @@ function ModalCarrinho({
                     </button>
 
                     <button className="acao-cotacao" type="button" onClick={aoFazerCotacao}>
-                        Fazer Cotação
+                        Solicitar Cotação
                     </button>
                 </AcoesCarrinho>
 

@@ -11,6 +11,12 @@ interface LoginUsuario {
     senha: string;
 }
 
+interface DadosAtualizacao {
+    nome?: string;
+    senhaAtual?: string;
+    senhaNova?: string;
+}
+
 export async function cadastrarUsuario(dados: CadastroUsuario) {
     const response = await api.post("/usuarios", dados);
 
@@ -23,12 +29,14 @@ export async function autenticarLogin(dados: LoginUsuario) {
     return response.data;
 }
 
-export async function buscarUsuarioLogado(token: string) {
-    const response = await api.get("/usuarios/logado", {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    });
+export async function buscarUsuarioLogado() {
+    const response = await api.get("/usuarios/logado");
 
     return response.data.usuario;
+}
+
+export async function atualizarUsuario(dados: DadosAtualizacao) {
+    const response = await api.patch("/usuarios", dados);
+
+    return response.data;
 }

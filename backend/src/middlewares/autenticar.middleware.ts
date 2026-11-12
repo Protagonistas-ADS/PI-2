@@ -1,8 +1,9 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { criarErro } from "../utils/criarErro";
+import UsuarioRepository from "../repositories/usuario.repository";
 
-export function autenticacaoMiddleware(
+export async function autenticacaoMiddleware(
     req: Request,
     res: Response,
     next: NextFunction
@@ -32,9 +33,19 @@ export function autenticacaoMiddleware(
             throw criarErro("Token inválido", 401);
         }
 
+        const idUsuario = dadosUsuario.id as number;
+
+        const usuario = await UsuarioRepository.BuscarPorId(idUsuario);
+
+        if (!usuario) {
+            throw criarErro("Usuário não encontrado", 401);
+        }
+
         req.usuario = {
-            id: dadosUsuario.id as number,
-            perfil: dadosUsuario.perfil as "cliente" | "administrador"
+            id: usuario.id,
+            nome: usuario.nome,
+            email: usuario.email,
+            perfil: usuario.perfil
         };
 
         next();

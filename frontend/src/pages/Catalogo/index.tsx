@@ -87,7 +87,7 @@ function Catalogo() {
 
     const linksNavegacao = [
         { id: 2, texto: "Pedidos/Cotações", href: "/catalogo", ativo: false },
-        { id: 1, texto: "Perfil", href: "/catalogo", ativo: false },
+        { id: 1, texto: "Perfil", href: "/perfil", ativo: false },
         { id: 3, texto: "Contatos", href: "#contatos", ativo: false },
         { id: 4, texto: "Sair", href: "/login", ativo: false, aoClicar: handleLogout },
     ];

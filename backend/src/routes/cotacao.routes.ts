@@ -4,7 +4,7 @@ import { Router } from "express";
 import CotacaoController from "../controllers/cotacao.controller";
 
 import { autenticacaoMiddleware } from "../middlewares/autenticar.middleware";
-import { autorizarAdministrador } from "../middlewares/autorizar.middleware";
+import { autorizarAdministrador } from "../middlewares/autenticarAdministrador.middleware";
 import { validarSchema } from "../middlewares/validarSchema.middleware";
 
 import {
