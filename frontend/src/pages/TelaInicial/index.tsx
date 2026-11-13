@@ -1,7 +1,9 @@
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
 import { FaAward, FaHeadset, FaLeaf } from "react-icons/fa";
 import { LuArrowRight } from "react-icons/lu";
+
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+
 import {
     ContainerPagina,
     Conteudo,
@@ -16,14 +18,11 @@ import {
     CTA,
     ConteudoCTA,
     BotaoCTA,
-    //Destaques,
-    //ConteudoDestaques,
 } from "./style";
+
 
 function TelaInicial() {
 
-    {/*{ id: 2, texto: "Destaques", href: "#destaques", ativo: false },*/}
-    {/*{ id: 1, texto: "Início", href: "/", ativo: true },*/}
     const linksNavegacao = [
         { id: 4, texto: "Entrar", href: "/login", ativo: false },
         { id: 5, texto: "Criar Conta", href: "/cadastro", ativo: false },
@@ -82,21 +81,13 @@ function TelaInicial() {
                     </ConteudoSobre>
                 </Sobre>
 
-                {/*
-                <Destaques>
-                    <ConteudoDestaques id="destaques">
-                    <h1>Destaques aqui</h1>
-                    </ConteudoDestaques>
-                </Destaques>
-                */}
-
                 <CTA>
                     <ConteudoCTA>
                         <h2>Pronto para transformar seus projetos?</h2>
 
                         <p>Conheça nossa linha completa de paletes de madeira e encontre a solução ideal para o seu negócio.</p>
 
-                        <BotaoCTA href="/login">
+                        <BotaoCTA to="/login">
                             Explorar Catálogo
                             <LuArrowRight />
                         </BotaoCTA>

@@ -1,10 +1,6 @@
 import { useState, type SyntheticEvent } from "react";
 import { useNavigate } from "react-router-dom";
-
-import {
-    ContainerPagina,
-    ContainerVoltar
-} from "./style";
+import { FaArrowLeft } from "react-icons/fa";
 
 import { cadastrarUsuario } from "../../services/usuarioApi";
 
@@ -12,7 +8,17 @@ import BotaoGeral from "../../components/BotaoGeral";
 import FormularioGeral from "../../components/FormularioGeral";
 import InputGeral from "../../components/InputGeral";
 
-import { FaArrowLeft } from "react-icons/fa";
+import { 
+    alertaSucesso,
+    alertaAviso,
+    alertaErro
+} from "../../utils/alertas";
+
+import {
+    ContainerPagina,
+    ContainerVoltar
+} from "./style";
+
 
 function Cadastro() {
     const [nome, setNome] = useState("");
@@ -26,11 +32,10 @@ function Cadastro() {
 
         try {
             await cadastrarUsuario({ nome, email, senha });
-
+            alertaSucesso("Cadastrado com sucesso.");
             navigate('/login');
         } catch (error) {
-            alert("Erro ao realizar cadastro.");
-            console.error("ERRO AQUI", error);
+            alertaErro("Erro ao cadastrar");
         }
     }
 

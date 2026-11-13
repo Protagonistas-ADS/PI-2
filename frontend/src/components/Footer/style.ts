@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const Rodape = styled.footer`
     width: 100%;
@@ -119,7 +120,7 @@ export const RodapeInferior = styled.div`
     text-align: center;
 `;
 
-export const Logo = styled.a`
+export const Logo = styled(Link)`
     display: flex;
     align-items: center;
     gap: 0.6rem;

@@ -23,7 +23,7 @@ export const BotaoAcao = styled.button<BotaoProps>`
     border: none;
     border-radius: 8px;
 
-    background-color: #e8912a;
+    background-color: #d97713;
     color: white;
 
     font-weight: 600;
@@ -31,7 +31,7 @@ export const BotaoAcao = styled.button<BotaoProps>`
     transition: background-color 0.2s ease;
 
     &:hover {
-        background-color: #cf7717;
+        background-color: #b56510;
     }
 `;
 
@@ -48,7 +48,7 @@ export const BotaoLink = styled(Link)<BotaoProps>`
     border: none;
     border-radius: 8px;
 
-    background-color: #e8912a;
+    background-color: #d97713;
     color: white;
 
     font-weight: 600;
@@ -57,6 +57,6 @@ export const BotaoLink = styled(Link)<BotaoProps>`
     transition: background-color 0.2s ease;
 
     &:hover {
-        background-color: #cf7717;
+        background-color: #b56510;
     }
 `;

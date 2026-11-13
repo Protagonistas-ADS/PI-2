@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const ContainerPagina = styled.div`
     min-height: 100vh;
@@ -41,23 +42,23 @@ export const ConteudoHero = styled.div`
 export const BotaoOrcamento = styled.a`
     display: inline-block;
     padding: 14px 24px;
-    background-color: #e8912a;
+    background-color: #d97713;
     color: white;
     text-decoration: none;
     font-weight: bold;
     font-size: 1.2rem;
     border-radius: 5px;
     cursor: pointer;
-    transition: all 0.2s ease;
+
     color: #F0E6D6;
 
     &:hover {
-        background-color: #cf7717;
+        background-color: #b56510;
     }
 `;
 
 export const SufixoMarca = styled.span`
-    color: #e8912a;
+    color: #d97713;
 `;
 
 
@@ -150,7 +151,7 @@ export const ConteudoCTA = styled.div`
     }
 `;
 
-export const BotaoCTA = styled.a`
+export const BotaoCTA = styled(Link)`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -159,7 +160,7 @@ export const BotaoCTA = styled.a`
     padding: 14px 24px;
     margin-top: 24px;
     
-    background-color: #e8912a;
+    background-color: #d97713;
     border-radius: 8px;
     cursor: pointer;
     text-decoration: none;
@@ -168,16 +169,7 @@ export const BotaoCTA = styled.a`
     font-size: 1.3rem;
     font-weight: bold;
 
-    transition: all 0.2s ease;
-
     &:hover {
-        background-color: #cf7717;
+        background-color: #b56510;
     }
-`;
-
-export const Destaques = styled.section`
-
-`;
-
-export const ConteudoDestaques = styled.div`
 `;
