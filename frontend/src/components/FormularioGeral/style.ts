@@ -22,8 +22,6 @@ export const Logo = styled.a`
     border-radius: 8px;
     margin-bottom: 12px;
     
-
-    
     text-decoration: none;
 
     img {

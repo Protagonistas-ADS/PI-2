@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 interface MenuProps {
     $menuAberto: boolean;
@@ -38,7 +39,7 @@ export const ConteudoCabecalho = styled.div`
     }
 `;
 
-export const Logo = styled.a`
+export const Logo = styled(Link)`
     display: flex;
     align-items: center;
     gap: 0.6rem;
@@ -100,6 +101,7 @@ export const ListaLinks = styled.ul`
     margin: 0;
     padding: 0;
     list-style: none;
+    }
 
     @media (width >= 768px) {
         flex-direction: row;
@@ -107,7 +109,7 @@ export const ListaLinks = styled.ul`
     }
 `;
 
-export const ItemLink = styled.a<LinkProps>`
+export const ItemLink = styled(Link) <LinkProps>`
     padding: 0.25rem 0;
 
     color: #ffffff;
@@ -117,6 +119,21 @@ export const ItemLink = styled.a<LinkProps>`
 
     border-bottom: 2px solid
         ${({ $ativo }) => $ativo ? "#e8912a" : "transparent"};
+
+    &:hover {
+        border-bottom-color: #e8912a;
+    }
+`;
+
+export const ItemAncora = styled.a`
+    padding: 0.25rem 0;
+
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: bold;
+    text-decoration: none;
+
+    border-bottom: 2px solid transparent;
 
     &:hover {
         border-bottom-color: #e8912a;
