@@ -1,4 +1,4 @@
-import { use, useState, type SyntheticEvent } from "react";
+import { useState, type SyntheticEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { autenticarLogin } from "../../services/usuarioApi";
@@ -10,6 +10,11 @@ import {
     ContainerPagina,
     ContainerVoltar,
 } from "./style";
+
+import { obterMensagemErro } from "../../utils/obterMensagemErro";
+import { 
+    swalErro
+} from "../../utils/alertas";
 
 import { FaArrowLeft } from "react-icons/fa";
 
@@ -25,15 +30,12 @@ function Login() {
             
             try {
                 const data = await autenticarLogin({ email, senha });
-
-                
                 
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("payload", JSON.stringify(data.payload));
                 navigate("/catalogo");
             } catch (error) {
-                alert("Erro ao realizar login.");
-                console.error("Erro ao realizar login", error);
+                swalErro(obterMensagemErro(error, "Erro ao logar. Tente novamente mais tarde"));
             }
         }
 

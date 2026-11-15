@@ -13,6 +13,12 @@ import FormularioGeral from "../../components/FormularioGeral";
 import InputGeral from "../../components/InputGeral";
 
 import { FaArrowLeft } from "react-icons/fa";
+import { obterMensagemErro } from "../../utils/obterMensagemErro";
+import { 
+    toastSucesso,
+    swalErro
+} from "../../utils/alertas";
+
 
 function Cadastro() {
     const [nome, setNome] = useState("");
@@ -26,11 +32,10 @@ function Cadastro() {
 
         try {
             await cadastrarUsuario({ nome, email, senha });
-
+            toastSucesso("Cadastrado com sucesso.");
             navigate('/login');
         } catch (error) {
-            alert("Erro ao realizar cadastro.");
-            console.error("ERRO AQUI", error);
+            swalErro(obterMensagemErro(error, "Erro ao cadastrar. Tente novamente mais tarde"));
         }
     }
 
