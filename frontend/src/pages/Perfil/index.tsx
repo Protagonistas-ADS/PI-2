@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
-import BotaoGeral from "../../components/BotaoGeral";
-import { buscarUsuarioLogado, atualizarUsuario } from "../../services/usuarioApi";
+import { useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaCheck } from "react-icons/fa";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+
+
+import BotaoGeral from "../../components/BotaoGeral";
+import Navbar from "../../components/Navbar";
+
+import { buscarUsuarioLogado, atualizarUsuario } from "../../services/usuarioApi";
 
 import { obterMensagemErro } from "../../utils/obterMensagemErro";
 import {
@@ -9,6 +15,7 @@ import {
     swalErro,
     swalAviso
 } from "../../utils/alertas";
+
 import {
     ContainerPagina,
     Conteudo,
@@ -27,17 +34,21 @@ interface Usuario {
     perfil: "cliente" | "administrador";
 }
 
+
 function Perfil() {
     const [usuario, setUsuario] = useState<Usuario | null>(null);
     const [nome, setNome] = useState("");
     const [senha, setSenha] = useState("");
     const [senhaNova, setSenhaNova] = useState("");
     const [confirmarSenha, setConfirmarSenha] = useState("");
+    const [mostrarSenhaAtual, setMostrarSenhaAtual] = useState(false);
+    const [mostrarSenhaNova, setMostrarSenhaNova] = useState(false);
+    const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false);
 
     const nomeAlterado = nome !== usuario?.nome;
+    const navigate = useNavigate();
 
     async function carregarUsuario() {
-
         try {
             const dados = await buscarUsuarioLogado();
             setUsuario(dados);
@@ -47,6 +58,17 @@ function Perfil() {
             console.error("Erro ao carregar usuário", error);
         }
     }
+
+    function handleLogout() {
+        localStorage.removeItem("token");
+        navigate('/login');
+    }
+
+    const linksNavegacao = [
+        { id: 2, texto: "Pedidos/Cotações", href: "/catalogo", ativo: false },
+        { id: 1, texto: "Perfil", href: "/perfil", ativo: false },
+        { id: 4, texto: "Sair", href: "/login", ativo: false, aoClicar: handleLogout },
+    ];
 
     function validarSenha() {
         if (!senha || !senhaNova || !confirmarSenha) {
@@ -104,15 +126,20 @@ function Perfil() {
 
     return (
         <ContainerPagina>
+            <Navbar
+                linkLogo="/catalogo"
+                links={linksNavegacao}
+            />
+
+            <CabecalhoPerfil>
+                <BotaoGeral
+                    texto="Voltar"
+                    destino="/catalogo"
+                    icone={<FaArrowLeft />}
+                />
+                <h1>Meu Perfil</h1>
+            </CabecalhoPerfil>
             <Conteudo>
-                <CabecalhoPerfil>
-                    <BotaoGeral
-                        texto="Voltar"
-                        destino="/catalogo"
-                        icone={<FaArrowLeft />}
-                    />
-                    <h1>Meu Perfil</h1>
-                </CabecalhoPerfil>
 
                 <GridPerfil>
                     <PainelPerfil>
@@ -156,32 +183,66 @@ function Perfil() {
 
                         <GrupoCampo>
                             <label htmlFor="senha">Senha Atual:</label>
-                            <CampoInformacao
-                                id="senha"
-                                type="password"
-                                value={senha}
-                                onChange={(event) => setSenha(event.target.value)}
-                            />
+
+                            <div className="campo-senha">
+                                <CampoInformacao
+                                    id="senha"
+                                    type={mostrarSenhaAtual ? "text" : "password"}
+                                    value={senha}
+                                    onChange={(event) => setSenha(event.target.value)}
+                                />
+
+                                <button
+                                    type="button"
+                                    onClick={() => setMostrarSenhaAtual((valor) => !valor)}
+                                    className="icone-senha"
+                                >
+                                    {mostrarSenhaAtual ? <FiEyeOff /> : <FiEye />}
+                                </button>
+                            </div>
+
                         </GrupoCampo>
 
                         <GrupoCampo>
                             <label htmlFor="senhaNova">Nova Senha:</label>
-                            <CampoInformacao
-                                id="senhaNova"
-                                type="password"
-                                value={senhaNova}
-                                onChange={(event) => setSenhaNova(event.target.value)}
-                            />
+
+                            <div className="campo-senha">
+                                <CampoInformacao
+                                    id="senhaNova"
+                                    type={mostrarSenhaNova ? "text" : "password"}
+                                    value={senhaNova}
+                                    onChange={(event) => setSenhaNova(event.target.value)}
+                                />
+
+                                <button
+                                    type="button"
+                                    onClick={() => setMostrarSenhaNova((valor) => !valor)}
+                                    className="icone-senha"
+                                >
+                                    {mostrarSenhaNova ? <FiEyeOff /> : <FiEye />}
+                                </button>
+                            </div>
                         </GrupoCampo>
 
                         <GrupoCampo>
                             <label htmlFor="confirmarSenha">Confirmar Nova Senha:</label>
-                            <CampoInformacao
-                                id="confirmarSenha"
-                                type="password"
-                                value={confirmarSenha}
-                                onChange={(event) => setConfirmarSenha(event.target.value)}
-                            />
+
+                            <div className="campo-senha">
+                                <CampoInformacao
+                                    id="confirmarSenha"
+                                    type={mostrarConfirmarSenha ? "text" : "password"}
+                                    value={confirmarSenha}
+                                    onChange={(event) => setConfirmarSenha(event.target.value)}
+                                />
+
+                                <button
+                                    type="button"
+                                    onClick={() => setMostrarConfirmarSenha((valor) => !valor)}
+                                    className="icone-senha"
+                                >
+                                    {mostrarConfirmarSenha ? <FiEyeOff /> : <FiEye />}
+                                </button>
+                            </div>
                         </GrupoCampo>
 
                         <BotaoGeral

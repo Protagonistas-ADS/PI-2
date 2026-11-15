@@ -7,6 +7,7 @@ import {
     Navegacao,
     ListaLinks,
     ItemLink,
+    ItemAncora
 } from "./style";
 import { FiX, FiMenu } from "react-icons/fi";
 import FerrarettoLogo from "../../assets/FerrarettoLogo.png";
@@ -38,7 +39,7 @@ function Navbar({ linkLogo, links }: NavbarProps) {
     return (
         <Cabecalho>
             <ConteudoCabecalho>
-                <Logo href={linkLogo}>
+                <Logo to={linkLogo}>
                     <img src={FerrarettoLogo} alt="Logo da empresa" />
                 </Logo>
 
@@ -56,16 +57,28 @@ function Navbar({ linkLogo, links }: NavbarProps) {
                     <ListaLinks>
                         {links.map((link) => (
                             <li key={link.id}>
-                                <ItemLink
-                                    href={link.href}
-                                    $ativo={link.ativo ?? false}
-                                    onClick={() => {
-                                        fecharMenu();
-                                        link.aoClicar?.()
-                                    }}
-                                >
-                                    {link.texto}
-                                </ItemLink>
+                                {link.href.startsWith("#") ? (
+                                    <ItemAncora
+                                        href={link.href}
+                                        onClick={() => {
+                                            fecharMenu();
+                                            link.aoClicar?.();
+                                        }}
+                                    >
+                                        {link.texto}
+                                    </ItemAncora>
+                                ) : (
+                                    <ItemLink
+                                        to={link.href}
+                                        $ativo={link.ativo ?? false}
+                                        onClick={() => {
+                                            fecharMenu();
+                                            link.aoClicar?.()
+                                        }}
+                                    >
+                                        {link.texto}
+                                    </ItemLink>
+                                )}
                             </li>
                         ))}
                     </ListaLinks>

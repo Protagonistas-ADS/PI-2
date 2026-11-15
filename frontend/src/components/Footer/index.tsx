@@ -33,7 +33,7 @@ function Footer({linkLogo}: FooterProps) {
         <Rodape>
             <ConteudoRodape id="contatos">
 
-                <Logo href={linkLogo}>     
+                <Logo to={linkLogo}>     
                     <img src={FerrarettoLogo} alt="Logo da empresa" />
                 </Logo>
 

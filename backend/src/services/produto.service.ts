@@ -9,7 +9,11 @@ const ProdutoService = {
         }
 
         await ProdutoRepository.Criar(nome, descricao, preco, quantidade);
-    }
+    },
+
+   async Listar() {
+        await ProdutoRepository.Listar();
+   }
 }
 
 export default ProdutoService;
