@@ -97,7 +97,7 @@ function Perfil() {
 
             toastSucesso("Nome atualizado com sucesso!");
         } catch (error) {
-            swalErro(obterMensagemErro(error, "Não foi possível alterar o nomme"));
+            swalErro(obterMensagemErro(error, "Não foi possível alterar o nome"));
         }
     }
 

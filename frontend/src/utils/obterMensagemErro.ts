@@ -9,7 +9,7 @@ export function obterMensagemErro(error: unknown, mensagemPadrao: string) {
             return mensagem;
         }
 
-        const detalhe = error.response?.data?.detalhes?.message;
+        const detalhe = error.response?.data?.detalhes?.[0]?.message;
 
         if (typeof detalhe === "string") {
             return detalhe;
