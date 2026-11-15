@@ -8,10 +8,10 @@ import BotaoGeral from "../../components/BotaoGeral";
 import FormularioGeral from "../../components/FormularioGeral";
 import InputGeral from "../../components/InputGeral";
 
+import { obterMensagemErro } from "../../utils/obterMensagemErro";
 import { 
-    alertaSucesso,
-    alertaAviso,
-    alertaErro
+    toastSucesso,
+    swalErro
 } from "../../utils/alertas";
 
 import {
@@ -32,10 +32,10 @@ function Cadastro() {
 
         try {
             await cadastrarUsuario({ nome, email, senha });
-            alertaSucesso("Cadastrado com sucesso.");
+            toastSucesso("Cadastrado com sucesso.");
             navigate('/login');
         } catch (error) {
-            alertaErro("Erro ao cadastrar");
+            swalErro(obterMensagemErro(error, "Erro ao cadastrar. Tente novamente mais tarde"));
         }
     }
 

@@ -8,6 +8,14 @@ import BotaoGeral from "../../components/BotaoGeral";
 import Navbar from "../../components/Navbar";
 
 import { buscarUsuarioLogado, atualizarUsuario } from "../../services/usuarioApi";
+
+import { obterMensagemErro } from "../../utils/obterMensagemErro";
+import {
+    toastSucesso,
+    swalErro,
+    swalAviso
+} from "../../utils/alertas";
+
 import {
     ContainerPagina,
     Conteudo,
@@ -64,52 +72,51 @@ function Perfil() {
 
     function validarSenha() {
         if (!senha || !senhaNova || !confirmarSenha) {
-            alert("Preencha todos os campos de senha.");
+            swalAviso("Preencha todos os campos de senha.");
             return false;
         }
 
         if (senhaNova !== confirmarSenha) {
-            alert("As senhas não coincidem.");
+            swalAviso("A nova senha e a confirmação não coincidem.");
             return false;
         }
 
         return true;
     }
 
-    async function atualizarDados() {
-        if (senhaNova || senha || confirmarSenha) {
-            if (!validarSenha()) return;
-        }
-
-        const dados: {
-            nome?: string;
-            senhaAtual?: string;
-            senhaNova?: string;
-        } = {};
-
-        if (nomeAlterado) {
-            dados.nome = nome;
-        }
-
-        if (senhaNova) {
-            dados.senhaAtual = senha;
-            dados.senhaNova = senhaNova;
-        }
-
-        if (Object.keys(dados).length === 0) {
+    async function atualizarNome() {
+        if (!nome.trim()) {
+            swalAviso("O nome não pode ficar vazio.");
             return;
         }
 
         try {
-            await atualizarUsuario(dados);
+            await atualizarUsuario({ nome });
 
             await carregarUsuario();
+
+            toastSucesso("Nome atualizado com sucesso!");
+        } catch (error) {
+            swalErro(obterMensagemErro(error, "Não foi possível alterar o nomme"));
+        }
+    }
+
+    async function atualizarSenha() {
+        if (!validarSenha()) return;
+
+        try {
+            await atualizarUsuario({
+                senhaAtual: senha,
+                senhaNova,
+            });
 
             setSenha("");
             setSenhaNova("");
             setConfirmarSenha("");
+
+            toastSucesso("Senha alterada com sucesso!");
         } catch (error) {
-            console.error("Erro ao atualizar usuário:", error);
+            swalErro(obterMensagemErro(error, "Não foi possível alterar a senha"));
         }
     }
 
@@ -152,7 +159,7 @@ function Perfil() {
                                 <button
                                     type="button"
                                     onMouseDown={(event) => event.preventDefault()}
-                                    onClick={atualizarDados}
+                                    onClick={atualizarNome}
                                     className="button-alterar-nome"
                                 >
                                     <FaCheck />
@@ -243,7 +250,7 @@ function Perfil() {
                             width="100%"
                             padding="15px"
                             margin="28px 0"
-                            onClick={atualizarDados}
+                            onClick={atualizarSenha}
                         />
                     </PainelPerfil>
                 </GridPerfil>
