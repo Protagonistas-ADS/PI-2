@@ -1,10 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 
-import TelaInicial from "../pages/TelaInicial";
-import Catalogo from "../pages/Catalogo";
-import Cadastro from "../pages/Cadastro";
-import Login from "../pages/Login";
-import Perfil from "../pages/Perfil";
+import TelaInicial from "../pages/Compartilhadas/TelaInicial";
+import Catalogo from "../pages/Cliente/Catalogo";
+import Cadastro from "../pages/Compartilhadas/Cadastro";
+import Login from "../pages/Compartilhadas/Login";
+import Perfil from "../pages/Cliente/Perfil";
 
 import RotaProtegida from "../components/RotaProtegida";
 import RotaPublica from "../components/RotaPublica";

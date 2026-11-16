@@ -2,11 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiShoppingCart } from "react-icons/fi";
 
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
-import CardsProdutos from "../../components/CardsProdutos";
-import ModalProduto from "../../components/ModalProduto";
-import ModalCarrinho from "../../components/ModalCarrinho";
+import Navbar from "../../../components/Navbar";
+import Footer from "../../../components/Footer";
+import CardsProdutos from "../../../components/CardsProdutos";
+import ModalProduto from "../../../components/ModalProduto";
+import ModalCarrinho from "../../../components/ModalCarrinho";
 
 import {
     ContainerPagina,
@@ -16,7 +16,7 @@ import {
     SessaoProdutos,
     BotaoCarrinho,
 } from "./style";
-import ProdutoImagemExemplo from "../../assets/PaleteBackground.png";
+import ProdutoImagemExemplo from "../../../assets/PaleteBackground.png";
 
 
 interface Produto {

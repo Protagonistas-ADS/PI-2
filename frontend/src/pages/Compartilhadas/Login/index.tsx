@@ -2,15 +2,15 @@ import { useState, type SyntheticEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 
-import { autenticarLogin } from "../../services/usuarioApi";
-import BotaoGeral from "../../components/BotaoGeral";
-import FormularioGeral from "../../components/FormularioGeral";
-import InputGeral from "../../components/InputGeral";
+import { autenticarLogin } from "../../../services/usuarioApi";
+import BotaoGeral from "../../../components/BotaoGeral";
+import FormularioGeral from "../../../components/FormularioGeral";
+import InputGeral from "../../../components/InputGeral";
 
-import { obterMensagemErro } from "../../utils/obterMensagemErro";
+import { obterMensagemErro } from "../../../utils/obterMensagemErro";
 import { 
     swalErro
-} from "../../utils/alertas";
+} from "../../../utils/alertas";
 
 import { 
     ContainerPagina,

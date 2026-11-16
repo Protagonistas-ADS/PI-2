@@ -1,8 +1,8 @@
 import { FaAward, FaHeadset, FaLeaf } from "react-icons/fa";
 import { LuArrowRight } from "react-icons/lu";
 
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
+import Navbar from "../../../components/Navbar";
+import Footer from "../../../components/Footer";
 
 import {
     ContainerPagina,

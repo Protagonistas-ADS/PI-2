@@ -3,17 +3,17 @@ import { useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaCheck } from "react-icons/fa";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
-import BotaoGeral from "../../components/BotaoGeral";
-import Navbar from "../../components/Navbar";
+import BotaoGeral from "../../../components/BotaoGeral";
+import Navbar from "../../../components/Navbar";
 
-import { buscarUsuarioLogado, atualizarUsuario } from "../../services/usuarioApi";
+import { buscarUsuarioLogado, atualizarUsuario } from "../../../services/usuarioApi";
 
-import { obterMensagemErro } from "../../utils/obterMensagemErro";
+import { obterMensagemErro } from "../../../utils/obterMensagemErro";
 import {
     toastSucesso,
     swalErro,
     swalAviso
-} from "../../utils/alertas";
+} from "../../../utils/alertas";
 
 import {
     ContainerPagina,
