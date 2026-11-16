@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS pedido (
     cotacao_id INT UNIQUE DEFAULT NULL,
     -- endereco_id INT DEFAULT NULL,
     status ENUM('pendente','respondido','entregue','cancelado') NOT NULL DEFAULT 'pendente',
-    previsao_entrega DATETIME,
+    previsao_busca DATETIME,
     -- observacoes_entrega VARCHAR(255),
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_pedido_cliente

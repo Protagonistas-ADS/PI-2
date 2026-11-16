@@ -20,6 +20,9 @@ import {
 } from "./style";
 
 
+
+
+
 function Cadastro() {
     const [nome, setNome] = useState("");
     const [email, setEmail] = useState("");
