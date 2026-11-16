@@ -5,6 +5,7 @@ import Catalogo from "../pages/Cliente/Catalogo";
 import Cadastro from "../pages/Compartilhadas/Cadastro";
 import Login from "../pages/Compartilhadas/Login";
 import Perfil from "../pages/Cliente/Perfil";
+import PedidosCotacoes from "../pages/Cliente/PedidosCotacoes";
 
 import RotaProtegida from "../components/RotaProtegida";
 import RotaPublica from "../components/RotaPublica";
@@ -44,11 +45,19 @@ function Rotas() {
                     </RotaProtegida>
                 }
             />
-            <Route 
+            <Route
                 path="/perfil"
                 element={
                     <RotaProtegida>
                         <Perfil />
+                    </RotaProtegida>
+                }
+            />
+            <Route
+                path="/clientePedidos"
+                element={
+                    <RotaProtegida>
+                        <PedidosCotacoes />
                     </RotaProtegida>
                 }
             />

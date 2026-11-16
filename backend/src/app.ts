@@ -5,6 +5,8 @@ import cors from "cors";
 
 import UsuarioRoutes from "./routes/usuario.routes";
 import ProdutoRoutes from "./routes/produto.routes";
+import PedidoRoutes from "./routes/pedido.routes";
+
 import erroMiddleware from "./middlewares/error.middleware";
 
 const app = express();
@@ -15,6 +17,7 @@ app.use(cors());
 // Rotas
 app.use("/usuarios", UsuarioRoutes);
 app.use("/produtos", ProdutoRoutes);
+app.use("/pedidos", PedidoRoutes);
 
 // Middleware de erro
 app.use(erroMiddleware);

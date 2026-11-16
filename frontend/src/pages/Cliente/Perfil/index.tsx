@@ -64,7 +64,8 @@ function Perfil() {
     }
 
     const linksNavegacao = [
-        { id: 2, texto: "Pedidos/Cotações", href: "/catalogo", ativo: false },
+        { id: 2, texto: "Catálogo", href: "/catalogo", ativo: false },
+        { id: 2, texto: "Pedidos/Cotações", href: "/clientePedidos", ativo: false },
         { id: 1, texto: "Perfil", href: "/perfil", ativo: false },
         { id: 4, texto: "Sair", href: "/login", ativo: false, aoClicar: handleLogout },
     ];
@@ -130,15 +131,15 @@ function Perfil() {
                 links={linksNavegacao}
             />
 
-            <CabecalhoPerfil>
-                <BotaoGeral
-                    texto="Voltar"
-                    destino="/catalogo"
-                    icone={<FaArrowLeft />}
-                />
-                <h1>Meu Perfil</h1>
-            </CabecalhoPerfil>
             <Conteudo>
+                <CabecalhoPerfil>
+                    <BotaoGeral
+                        texto="Voltar"
+                        destino="/catalogo"
+                        icone={<FaArrowLeft />}
+                    />
+                    <h1>Meu Perfil</h1>
+                </CabecalhoPerfil>
 
                 <GridPerfil>
                     <PainelPerfil>

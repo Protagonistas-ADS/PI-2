@@ -38,8 +38,8 @@ CREATE TABLE IF NOT EXISTS endereco (
     FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
 );
 */
--- ====================== LOTE (produto) ======================
-CREATE TABLE IF NOT EXISTS lote (
+-- ====================== produto ======================
+CREATE TABLE IF NOT EXISTS produto (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     descricao VARCHAR(255),
@@ -63,14 +63,14 @@ CREATE TABLE IF NOT EXISTS cotacao (
 CREATE TABLE IF NOT EXISTS cotacao_item (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cotacao_id INT NOT NULL,
-    lote_id INT NOT NULL,
+    produto_id INT NOT NULL,
     quantidade INT NOT NULL,
     preco_unitario DECIMAL(10,2),
     subtotal DECIMAL(10, 2),
     CONSTRAINT fk_cotacao_item_cotacao
     FOREIGN KEY (cotacao_id) REFERENCES cotacao(id) ON DELETE CASCADE,
-    CONSTRAINT fk_cotacao_item_lote
-    FOREIGN KEY (lote_id) REFERENCES lote(id)
+    CONSTRAINT fk_cotacao_item_produto
+    FOREIGN KEY (produto_id) REFERENCES produto(id)
 );
 
 -- ====================== PEDIDO ======================
@@ -94,14 +94,14 @@ CREATE TABLE IF NOT EXISTS pedido (
 CREATE TABLE IF NOT EXISTS pedido_item (
     id INT AUTO_INCREMENT PRIMARY KEY,
     pedido_id INT NOT NULL,
-    lote_id INT NOT NULL,
+    produto_id INT NOT NULL,
     quantidade INT NOT NULL,
     preco_unitario DECIMAL(10,2) NOT NULL,
     subtotal DECIMAL(10, 2) NOT NULL,
     CONSTRAINT fk_pedido_item_pedido
     FOREIGN KEY (pedido_id) REFERENCES pedido(id) ON DELETE CASCADE,
-    CONSTRAINT fk_pedido_item_lote
-    FOREIGN KEY (lote_id) REFERENCES lote(id)
+    CONSTRAINT fk_pedido_item_produto
+    FOREIGN KEY (produto_id) REFERENCES produto(id)
 );
 
 -- ====================== VENDA ======================
@@ -129,24 +129,24 @@ CREATE TABLE IF NOT EXISTS nota (
 CREATE TABLE IF NOT EXISTS nota_item (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nota_id INT NOT NULL,
-    lote_id INT NOT NULL,
+    produto_id INT NOT NULL,
     quantidade INT NOT NULL,
     preco_unitario DECIMAL(10,2) NOT NULL,
     subtotal DECIMAL(10,2) NOT NULL,
     CONSTRAINT fk_nota_item_nota FOREIGN KEY (nota_id) REFERENCES nota(id) ON DELETE CASCADE,
-    CONSTRAINT fk_nota_item_lote FOREIGN KEY (lote_id) REFERENCES lote(id)
+    CONSTRAINT fk_nota_item_produto FOREIGN KEY (produto_id) REFERENCES produto(id)
 );
 
 -- ====================== MOVIMENTAÇÃO DE ESTOQUE ======================
 CREATE TABLE IF NOT EXISTS movimentacao_estoque (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    lote_id INT NOT NULL,
+    produto_id INT NOT NULL,
     nota_id INT DEFAULT NULL,
     tipo ENUM('entrada','saida') NOT NULL,
     quantidade INT NOT NULL,
     data_mov TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_movimentacao_estoque_lote
-    FOREIGN KEY (lote_id) REFERENCES lote(id),
+    CONSTRAINT fk_movimentacao_estoque_produto
+    FOREIGN KEY (produto_id) REFERENCES produto(id),
     CONSTRAINT fk_movimentacao_estoque_nota
     FOREIGN KEY (nota_id) REFERENCES nota(id)
 );
