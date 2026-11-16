@@ -12,6 +12,7 @@ export const CabecalhoPerfil = styled.header`
     align-items: center;
     gap: 20px;
     padding: 30px 2.5%;
+    margin-bottom: 20px;
 
     h1 {
         color: #2b4b3c;

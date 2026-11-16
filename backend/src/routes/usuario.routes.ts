@@ -3,7 +3,7 @@ import { Router } from "express";
 import UsuarioController from "../controllers/usuario.controller";
 
 import { validarSchema } from "../middlewares/validarSchema.middleware";
-import { autenticacaoMiddleware } from "../middlewares/autenticar.middleware";
+import { autenticacaoMiddleware } from "../middlewares/autenticacao.middleware";
 import { CadastroSchema, LoginSchema, AtualizarSchema } from "../schemas/usuario.schema";
 
 
