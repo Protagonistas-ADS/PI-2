@@ -3,7 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 
 import { listarCotacoesCliente, listarItensCotacao } from "../../../services/cotacaoApi";
-import { listarPedidosCliente, listarItensPedido } from "../../../services/pedidoApi";
+import {
+    listarPedidosCliente,
+    listarItensPedido,
+    cancelarPedido,
+} from "../../../services/pedidoApi";
+import { swalConfirmacao, swalErro, toastSucesso } from "../../../utils/alertas";
 
 import TabelaGeral from "../../../components/TabelaGeral";
 import Navbar from "../../../components/Navbar";
@@ -32,6 +37,7 @@ function PedidosCotacoes() {
     const [produtosCotacao, setProdutosCotacao] = useState<any[]>([]);
     const [modalCotacaoAberto, setModalCotacaoAberto] = useState(false);
 
+    const navigate = useNavigate();
 
     async function carregarCotacoesCliente() {
         try {
@@ -97,6 +103,27 @@ function PedidosCotacoes() {
         }
     }
 
+    async function handleCancelarPedido(id: number) {
+        const confirmacao = await swalConfirmacao(
+            "Tem certeza que deseja cancelar este pedido?"
+        );
+
+        if (!confirmacao.isConfirmed) return;
+
+        try {
+            await cancelarPedido(id);
+
+            setPedidos((pedidosAtuais) =>
+                pedidosAtuais.filter((pedido: any) => pedido.id !== id)
+            );
+
+            toastSucesso("Pedido cancelado com sucesso.");
+        } catch (error) {
+            console.error("Erro ao cancelar pedido:", error);
+            swalErro("Não foi possível cancelar o pedido.");
+        }
+    }
+
     // COLUNAS
     const colunasPedidos = [
         {
@@ -106,28 +133,28 @@ function PedidosCotacoes() {
         {
             titulo: "Quantidade",
             chave: "quantidade_total",
-            renderizar: (valor: number, registro: any) => (
+            renderizar: (valorCelula: number, registro: any) => (
                 <button
                     className="botao-quantidade"
                     type="button"
                     onClick={() => abrirProdutosPedido(registro.id)}
                 >
-                    {valor} unidades
+                    {valorCelula} unidades
                 </button>
             )
         },
         {
             titulo: "Status",
             chave: "status",
-            renderizar: (valor: string) => {
+            renderizar: (valorCelula: string) => {
                 const status = {
                     pendente: "Pendente",
                     respondido: "Respondido"
                 };
 
                 return (
-                    <span className={`status status-${valor}`}>
-                        {status[valor as keyof typeof status] ?? valor}
+                    <span className={`status status-${valorCelula}`}>
+                        {status[valorCelula as keyof typeof status] ?? valorCelula}
                     </span>
                 );
             }
@@ -135,14 +162,27 @@ function PedidosCotacoes() {
         {
             titulo: "Previsão de busca",
             chave: "previsao_busca",
-            renderizar: (valor: string | null) => {
-                if (!valor) return "Aguardando definição";
+            renderizar: (valorCelula: string | null) => {
+                if (!valorCelula) return "Aguardando definição";
 
-                const data = String(valor).slice(0, 10);
+                const data = String(valorCelula).slice(0, 10);
                 const [ano, mes, dia] = data.split("-");
 
                 return `${dia}/${mes}/${ano}`;
             }
+        },
+        {
+            titulo: "Ações",
+            chave: "id",
+            renderizar: (valorCelula: string, registro: any) => (
+                <button
+                    type="button"
+                    className="acao-pedido"
+                    onClick={() => handleCancelarPedido(registro.id)}
+                >
+                    Cancelar
+                </button>
+            )
         }
     ];
 
@@ -154,20 +194,20 @@ function PedidosCotacoes() {
         {
             titulo: "Quantidade",
             chave: "quantidade_total",
-            renderizar: (valor: number, registro: any) => (
+            renderizar: (valorCelula: number, registro: any) => (
                 <button
                     className="botao-quantidade"
                     type="button"
                     onClick={() => abrirProdutosCotacao(registro.id)}
                 >
-                    {valor} unidades
+                    {valorCelula} unidades
                 </button>
             )
         },
         {
             titulo: "Status",
             chave: "status",
-            renderizar: (valor: string) => {
+            renderizar: (valorCelula: string) => {
                 const status = {
                     pendente: "Pendente",
                     respondida: "Respondida",
@@ -175,8 +215,8 @@ function PedidosCotacoes() {
                 };
 
                 return (
-                    <span className={`status status-${valor}`}>
-                        {status[valor as keyof typeof status] ?? valor}
+                    <span className={`status status-${valorCelula}`}>
+                        {status[valorCelula as keyof typeof status] ?? valorCelula}
                     </span>
                 );
             }
@@ -184,25 +224,30 @@ function PedidosCotacoes() {
         {
             titulo: "Validade",
             chave: "validade",
-            renderizar: (valor: string | null) => {
-                if (!valor) return "Aguardando resposta";
+            renderizar: (valorCelula: string | null) => {
+                if (!valorCelula) return "Aguardando resposta";
 
-                const data = String(valor).replace("T", " ").slice(0, 16);
+                const data = String(valorCelula).replace("T", " ").slice(0, 16);
                 const [ano, mes, diaHora] = data.split("-");
                 const [dia, hora] = diaHora!.split(" ");
 
                 return `${dia}/${mes}/${ano}`;
             }
+        },
+        {
+            titulo: "Ações",
+            chave: "id",
+            renderizar: (valorCelula: string, registro: any) => (
+                <button
+                    type="button"
+                    className="acao-pedido"
+                    onClick={() => handleCancelarPedido(registro.id)}
+                >
+                    Cancelar
+                </button>
+            )
         }
     ];
-
-
-    function abrirProdutos(registro: any) {
-        setRegistroSelecionado(registro);
-        setModalAberto(true);
-    }
-
-    const navigate = useNavigate();
 
     function handleLogout() {
         localStorage.removeItem("token");
