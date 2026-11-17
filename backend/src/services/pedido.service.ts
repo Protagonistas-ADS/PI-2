@@ -1,11 +1,30 @@
 import PedidoRepository from "../repositories/pedido.repository";
+import { criarErro } from "../utils/criarErro";
 
 const PedidoService = {
 
-    async ListarDoCliente(id: number) {
-        const pedidos = await PedidoRepository.ListarDoCliente(id);
+    async ListarPorCliente(id: number) {
+        if (!id) {
+            throw criarErro("Identificação do cliente não informada.", 400);
+        }
+
+        const pedidos = await PedidoRepository.ListarPorCliente(id);
 
         return pedidos;
+    },
+
+    async ListarItens(id: number, clienteId: number) {
+        if (!id || !clienteId) {
+            throw criarErro("Identificação do pedido ou cliente não informada.", 400);
+        }
+
+        const produtos = await PedidoRepository.ListarItens(id, clienteId);
+
+        if (produtos.length === 0) {
+            throw criarErro("Pedido não encontrado ou sem produtos.", 404);
+        }
+
+        return produtos;
     }
 
 };

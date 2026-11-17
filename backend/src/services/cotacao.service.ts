@@ -4,125 +4,38 @@ import { criarErro } from "../utils/criarErro";
 
 const CotacaoService = {
 
-    async Criar(
-        usuario: { id: number; perfil: "cliente" | "administrador" },
-        dados: {
-            cliente_id?: number;
-            validade?: string;
-            itens: { lote_id: number; quantidade: number }[];
-        }
-    ) {
-        let clienteId: number;
-
-        if (usuario.perfil === "administrador") {
-            if (!dados.cliente_id) {
-                throw criarErro(
-                    "O administrador deve informar o cliente da cotação.",
-                    400
-                );
-            }
-
-            clienteId = dados.cliente_id;
-        } else {
-            clienteId = usuario.id;
+    async ListarPorCliente(id: number) {
+        if (!id) {
+            throw criarErro("Identificação do cliente não informada.", 400);
         }
 
-        const id = await CotacaoRepository.Criar({
-            cliente_id: clienteId,
-            validade: dados.validade ?? null,
-            status: "pendente",
-            itens: dados.itens
-        });
+        const cotacoes = await CotacaoRepository.ListarPorCliente(id);
 
-        return { id };
+        return cotacoes;
     },
 
-    async Listar(
-        usuario: { id: number; perfil: "cliente" | "administrador" }
-    ) {
-        if (usuario.perfil === "administrador") {
-            return await CotacaoRepository.Listar();
+    async ListarItens(id: number, clienteId: number) {
+        if (!id || !clienteId) {
+            throw criarErro("Identificação da cotação ou cliente não informada.", 400);
         }
 
-        return await CotacaoRepository.Listar(usuario.id);
-    },
+        const produtos = await CotacaoRepository.ListarItens(id, clienteId);
 
-    async BuscarPorId(
-        id: number,
-        usuario: { id: number; perfil: "cliente" | "administrador" }
-    ) {
-        const cotacao = await CotacaoRepository.BuscarPorId(id);
-
-        if (!cotacao) {
-            throw criarErro("Cotação não encontrada.", 404);
+        if (produtos.length === 0) {
+            throw criarErro("Cotação não encontrada ou sem produtos.", 404);
         }
 
-        if (
-            usuario.perfil !== "administrador" &&
-            cotacao.cliente_id !== usuario.id
-        ) {
-            throw criarErro(
-                "Você não possui permissão para visualizar esta cotação.",
-                403
-            );
-        }
+        const valorTotal = produtos.reduce(
+            (total, produto) => total + Number(produto.subtotal ?? 0),
+            0
+        );
 
-        return cotacao;
-    },
-
-    async Atualizar(
-        id: number,
-        dados: {
-            validade?: string | null;
-            status?: string;
-            itens?: { lote_id: number; quantidade: number }[];
-        }
-    ) {
-        const cotacao = await CotacaoRepository.BuscarPorId(id);
-
-        if (!cotacao) {
-            throw criarErro("Cotação não encontrada.", 404);
-        }
-
-        if (cotacao.status === "convertida") {
-            throw criarErro(
-                "Não é possível editar uma cotação convertida em pedido.",
-                409
-            );
-        }
-
-        await CotacaoRepository.Atualizar(id, dados);
-
-        return { mensagem: "Cotação atualizada com sucesso." };
-    },
-
-    async Deletar(id: number) {
-        const cotacao = await CotacaoRepository.BuscarPorId(id);
-
-        if (!cotacao) {
-            throw criarErro("Cotação não encontrada.", 404);
-        }
-
-        if (cotacao.status === "convertida") {
-            throw criarErro(
-                "Não é possível excluir uma cotação convertida em pedido.",
-                409
-            );
-        }
-
-        const possuiPedido = await CotacaoRepository.PossuiPedido(id);
-
-        if (possuiPedido) {
-            throw criarErro(
-                "Não é possível excluir uma cotação vinculada a um pedido.",
-                409
-            );
-        }
-
-        await CotacaoRepository.Deletar(id);
-
-        return { mensagem: "Cotação excluída com sucesso." };
+        return {
+            produtos,
+            valor_total: valorTotal
+        };
     }
+
 };
 
 export default CotacaoService;
