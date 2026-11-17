@@ -8,14 +8,14 @@ INSERT INTO usuario (id, nome, email, senha, perfil) VALUES
 
 -- TELEFONE
 
---INSERT INTO telefone (usuario_id, numero, tipo) VALUES
---(1, '19999999999', 'celular'),
---(1, '1933334444', 'comercial');
+-- INSERT INTO telefone (usuario_id, numero, tipo) VALUES
+-- (1, '19999999999', 'celular'),
+-- (1, '1933334444', 'comercial');
 
 -- ENDERECO
 
---INSERT INTO endereco (usuario_id, rua, numero, bairro, cidade, estado, cep) VALUES
---(1, 'Rua das Flores', '100', 'Centro', 'Indaiatuba', 'SP', '13330000');
+-- INSERT INTO endereco (usuario_id, rua, numero, bairro, cidade, estado, cep) VALUES
+-- (1, 'Rua das Flores', '100', 'Centro', 'Indaiatuba', 'SP', '13330000');
 
 -- PRODUTOS
 

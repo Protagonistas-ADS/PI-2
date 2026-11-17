@@ -5,6 +5,7 @@ export const PaginaContainer = styled.div`
     display: flex;
     flex-direction: column;
     background-color: #F0E6D6;
+    padding-bottom: 55px;
 `;
 
 export const AbasContainer = styled.div`
@@ -35,7 +36,7 @@ export const Aba = styled.button<{ $ativa: boolean }>`
 export const PedidosCabecalho = styled.div`
     display: flex;
     gap: 25px;
-    padding: 30px 2.5%;
+    padding: 30px;
 
     h1 {
         font-weight: bold;
@@ -56,18 +57,18 @@ export const PedidosConteudo = styled.div`
     max-width: 1200px;
 
     .botao-quantidade {
-    background: #e8f0eb;
-    color: #2b4b3c;
-    border: 1px solid #2b4b3c;
-    border-radius: 6px;
-    padding: 5px 12px;
-    cursor: pointer;
-    font-weight: 600;
+        background: #e8f0eb;
+        color: #2b4b3c;
+        border: 1px solid #2b4b3c;
+        border-radius: 6px;
+        padding: 5px 12px;
+        cursor: pointer;
+        font-weight: 600;
 
-    &:hover {
-        background: #d4e4d9;
+        &:hover {
+            background: #d4e4d9;
+        }
     }
-}
 
     .status {
         display: inline-block;
