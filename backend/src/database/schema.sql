@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS usuario (
     email VARCHAR(255) UNIQUE NOT NULL,
     senha VARCHAR(255) NOT NULL,
     perfil ENUM('cliente', 'administrador') NOT NULL,
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    criado_em DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 -- ====================== TELEFONE (vários por usuário) ======================
@@ -55,7 +55,8 @@ CREATE TABLE IF NOT EXISTS cotacao (
     validade DATETIME,
     status ENUM('pendente','respondida','convertida','recusada','cancelada', 'expirada') NOT NULL DEFAULT 'pendente',
     -- validade DATE,
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+    lida_em DATETIME DEFAULT null,
     CONSTRAINT fk_cotacao_cliente
     FOREIGN KEY (cliente_id) REFERENCES usuario(id)
 );
@@ -82,7 +83,7 @@ CREATE TABLE IF NOT EXISTS pedido (
     status ENUM('pendente','respondido','entregue','cancelado') NOT NULL DEFAULT 'pendente',
     previsao_busca DATETIME,
     -- observacoes_entrega VARCHAR(255),
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_pedido_cliente
     FOREIGN KEY (cliente_id) REFERENCES usuario(id),
     CONSTRAINT fk_pedido_cotacao
@@ -109,7 +110,7 @@ CREATE TABLE IF NOT EXISTS venda (
     id INT AUTO_INCREMENT PRIMARY KEY,
     pedido_id INT NOT NULL UNIQUE,
     valor_total DECIMAL(10,2) NOT NULL,
-    data_venda TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data_venda DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_venda_pedido
     FOREIGN KEY (pedido_id) REFERENCES pedido(id)
 );
@@ -121,7 +122,7 @@ CREATE TABLE IF NOT EXISTS nota (
     numero VARCHAR(30) NOT NULL UNIQUE,
     natureza_operacao VARCHAR(100) DEFAULT 'Venda de mercadoria',
     valor_total DECIMAL(10,2) NOT NULL,
-    data_emissao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data_emissao DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_nota_venda
     FOREIGN KEY (venda_id) REFERENCES venda(id)
 );
@@ -144,7 +145,7 @@ CREATE TABLE IF NOT EXISTS movimentacao_estoque (
     nota_id INT DEFAULT NULL,
     tipo ENUM('entrada','saida') NOT NULL,
     quantidade INT NOT NULL,
-    data_mov TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data_mov DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_movimentacao_estoque_produto
     FOREIGN KEY (produto_id) REFERENCES produto(id),
     CONSTRAINT fk_movimentacao_estoque_nota
