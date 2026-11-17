@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { FaArrowLeft } from "react-icons/fa";
+
+import { listarCotacoesCliente, listarItensCotacao } from "../../../services/cotacaoApi";
+import { listarPedidosCliente, listarItensPedido } from "../../../services/pedidoApi";
 
 import TabelaGeral from "../../../components/TabelaGeral";
 import Navbar from "../../../components/Navbar";
 import BotaoGeral from "../../../components/BotaoGeral";
+import ModalCarrinho from "../../../components/ModalCarrinho";
 
 import {
     PaginaContainer,
@@ -14,111 +17,150 @@ import {
     PedidosCabecalho,
     PedidosConteudo
 } from "./style";
-import { Titulo } from "../../../components/TabelaGeral/style";
+
+
 
 
 function PedidosCotacoes() {
     const [abaSelecionada, setAbaSelecionada] = useState<"pedidos" | "cotacoes">("pedidos");
-    const [registroSelecionado, setRegistroSelecionado] = useState<any>(null);
+    const [registroSelecionado, setRegistroSelecionado] = useState(null);
     const [modalAberto, setModalAberto] = useState(false);
+    const [cotacoes, setCotacoes] = useState([]);
+    const [pedidos, setPedidos] = useState([]);
+    const [produtosPedido, setProdutosPedido] = useState([]);
+    const [modalPedidoAberto, setModalPedidoAberto] = useState(false);
+    const [produtosCotacao, setProdutosCotacao] = useState<any[]>([]);
+    const [modalCotacaoAberto, setModalCotacaoAberto] = useState(false);
 
 
-    // DADOS TEMPORAIS (MOCK)
-    const pedidos = [
-        {
-            id: 1,
-            produtos: [
-                { id: 1, nome: "Palete PBR", quantidade: 10, preco_unitario: 45.00 },
-                { id: 2, nome: "Palete descartável", quantidade: 5, preco_unitario: 25.00 }
-            ],
-            status: "pendente",
-            previsao_busca: null
-        },
-        {
-            id: 2,
-            produtos: [
-                { id: 3, nome: "Palete reforçado", quantidade: 8, preco_unitario: 75.00 },
-                { id: 4, nome: "Palete plástico", quantidade: 3, preco_unitario: 120.00 }
-            ],
-            status: "respondido",
-            previsao_busca: "21/11/2026"
+    async function carregarCotacoesCliente() {
+        try {
+            const dados = await listarCotacoesCliente();
+            setCotacoes(dados);
+        } catch (error) {
+            console.error("Erro ao carregar cotações: ", error);
         }
-    ];
+    }
 
-
-    const cotacoes = [
-        {
-            id: 1,
-            produtos: [
-                { id: 1, nome: "Palete PBR", quantidade: 20 },
-                { id: 4, nome: "Palete plástico", quantidade: 10 }
-            ],
-            status: "pendente",
-            validade: null
-        },
-        {
-            id: 2,
-            produtos: [
-                { id: 3, nome: "Palete reforçado", quantidade: 15, preco_unitario: 70.00 },
-                { id: 2, nome: "Palete descartável", quantidade: 30, preco_unitario: 23.00 }
-            ],
-            status: "respondida",
-            validade: "23/11/2026"
-        },
-        {
-            id: 3,
-            produtos: [
-                { id: 1, nome: "Palete PBR", quantidade: 50, preco_unitario: 43.00 },
-                { id: 3, nome: "Palete reforçado", quantidade: 20, preco_unitario: 72.00 }
-            ],
-            status: "expirada",
-            validade: "13/11/2026"
+    async function carregarPedidosCliente() {
+        try {
+            const dados = await listarPedidosCliente();
+            setPedidos(dados);
+        } catch (error) {
+            console.error("Erro ao carregar pedidos: ", error);
         }
-    ];
+    }
 
+    async function abrirProdutosPedido(id: number) {
+        try {
+            const produtos = await listarItensPedido(id);
+
+            const itens = produtos.map((produto: any) => (
+                {
+                    produto: {
+                        id: produto.produto_id,
+                        nome: produto.produto_nome,
+                        preco: Number(produto.preco_unitario)
+                    },
+
+                    quantidade: produto.quantidade
+                }
+            ));
+
+            setProdutosPedido(itens);
+            setModalPedidoAberto(true)
+        } catch (error) {
+            console.error("Erro ao abrir itens do pedido: ", error);
+        }
+    }
+
+    async function abrirProdutosCotacao(id: number) {
+        try {
+            const resultado = await listarItensCotacao(id);
+
+            const itens = resultado.produtos.map((produto: any) => (
+                {
+                    produto: {
+                        id: produto.produto_id,
+                        nome: produto.produto_nome,
+                        preco: Number(produto.preco_unitario ?? 0)
+                    },
+
+                    quantidade: produto.quantidade
+                }
+            ));
+
+            setProdutosCotacao(itens);
+            setModalCotacaoAberto(true)
+        } catch (error) {
+            console.error("Erro ao abrir itens da cotação: ", error);
+        }
+    }
 
     // COLUNAS
     const colunasPedidos = [
         {
             titulo: "Pedido",
-            chave: "id",
-            renderizar: (valor: number) => `#${valor}`
+            chave: "id"
         },
         {
-            titulo: "Produtos",
-            chave: "produtos",
-            renderizar: (valor: any[], pedido: any) => (
-                <button onClick={() => abrirProdutos(pedido)}>
-                    {valor.length} produtos
+            titulo: "Quantidade",
+            chave: "quantidade_total",
+            renderizar: (valor: number, registro: any) => (
+                <button
+                    className="botao-quantidade"
+                    type="button"
+                    onClick={() => abrirProdutosPedido(registro.id)}
+                >
+                    {valor} unidades
                 </button>
             )
         },
         {
             titulo: "Status",
             chave: "status",
-            renderizar: (valor: string) => (
-                <span>{valor === "pendente" ? "Pendente" : "Respondido"}</span>
-            )
+            renderizar: (valor: string) => {
+                const status = {
+                    pendente: "Pendente",
+                    respondido: "Respondido"
+                };
+
+                return (
+                    <span className={`status status-${valor}`}>
+                        {status[valor as keyof typeof status] ?? valor}
+                    </span>
+                );
+            }
         },
         {
             titulo: "Previsão de busca",
             chave: "previsao_busca",
-            renderizar: (valor: string | null) => valor ?? "-"
+            renderizar: (valor: string | null) => {
+                if (!valor) return "Aguardando definição";
+
+                const data = String(valor).slice(0, 10);
+                const [ano, mes, dia] = data.split("-");
+
+                return `${dia}/${mes}/${ano}`;
+            }
         }
     ];
 
     const colunasCotacoes = [
         {
             titulo: "Cotação",
-            chave: "id",
-            renderizar: (valor: number) => `#${valor}`
+            chave: "id"
         },
         {
-            titulo: "Produtos",
-            chave: "produtos",
-            renderizar: (valor: any[], cotacao: any) => (
-                <button onClick={() => abrirProdutos(cotacao)}>
-                    {valor.length} produtos
+            titulo: "Quantidade",
+            chave: "quantidade_total",
+            renderizar: (valor: number, registro: any) => (
+                <button
+                    className="botao-quantidade"
+                    type="button"
+                    onClick={() => abrirProdutosCotacao(registro.id)}
+                >
+                    {valor} unidades
                 </button>
             )
         },
@@ -132,22 +174,27 @@ function PedidosCotacoes() {
                     expirada: "Expirada"
                 };
 
-                return <span>{status[valor as keyof typeof status]}</span>;
+                return (
+                    <span className={`status status-${valor}`}>
+                        {status[valor as keyof typeof status] ?? valor}
+                    </span>
+                );
             }
         },
         {
             titulo: "Validade",
             chave: "validade",
-            renderizar: (valor: string | null) => valor ?? "-"
+            renderizar: (valor: string | null) => {
+                if (!valor) return "Aguardando resposta";
+
+                const data = String(valor).replace("T", " ").slice(0, 16);
+                const [ano, mes, diaHora] = data.split("-");
+                const [dia, hora] = diaHora!.split(" ");
+
+                return `${dia}/${mes}/${ano}`;
+            }
         }
     ];
-
-
-
-
-
-
-
 
 
     function abrirProdutos(registro: any) {
@@ -161,6 +208,11 @@ function PedidosCotacoes() {
         localStorage.removeItem("token");
         navigate('/login');
     }
+
+    useEffect(() => {
+        carregarCotacoesCliente();
+        carregarPedidosCliente();
+    }, []);
 
     const linksNavegacao = [
         { id: 3, texto: "Catálogo", href: "/catalogo", ativo: false },
@@ -205,18 +257,34 @@ function PedidosCotacoes() {
 
                 {abaSelecionada === "pedidos" ? (
                     <TabelaGeral
-                        titulo="Meus Pedidos"
+                        titulo={`Meus Pedidos - ${pedidos.length} Registros`}
                         colunas={colunasPedidos}
                         dados={pedidos}
                     />
                 ) : (
                     <TabelaGeral
-                        titulo="Minhas Cotações"
+                        titulo={`Minhas Cotações - ${cotacoes.length} Registros`}
                         colunas={colunasCotacoes}
                         dados={cotacoes}
                     />
                 )}
             </PedidosConteudo>
+
+            {modalPedidoAberto && (
+                <ModalCarrinho
+                    itens={produtosPedido}
+                    aoFechar={() => setModalPedidoAberto(false)}
+                    titulo="Produtos do Pedido"
+                />
+            )}
+
+            {modalCotacaoAberto && (
+                <ModalCarrinho
+                    itens={produtosCotacao}
+                    aoFechar={() => setModalCotacaoAberto(false)}
+                    titulo="Produtos da Cotação"
+                />
+            )}
 
         </PaginaContainer>
     )

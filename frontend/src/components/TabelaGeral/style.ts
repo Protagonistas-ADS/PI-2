@@ -30,7 +30,7 @@ export const Linha = styled.tr`
 
 export const Cabecalho = styled.th`
     padding: 16px;
-    text-align: left;
+    text-align: center;
     background-color: #2b4b3c;
     color: #ffffff;
     font-weight: 600;
@@ -40,6 +40,6 @@ export const Cabecalho = styled.th`
 export const Celula = styled.td`
     padding: 16px;
     color: #333333;
-    text-align: left;
+    text-align: center;
     vertical-align: middle;
 `;

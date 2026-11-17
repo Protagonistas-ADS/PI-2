@@ -54,4 +54,42 @@ export const PedidosConteudo = styled.div`
     margin: 0 auto;
     width: 100%;
     max-width: 1200px;
+
+    .botao-quantidade {
+    background: #e8f0eb;
+    color: #2b4b3c;
+    border: 1px solid #2b4b3c;
+    border-radius: 6px;
+    padding: 5px 12px;
+    cursor: pointer;
+    font-weight: 600;
+
+    &:hover {
+        background: #d4e4d9;
+    }
+}
+
+    .status {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .status-pendente {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .status-respondido,
+    .status-respondida {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .status-expirada {
+        background: #e2e3e5;
+        color: #383d41;
+    }
 `;

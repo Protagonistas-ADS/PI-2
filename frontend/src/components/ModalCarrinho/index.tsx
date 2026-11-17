@@ -1,6 +1,6 @@
 import ModalBase from "../ModalBase";
 import { FiX } from "react-icons/fi";
-import {    
+import {
     CabecalhoCarrinho,
     ListaProdutos,
     ItemProduto,
@@ -8,13 +8,10 @@ import {
     AcoesCarrinho,
 } from "./style";
 
-interface Produto { 
+interface Produto {
     readonly id: number;
     nome: string;
-    imagem: string;
-    descricao: string;
     preco: number;
-    quantidadeEstoque: number;
 }
 
 interface ItemCarrinho {
@@ -25,15 +22,17 @@ interface ItemCarrinho {
 interface ModalCarrinhoProps {
     itens: ItemCarrinho[];
     aoFechar: () => void;
-    aoFazerPedido: () => void;
-    aoFazerCotacao: () => void;
+    aoFazerPedido?: () => void;
+    aoFazerCotacao?: () => void;
+    titulo?: string;
 }
 
 function ModalCarrinho({
     itens,
     aoFechar,
     aoFazerPedido,
-    aoFazerCotacao
+    aoFazerCotacao,
+    titulo = "Meu Carrinho"
 }: ModalCarrinhoProps) {
     const valorTotal = itens.reduce(
         (total, item) => total + item.produto.preco * item.quantidade, 0
@@ -49,10 +48,10 @@ function ModalCarrinho({
     return (
         <ModalBase aoFechar={aoFechar}>
             <CabecalhoCarrinho>
-                <h2>Meu Carrinho</h2>
+                <h2>{titulo}</h2>
 
                 <button type="button" onClick={aoFechar}>
-                    <FiX size={'48px'}/>
+                    <FiX size={'48px'} />
                 </button>
             </CabecalhoCarrinho>
 
@@ -74,16 +73,19 @@ function ModalCarrinho({
 
             <ResumoCarrinho>
                 <strong>Valor total: {formatarPreco(valorTotal)}</strong>
-                
-                <AcoesCarrinho>
-                    <button className="acao-pedido" type="button" onClick={aoFazerPedido}>
-                        Fazer Pedido
-                    </button>
 
-                    <button className="acao-cotacao" type="button" onClick={aoFazerCotacao}>
-                        Solicitar Cotação
-                    </button>
-                </AcoesCarrinho>
+
+                {aoFazerPedido && aoFazerCotacao ? (
+                    <AcoesCarrinho>
+                        <button className="acao-pedido" type="button" onClick={aoFazerPedido}>
+                            Fazer Pedido
+                        </button>
+
+                        <button className="acao-cotacao" type="button" onClick={aoFazerCotacao}>
+                            Solicitar Cotação
+                        </button>
+                    </AcoesCarrinho>
+                ) : null}
 
             </ResumoCarrinho>
         </ModalBase>
