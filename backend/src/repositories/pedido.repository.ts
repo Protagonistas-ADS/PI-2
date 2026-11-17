@@ -1,5 +1,6 @@
 import db from "../configs/db";
-import { RowDataPacket } from "mysql2";
+import { RowDataPacket, ResultSetHeader } from "mysql2";
+
 
 const PedidoRepository = {
 
@@ -34,6 +35,18 @@ const PedidoRepository = {
         WHERE pe.id = ?
           AND pe.cliente_id = ?;
     `, [id, clienteId]);
+
+        return resultado;
+    },
+
+    async Cancelar(id: number, clienteId: number) {
+        const [resultado] = await db.execute<ResultSetHeader>(`
+            UPDATE pedido
+            SET status = "cancelado"
+            WHERE id = ?
+                AND cliente_id = ?
+                AND status IN ("pendente", "respondido")
+        `, [id, clienteId]);
 
         return resultado;
     }

@@ -28,8 +28,21 @@ const PedidoController = {
         } catch (error) {
             next(error);
         }
-    }
+    },
 
+    async Cancelar(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = Number(req.params.id);
+            const clienteId = req.usuario!.id;
+
+            const resultado = await PedidoService.Cancelar(id, clienteId);
+
+            res.status(200).json(resultado);
+
+        } catch (error) {
+            next(error);
+        }
+    }
 };
 
 export default PedidoController;
