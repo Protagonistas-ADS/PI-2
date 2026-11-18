@@ -1,5 +1,10 @@
 import ModalBase from "../ModalBase";
-import { FiX } from "react-icons/fi";
+import {
+    FiX,
+    FiPlus,
+    FiMinus,
+    FiTrash2
+} from "react-icons/fi";
 import {
     CabecalhoCarrinho,
     ListaProdutos,
@@ -12,6 +17,7 @@ interface Produto {
     readonly id: number;
     nome: string;
     preco: number;
+    quantidadeEstoque: number;
 }
 
 interface ItemCarrinho {
@@ -19,20 +25,26 @@ interface ItemCarrinho {
     quantidade: number;
 }
 
+
 interface ModalCarrinhoProps {
     itens: ItemCarrinho[];
     aoFechar: () => void;
-    aoFazerPedido?: () => void;
-    aoFazerCotacao?: () => void;
-    titulo?: string;
+    aoFazerPedido: () => void;
+    aoFazerCotacao: () => void;
+    aoAumentar: (id: number) => void;
+    aoDiminuir: (id: number) => void;
+    aoRemover: (id: number) => void;
 }
+
 
 function ModalCarrinho({
     itens,
     aoFechar,
     aoFazerPedido,
     aoFazerCotacao,
-    titulo = "Meu Carrinho"
+    aoAumentar,
+    aoDiminuir,
+    aoRemover
 }: ModalCarrinhoProps) {
     const valorTotal = itens.reduce(
         (total, item) => total + item.produto.preco * item.quantidade, 0
@@ -48,44 +60,91 @@ function ModalCarrinho({
     return (
         <ModalBase aoFechar={aoFechar}>
             <CabecalhoCarrinho>
-                <h2>{titulo}</h2>
+                <h2>Meu Carrinho</h2>
 
                 <button type="button" onClick={aoFechar}>
                     <FiX size={'48px'} />
                 </button>
             </CabecalhoCarrinho>
 
-            <ListaProdutos>
-                {itens.map((item) => (
-                    <ItemProduto key={item.produto.id}>
-                        <h3>{item.produto.nome}</h3>
 
-                        <p>Quantidade: {item.quantidade}</p>
+<ListaProdutos>
+    {itens.length === 0 ? (
+        <p>Seu carrinho está vazio.</p>
+    ) : (
+        itens.map((item) => (
+            <ItemProduto key={item.produto.id}>
+                <h3>{item.produto.nome}</h3>
 
-                        <p>Preço Unitário: {formatarPreco(item.produto.preco)}</p>
+                <div className="controle-quantidade">
+                    <span>Quantidade:</span>
 
-                        <strong>
-                            Subtotal: {formatarPreco(item.produto.preco * item.quantidade)}
-                        </strong>
-                    </ItemProduto>
-                ))}
-            </ListaProdutos>
+                    <div className="botoes-quantidade">
+                        <button
+                            type="button"
+                            onClick={() => aoDiminuir(item.produto.id)}
+                            aria-label={`Diminuir quantidade de ${item.produto.nome}`}
+                        >
+                            <FiMinus />
+                        </button>
+
+                        <span>{item.quantidade}</span>
+
+                        <button
+                            type="button"
+                            onClick={() => aoAumentar(item.produto.id)}
+                            disabled={item.quantidade >= item.produto.quantidadeEstoque}
+                            aria-label={`Aumentar quantidade de ${item.produto.nome}`}
+                        >
+                            <FiPlus />
+                        </button>
+                    </div>
+
+                    <button
+                        className="botao-remover"
+                        type="button"
+                        onClick={() => aoRemover(item.produto.id)}
+                    >
+                        <FiTrash2 />
+                        Remover
+                    </button>
+                </div>
+
+                <p>
+                    Preço Unitário: {formatarPreco(item.produto.preco)}
+                </p>
+
+                <strong>
+                    Subtotal: {formatarPreco(item.produto.preco * item.quantidade)}
+                </strong>
+            </ItemProduto>
+        ))
+    )}
+</ListaProdutos>
 
             <ResumoCarrinho>
                 <strong>Valor total: {formatarPreco(valorTotal)}</strong>
 
 
-                {aoFazerPedido && aoFazerCotacao ? (
-                    <AcoesCarrinho>
-                        <button className="acao-pedido" type="button" onClick={aoFazerPedido}>
-                            Fazer Pedido
-                        </button>
+{itens.length > 0 && (
+    <AcoesCarrinho>
+        <button
+            className="acao-pedido"
+            type="button"
+            onClick={aoFazerPedido}
+        >
+            Fazer Pedido
+        </button>
 
-                        <button className="acao-cotacao" type="button" onClick={aoFazerCotacao}>
-                            Solicitar Cotação
-                        </button>
-                    </AcoesCarrinho>
-                ) : null}
+        <button
+            className="acao-cotacao"
+            type="button"
+            onClick={aoFazerCotacao}
+        >
+            Solicitar Cotação
+        </button>
+    </AcoesCarrinho>
+)}
 
             </ResumoCarrinho>
         </ModalBase>

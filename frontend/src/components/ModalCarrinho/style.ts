@@ -52,6 +52,81 @@ export const ItemProduto = styled.article`
         margin-top: 10px;
         color: #ed8b22;
     }
+
+    .controle-quantidade {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-top: 14px;
+        flex-wrap: wrap;
+
+        > span {
+            color: #5d6d63;
+            font-size: 0.95rem;
+        }
+    }
+
+    .botoes-quantidade {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        span {
+            min-width: 24px;
+            text-align: center;
+            font-weight: 600;
+            color: #2b4b3c;
+        }
+
+        button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 34px;
+            height: 34px;
+
+            border: none;
+            border-radius: 8px;
+
+            background-color: #2b4b3c;
+            color: #ffffff;
+
+            cursor: pointer;
+            transition: 0.2s;
+
+            &:hover:not(:disabled) {
+                background-color: #21352b;
+                transform: translateY(-1px);
+            }
+
+            &:disabled {
+                background-color: #aab5ae;
+                cursor: not-allowed;
+                opacity: 0.6;
+            }
+        }
+    }
+
+    .botao-remover {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        border: none;
+        background: transparent;
+        color: #d64545;
+
+        font-size: 0.9rem;
+        font-weight: 600;
+
+        cursor: pointer;
+
+        &:hover {
+            color: #a92d2d;
+            text-decoration: underline;
+        }
+    }
 `;
 
 export const ResumoCarrinho = styled.footer`

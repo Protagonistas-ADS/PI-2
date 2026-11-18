@@ -70,19 +70,80 @@ function Catalogo() {
         alert("Cotação feita com sucesso");
     }
 
+
     function adicionarNoCarrinho(produto: Produto, quantidade: number) {
         setCarrinho((carrinhoAtual) => {
-            const itemExistente = carrinhoAtual.find((item) => item.produto.id === produto.id);
+            const itemExistente = carrinhoAtual.find(
+                (item) => item.produto.id === produto.id
+            );
+
+            const quantidadeAtual = itemExistente?.quantidade ?? 0;
+
+            // Impede ultrapassar o estoque disponível
+            const quantidadeAdicionar = Math.min(
+                quantidade,
+                produto.quantidadeEstoque - quantidadeAtual
+            );
+
+            if (quantidadeAdicionar <= 0) {
+                return carrinhoAtual;
+            }
 
             if (itemExistente) {
-                return carrinhoAtual.map((item) => item.produto.id === produto.id
-                    ? { ...itemExistente, quantidade: item.quantidade + quantidade }
-                    : item
+                return carrinhoAtual.map((item) =>
+                    item.produto.id === produto.id
+                        ? {
+                            ...item,
+                            quantidade: item.quantidade + quantidadeAdicionar
+                        }
+                        : item
                 );
             }
 
-            return [...carrinhoAtual, { produto, quantidade }];
+            return [
+                ...carrinhoAtual,
+                { produto, quantidade: quantidadeAdicionar }
+            ];
         });
+    }
+
+    // Aumenta a quantidade de um produto
+    function aumentarQuantidade(id: number) {
+        setCarrinho((carrinhoAtual) =>
+            carrinhoAtual.map((item) =>
+                item.produto.id === id &&
+                item.quantidade < item.produto.quantidadeEstoque
+                    ? { ...item, quantidade: item.quantidade + 1 }
+                    : item
+            )
+        );
+    }
+
+    // Diminui a quantidade de um produto
+    function diminuirQuantidade(id: number) {
+        setCarrinho((carrinhoAtual) =>
+            carrinhoAtual.flatMap((item) => {
+                if (item.produto.id !== id) {
+                    return [item];
+                }
+
+                // Remove o produto quando chegar a zero
+                if (item.quantidade <= 1) {
+                    return [];
+                }
+
+                return [
+                    { ...item, quantidade: item.quantidade - 1 }
+                ];
+            })
+        );
+    }
+
+    // Remove completamente um produto do carrinho
+    function removerDoCarrinho(id: number) {
+        setCarrinho((carrinhoAtual) =>
+            carrinhoAtual.filter((item) => item.produto.id !== id)
+        );
     }
 
     const linksNavegacao = [
@@ -140,12 +201,15 @@ function Catalogo() {
 
             {carrinhoAberto && (
 
-                <ModalCarrinho
-                    itens={carrinho}
-                    aoFechar={() => setCarrinhoAberto(false)}
-                    aoFazerPedido={handleFazerPedido}
-                    aoFazerCotacao={handleFazerCotacao}
-                />
+<ModalCarrinho
+    itens={carrinho}
+    aoFechar={() => setCarrinhoAberto(false)}
+    aoFazerPedido={handleFazerPedido}
+    aoFazerCotacao={handleFazerCotacao}
+    aoAumentar={aumentarQuantidade}
+    aoDiminuir={diminuirQuantidade}
+    aoRemover={removerDoCarrinho}
+/>
             )}
 
         </ContainerPagina>
