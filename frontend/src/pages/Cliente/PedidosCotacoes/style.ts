@@ -94,19 +94,35 @@ export const PedidosConteudo = styled.div`
         color: #383d41;
     }
 
-    .acao-pedido {
-        background: #fde8e8;
-        color: #b42318;
-        border: 1px solid #f5b5b5;
-        border-radius: 6px;
-        padding: 7px 12px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.2s;
+.acao-cancelar {
+    background: #fde8e8;
+    color: #b42318;
+    border: 1px solid #f5b5b5;
+    border-radius: 6px;
+    padding: 7px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
 
-        &:hover {
-            background: #fbd5d5;
-        }
+    &:hover {
+        background: #fbd5d5;
     }
+}
+
+.acao-marcar-lida {
+    background: #fbf9b0;
+    color: #0e0e0e;
+    border: 1px solid #e5d875;
+    border-radius: 6px;
+    padding: 7px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+        background: #f5ed8a;
+    }
+}
 `;

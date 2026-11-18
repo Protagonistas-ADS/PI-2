@@ -14,3 +14,8 @@ export async function cancelarCotacao(id: number) {
     const response = await api.patch(`/cotacoes/cancelar/${id}`);
     return response.data;
 }
+
+export async function marcarComoLida(id: number) {
+    const response = await api.patch(`/cotacoes/lida/${id}`);
+    return response.data;
+}

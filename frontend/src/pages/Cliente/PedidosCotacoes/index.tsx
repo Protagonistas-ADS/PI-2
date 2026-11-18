@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 
-import { 
-    listarCotacoesCliente, 
+import {
+    listarCotacoesCliente,
     listarItensCotacao,
     cancelarCotacao,
+    marcarComoLida,
 } from "../../../services/cotacaoApi";
 
 import {
@@ -28,6 +29,7 @@ import {
     PedidosCabecalho,
     PedidosConteudo
 } from "./style";
+import { obterMensagemErro } from "../../../utils/obterMensagemErro";
 
 
 
@@ -151,6 +153,26 @@ function PedidosCotacoes() {
         }
     }
 
+
+    async function handleMarcarComoLida(id: number) {
+        try {
+            await marcarComoLida(id);
+
+            setCotacoes((cotacoesAtuais) =>
+                cotacoesAtuais.filter((cotacao: any) => cotacao.id !== id)
+            );
+
+            toastSucesso("Cotação marcada como lida.");
+        } catch (error) {
+            swalErro(obterMensagemErro(error, "Não foi possível marcar cotação como lida"));
+        }
+    }
+
+    function handleLogout() {
+        localStorage.removeItem("token");
+        navigate('/login');
+    }
+
     // COLUNAS
     const colunasPedidos = [
         {
@@ -204,7 +226,7 @@ function PedidosCotacoes() {
             renderizar: (valorCelula: string, registro: any) => (
                 <button
                     type="button"
-                    className="acao-pedido"
+                    className="acao-cancelar"
                     onClick={() => handleCancelarPedido(registro.id)}
                 >
                     Cancelar
@@ -265,21 +287,27 @@ function PedidosCotacoes() {
             titulo: "Ações",
             chave: "id",
             renderizar: (valorCelula: string, registro: any) => (
-                <button
-                    type="button"
-                    className="acao-pedido"
-                    onClick={() => handleCancelarCotacao(registro.id)}
-                >
-                    Cancelar
-                </button>
+                registro.status === "expirada" ? (
+
+                    <button
+                        type="button"
+                        className="acao-marcar-lida"
+                        onClick={() => handleMarcarComoLida(registro.id)}
+                    >
+                        Marcar como Lida
+                    </button>
+                ) : (
+                    <button
+                        type="button"
+                        className="acao-cancelar"
+                        onClick={() => handleCancelarCotacao(registro.id)}
+                    >
+                        Cancelar
+                    </button>
+                )
             )
         }
     ];
-
-    function handleLogout() {
-        localStorage.removeItem("token");
-        navigate('/login');
-    }
 
     useEffect(() => {
         carregarCotacoesCliente();

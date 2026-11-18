@@ -38,7 +38,7 @@ function Cadastro() {
             toastSucesso("Cadastrado com sucesso.");
             navigate('/login');
         } catch (error) {
-            swalErro(obterMensagemErro(error, "Erro ao cadastrar. Tente novamente mais tarde"));
+            swalErro(obterMensagemErro(error, "Não foi possível cadastrar o usuário"));
         }
     }
 

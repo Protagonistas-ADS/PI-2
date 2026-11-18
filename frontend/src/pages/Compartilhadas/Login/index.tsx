@@ -37,7 +37,7 @@ function Login() {
                 localStorage.setItem("payload", JSON.stringify(data.payload));
                 navigate("/catalogo");
             } catch (error) {
-                swalErro(obterMensagemErro(error, "Erro ao logar. Tente novamente mais tarde"));
+                swalErro(obterMensagemErro(error, "Não foi possível fazer login"));
             }
         }
 
