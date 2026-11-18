@@ -2,12 +2,18 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 
-import { listarCotacoesCliente, listarItensCotacao } from "../../../services/cotacaoApi";
+import { 
+    listarCotacoesCliente, 
+    listarItensCotacao,
+    cancelarCotacao,
+} from "../../../services/cotacaoApi";
+
 import {
     listarPedidosCliente,
     listarItensPedido,
     cancelarPedido,
 } from "../../../services/pedidoApi";
+
 import { swalConfirmacao, swalErro, toastSucesso } from "../../../utils/alertas";
 
 import TabelaGeral from "../../../components/TabelaGeral";
@@ -121,6 +127,27 @@ function PedidosCotacoes() {
         } catch (error) {
             console.error("Erro ao cancelar pedido:", error);
             swalErro("Não foi possível cancelar o pedido.");
+        }
+    }
+
+    async function handleCancelarCotacao(id: number) {
+        const confirmacao = await swalConfirmacao(
+            "Tem certeza que deseja cancelar esta Cotação?"
+        );
+
+        if (!confirmacao.isConfirmed) return;
+
+        try {
+            await cancelarCotacao(id);
+
+            setCotacoes((cotacoesAtuais) =>
+                cotacoesAtuais.filter((cotacao: any) => cotacao.id !== id)
+            );
+
+            toastSucesso("Cotação cancelada com sucesso.");
+        } catch (error) {
+            console.error("Erro ao cancelar pedido:", error);
+            swalErro("Não foi possível cancelar a cotação.");
         }
     }
 
@@ -241,7 +268,7 @@ function PedidosCotacoes() {
                 <button
                     type="button"
                     className="acao-pedido"
-                    onClick={() => handleCancelarPedido(registro.id)}
+                    onClick={() => handleCancelarCotacao(registro.id)}
                 >
                     Cancelar
                 </button>

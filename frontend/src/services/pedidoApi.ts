@@ -11,6 +11,6 @@ export async function listarItensPedido(id: number) {
 }
 
 export async function cancelarPedido(id: number) {
-    const response = await api.get(`/pedidos/cancelar/${id}`);
+    const response = await api.patch(`/pedidos/cancelar/${id}`);
     return response.data;
 }

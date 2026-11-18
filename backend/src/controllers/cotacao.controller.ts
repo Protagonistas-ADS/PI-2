@@ -27,6 +27,20 @@ const CotacaoController = {
         } catch (error) {
             next(error);
         }
+    },
+
+    async Cancelar(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = Number(req.params.id);
+            const clienteId = req.usuario!.id;
+
+            const resultado = await CotacaoService.Cancelar(id, clienteId);
+
+            res.status(200).json(resultado);
+
+        } catch (error) {
+            next(error);
+        }
     }
 
 };
