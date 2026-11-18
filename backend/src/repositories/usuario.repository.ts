@@ -1,5 +1,5 @@
 import db from "../configs/db";
-import { RowDataPacket } from "mysql2";
+import { RowDataPacket, ResultSetHeader } from "mysql2";
 
 interface Usuario extends RowDataPacket {
     id: number;
@@ -14,21 +14,22 @@ interface DadosAtualizacao {
     senha?: string;
 }
 
-
 const UsuarioRepository = {
 
-    async Cadastrar(nome: string, email: string, senha: string) {
-        await db.execute(`
+    async Cadastrar(nome: string, email: string, senha: string): Promise<ResultSetHeader> {
+        const [resultado] = await db.execute<ResultSetHeader>(`
             INSERT INTO usuario (nome, email, senha, perfil)
-            VALUES (?, ?, ?, ?)   
+            VALUES (?, ?, ?, ?);
         `, [nome, email, senha, 'cliente']);
+
+        return resultado;
     },
 
     async BuscarPorEmail(email: string): Promise<Usuario | null> {
         const [resultado] = await db.execute<Usuario[]>(`
             SELECT id, nome, email, senha, perfil
             FROM usuario
-            WHERE email = ?
+            WHERE email = ?;
         `, [email]);
 
         return resultado[0] ?? null;
@@ -38,13 +39,13 @@ const UsuarioRepository = {
         const [resultado] = await db.execute<Usuario[]>(`
             SELECT id, nome, email, senha, perfil
             FROM usuario
-            WHERE id = ?
+            WHERE id = ?;
         `, [id]);
 
         return resultado[0] ?? null;
     },
 
-    async Atualizar(id: number, dados: DadosAtualizacao): Promise<void> {
+    async Atualizar(id: number, dados: DadosAtualizacao): Promise<ResultSetHeader | undefined> {
         const campos = [];
         const valores = [];
 
@@ -62,12 +63,15 @@ const UsuarioRepository = {
 
         valores.push(id);
 
-        await db.execute(`
+        const [resultado] = await db.execute<ResultSetHeader>(`
             UPDATE usuario
             SET ${campos.join(", ")}
-            WHERE id = ?
+            WHERE id = ?;
         `, valores);
+
+        return resultado;
     },
-}
+
+};
 
 export default UsuarioRepository;
