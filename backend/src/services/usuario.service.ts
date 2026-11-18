@@ -59,61 +59,61 @@ const UsuarioService = {
         return { token, payload };
     },
 
-async Atualizar(id: number, dados: DadosAtualizacao) {
-    const atualizacao: { nome?: string; senha?: string } = {};
+    async Atualizar(id: number, dados: DadosAtualizacao) {
+        const atualizacao: { nome?: string; senha?: string } = {};
 
-    const usuario = await UsuarioRepository.BuscarPorId(id);
+        const usuario = await UsuarioRepository.BuscarPorId(id);
 
-    if (!usuario) {
-        throw criarErro("Usuário não encontrado.", 404);
-    }
-
-    // Validações do nome
-    if (dados.nome !== undefined) {
-        const nome = dados.nome.trim();
-
-        if (!nome) {
-            throw criarErro("O nome não pode ficar vazio.", 400);
+        if (!usuario) {
+            throw criarErro("Usuário não encontrado.", 404);
         }
 
-        atualizacao.nome = nome;
-    }
+        // Validações do nome
+        if (dados.nome !== undefined) {
+            const nome = dados.nome.trim();
 
-    // Validações da senha
-    if (dados.senhaAtual !== undefined && dados.senhaNova === undefined) {
-        throw criarErro("Informe a nova senha.", 400);
-    }
+            if (!nome) {
+                throw criarErro("O nome não pode ficar vazio.", 400);
+            }
 
-    if (dados.senhaNova !== undefined) {
-        if (!dados.senhaAtual) {
-            throw criarErro("Informe sua senha atual.", 400);
+            atualizacao.nome = nome;
         }
 
-        if (dados.senhaNova.length < 6) {
-            throw criarErro(
-                "A nova senha deve conter ao menos 6 caracteres.",
-                400
+        // Validações da senha
+        if (dados.senhaAtual !== undefined && dados.senhaNova === undefined) {
+            throw criarErro("Informe a nova senha.", 400);
+        }
+
+        if (dados.senhaNova !== undefined) {
+            if (!dados.senhaAtual) {
+                throw criarErro("Informe sua senha atual.", 400);
+            }
+
+            if (dados.senhaNova.length < 6) {
+                throw criarErro(
+                    "A nova senha deve conter ao menos 6 caracteres.",
+                    400
+                );
+            }
+
+            const senhaValida = await bcrypt.compare(
+                dados.senhaAtual,
+                usuario.senha
             );
+
+            if (!senhaValida) {
+                throw criarErro("Senha atual incorreta.", 401);
+            }
+
+            atualizacao.senha = await bcrypt.hash(dados.senhaNova, 10);
         }
 
-        const senhaValida = await bcrypt.compare(
-            dados.senhaAtual,
-            usuario.senha
-        );
-
-        if (!senhaValida) {
-            throw criarErro("Senha atual incorreta.", 401);
+        if (Object.keys(atualizacao).length === 0) {
+            throw criarErro("Nenhum dado para atualizar.", 400);
         }
 
-        atualizacao.senha = await bcrypt.hash(dados.senhaNova, 10);
-    }
-
-    if (Object.keys(atualizacao).length === 0) {
-        throw criarErro("Nenhum dado para atualizar.", 400);
-    }
-
-    await UsuarioRepository.Atualizar(id, atualizacao);
-},
+        await UsuarioRepository.Atualizar(id, atualizacao);
+    },
 }
 
 export default UsuarioService;

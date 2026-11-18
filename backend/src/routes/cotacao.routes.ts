@@ -7,6 +7,6 @@ const router = Router();
 router.get("/cliente", autenticacaoMiddleware, CotacaoController.ListarPorCliente);
 router.get("/itens/:id", autenticacaoMiddleware, CotacaoController.ListarItens);
 router.patch("/cancelar/:id", autenticacaoMiddleware, CotacaoController.Cancelar);
-router.patch("/lida/:id", autenticacaoMiddleware, CotacaoController.marcarComoLida);
+router.patch("/lida/:id", autenticacaoMiddleware, CotacaoController.MarcarComoLida);
 
 export default router;

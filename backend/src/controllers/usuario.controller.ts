@@ -21,7 +21,7 @@ const UsuarioController = {
 
             const resultado = await UsuarioService.Login(email, senha);
 
-            return res.status(200).json(resultado);
+            res.status(200).json(resultado);
 
         } catch (error) {
             next(error);
@@ -30,7 +30,8 @@ const UsuarioController = {
 
     async BuscarUsuarioLogado(req: Request, res: Response, next: NextFunction) {
         try {
-            return res.status(200).json({ usuario: req.usuario });
+
+            res.status(200).json({ usuario: req.usuario });
 
         } catch (error) {
             next(error);
@@ -44,8 +45,8 @@ const UsuarioController = {
 
             await UsuarioService.Atualizar(id, dados);
 
-            return res.sendStatus(204);
-            
+            res.sendStatus(204);
+
         } catch (error) {
             next(error);
         }

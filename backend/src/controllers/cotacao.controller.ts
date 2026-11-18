@@ -11,7 +11,7 @@ const CotacaoController = {
             const cotacoes = await CotacaoService.ListarPorCliente(id);
 
             res.status(200).json({ cotacoes });
-            
+
         } catch (error) {
             next(error);
         }

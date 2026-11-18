@@ -14,7 +14,7 @@ const ProdutoController = {
             next(error);
         }
     },
-    
+
     async Listar(req: Request, res: Response, next: NextFunction) {
         try {
             const produtos = await ProdutoService.Listar();
