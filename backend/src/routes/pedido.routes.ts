@@ -6,6 +6,6 @@ const router = Router();
 
 router.get("/cliente", autenticacaoMiddleware, PedidoController.ListarPorCliente);
 router.get("/itens/:id", autenticacaoMiddleware, PedidoController.ListarItens);
-router.post("/cancelar/:id", autenticacaoMiddleware, PedidoController.Cancelar);
+router.patch("/cancelar/:id", autenticacaoMiddleware, PedidoController.Cancelar);
 
 export default router;

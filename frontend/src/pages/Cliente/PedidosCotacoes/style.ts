@@ -93,4 +93,20 @@ export const PedidosConteudo = styled.div`
         background: #e2e3e5;
         color: #383d41;
     }
+
+    .acao-pedido {
+        background: #fde8e8;
+        color: #b42318;
+        border: 1px solid #f5b5b5;
+        border-radius: 6px;
+        padding: 7px 12px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+
+        &:hover {
+            background: #fbd5d5;
+        }
+    }
 `;

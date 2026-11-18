@@ -12,7 +12,7 @@ import {
 interface Coluna {
     titulo: string;
     chave: string;
-    renderizar?: (valor: any, registro: any) => React.ReactNode;
+    renderizar?: (valorCelula: any, registro: any) => React.ReactNode;
 }
 
 interface TabelaGeralProps {
