@@ -25,6 +25,7 @@ const PedidoService = {
 
         return produtos;
     },
+
     async Cancelar(id: number, clienteId: number) {
         if (!id || !clienteId) {
             throw criarErro("Identificação do pedido ou cliente não informada.", 400);
@@ -33,10 +34,7 @@ const PedidoService = {
         const resultado = await PedidoRepository.Cancelar(id, clienteId);
 
         if (resultado.affectedRows === 0) {
-            throw criarErro(
-                "Pedido não encontrado ou não pode ser cancelado.",
-                404
-            );
+            throw criarErro("Pedido não encontrado ou não pode ser cancelado.", 404);
         }
 
         return { mensagem: "Pedido cancelado com sucesso." };

@@ -1,6 +1,6 @@
 
 import db from "../configs/db";
-import { RowDataPacket } from "mysql2";
+import { RowDataPacket, ResultSetHeader } from "mysql2";
 
 const CotacaoRepository = {
 
@@ -39,6 +39,18 @@ const CotacaoRepository = {
             INNER JOIN cotacao c ON c.id = ci.cotacao_id
             WHERE c.id = ?
               AND c.cliente_id = ?;
+        `, [id, clienteId]);
+
+        return resultado;
+    },
+
+    async Cancelar(id: number, clienteId: number) {
+        const [resultado] = await db.execute<ResultSetHeader>(`
+            UPDATE cotacao
+            SET status = "cancelada"
+            WHERE id = ?
+                AND cliente_id = ?
+                AND status IN ("pendente", "respondida")
         `, [id, clienteId]);
 
         return resultado;

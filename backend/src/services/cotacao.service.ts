@@ -34,6 +34,20 @@ const CotacaoService = {
             produtos,
             valor_total: valorTotal
         };
+    },
+
+    async Cancelar(id: number, clienteId: number) {
+        if (!id || !clienteId) {
+            throw criarErro("Identificação da cotação ou cliente não informada.", 400);
+        }
+
+        const resultado = await CotacaoRepository.Cancelar(id, clienteId);
+
+        if (resultado.affectedRows === 0) {
+            throw criarErro("Cotação não encontrada ou não pode ser cancelada.", 404);
+        }
+
+        return { mensagem: "Cotação cancelada com sucesso." };
     }
 
 };
