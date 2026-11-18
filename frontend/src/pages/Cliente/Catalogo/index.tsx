@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiShoppingCart } from "react-icons/fi";
 
@@ -42,9 +42,20 @@ const bancoProdutos: Produto[] = [
 
 
 function Catalogo() {
+    
     const [produtos, setProdutos] = useState<Produto[]>(bancoProdutos);
     const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
-    const [carrinho, setCarrinho] = useState<ItemCarrinho[]>([]);
+    const [carrinho, setCarrinho] = useState<ItemCarrinho[]>(() => {
+    const carrinhoSalvo = localStorage.getItem("carrinho");
+
+    return carrinhoSalvo ? JSON.parse(carrinhoSalvo) : [];
+    
+});
+
+useEffect(() => {
+    localStorage.setItem("carrinho", JSON.stringify(carrinho));
+}, [carrinho]);
+
     const [carrinhoAberto, setCarrinhoAberto] = useState(false);
 
     const navigate = useNavigate();
@@ -63,12 +74,18 @@ function Catalogo() {
     }
 
     function handleFazerPedido() {
-        alert("Pedido feito com sucesso");
-    }
+    alert("Pedido feito com sucesso");
 
-    function handleFazerCotacao() {
-        alert("Cotação feita com sucesso");
-    }
+    setCarrinho([]);
+    setCarrinhoAberto(false);
+}
+
+function handleFazerCotacao() {
+    alert("Cotação feita com sucesso");
+
+    setCarrinho([]);
+    setCarrinhoAberto(false);
+}
 
 
     function adicionarNoCarrinho(produto: Produto, quantidade: number) {
@@ -216,6 +233,7 @@ function Catalogo() {
 
 
     )
+    
 }
 
 export default Catalogo;
