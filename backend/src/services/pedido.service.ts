@@ -36,8 +36,6 @@ const PedidoService = {
         if (resultado.affectedRows === 0) {
             throw criarErro("Pedido não encontrado ou não pode ser cancelado.", 404);
         }
-
-        return { mensagem: "Pedido cancelado com sucesso." };
     }
 
 };

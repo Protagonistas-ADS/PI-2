@@ -8,9 +8,7 @@ const UsuarioController = {
 
             await UsuarioService.Cadastrar(nome, email, senha);
 
-            res.status(201).json({
-                mensagem: "Usuário cadastrado com sucesso."
-            });
+            res.sendStatus(201);
 
         } catch (error) {
             next(error);
@@ -24,6 +22,7 @@ const UsuarioController = {
             const resultado = await UsuarioService.Login(email, senha);
 
             return res.status(200).json(resultado);
+
         } catch (error) {
             next(error);
         }
@@ -31,10 +30,7 @@ const UsuarioController = {
 
     async BuscarUsuarioLogado(req: Request, res: Response, next: NextFunction) {
         try {
-
-            return res.status(200).json({
-                usuario: req.usuario
-            });
+            return res.status(200).json({ usuario: req.usuario });
 
         } catch (error) {
             next(error);
@@ -43,14 +39,13 @@ const UsuarioController = {
 
     async Atualizar(req: Request, res: Response, next: NextFunction) {
         try {
-            const id = req.usuario.id;
+            const id = req.usuario!.id;
             const dados = req.body;
 
             await UsuarioService.Atualizar(id, dados);
 
-            return res.status(200).json({
-                mensagem: "Usuário atualizado com sucesso."
-            });
+            return res.sendStatus(204);
+            
         } catch (error) {
             next(error);
         }

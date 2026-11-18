@@ -35,9 +35,9 @@ const PedidoController = {
             const id = Number(req.params.id);
             const clienteId = req.usuario!.id;
 
-            const resultado = await PedidoService.Cancelar(id, clienteId);
+            await PedidoService.Cancelar(id, clienteId);
 
-            res.status(200).json(resultado);
+            res.sendStatus(204);
 
         } catch (error) {
             next(error);

@@ -46,8 +46,18 @@ const CotacaoService = {
         if (resultado.affectedRows === 0) {
             throw criarErro("Cotação não encontrada ou não pode ser cancelada.", 404);
         }
+    },
 
-        return { mensagem: "Cotação cancelada com sucesso." };
+    async MarcarComoLida(id: number, clienteId: number) {
+        if (!id || !clienteId) {
+            throw criarErro("Identificação da cotação ou cliente não informada.", 400);
+        }
+
+        const resultado = await CotacaoRepository.MarcarComoLida(id, clienteId);
+
+        if (resultado.affectedRows === 0) {
+            throw criarErro("Cotação não encontrada ou já marcada como lida.", 404);
+        }
     }
 
 };

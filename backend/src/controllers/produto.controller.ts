@@ -8,9 +8,7 @@ const ProdutoController = {
 
             await ProdutoService.Criar(nome, descricao, preco, quantidade);
 
-            res.status(201).json({
-                mensagem: "Produto cadastrado com sucesso."
-            });
+            res.sendStatus(201);
 
         } catch (error) {
             next(error);
@@ -19,11 +17,10 @@ const ProdutoController = {
     
     async Listar(req: Request, res: Response, next: NextFunction) {
         try {
-            await ProdutoService.Listar();
+            const produtos = await ProdutoService.Listar();
 
-            res.status(200).json({
-                mensagem: "Produtos listados com sucesso."
-            });
+            res.status(200).json({ produtos });
+
         } catch (error) {
             next(error);
         }

@@ -11,6 +11,7 @@ const CotacaoController = {
             const cotacoes = await CotacaoService.ListarPorCliente(id);
 
             res.status(200).json({ cotacoes });
+            
         } catch (error) {
             next(error);
         }
@@ -24,6 +25,7 @@ const CotacaoController = {
             const resultado = await CotacaoService.ListarItens(id, clienteId);
 
             res.status(200).json(resultado);
+
         } catch (error) {
             next(error);
         }
@@ -34,9 +36,23 @@ const CotacaoController = {
             const id = Number(req.params.id);
             const clienteId = req.usuario!.id;
 
-            const resultado = await CotacaoService.Cancelar(id, clienteId);
+            await CotacaoService.Cancelar(id, clienteId);
 
-            res.status(200).json(resultado);
+            res.sendStatus(204)
+
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    async MarcarComoLida(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = Number(req.params.id);
+            const clienteId = req.usuario!.id;
+
+            await CotacaoService.MarcarComoLida(id, clienteId);
+
+            res.sendStatus(204);
 
         } catch (error) {
             next(error);

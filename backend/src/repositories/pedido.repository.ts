@@ -1,14 +1,14 @@
 import db from "../configs/db";
 import { RowDataPacket, ResultSetHeader } from "mysql2";
 
-interface Pedido extends RowDataPacket {
+export interface Pedido extends RowDataPacket {
     id: number;
     status: 'pendente' | 'respondido';
     previsao_busca: Date | null;
     quantidade_total: number;
 }
 
-interface ItemPedido extends RowDataPacket {
+export interface ItemPedido extends RowDataPacket {
     produto_id: number;
     produto_nome: string;
     quantidade: number;

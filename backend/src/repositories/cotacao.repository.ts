@@ -1,7 +1,7 @@
 import db from "../configs/db";
 import { RowDataPacket, ResultSetHeader } from "mysql2";
 
-interface Cotacao extends RowDataPacket {
+export interface Cotacao extends RowDataPacket {
     id: number;
     status: string;
     validade: Date | null;
@@ -9,7 +9,7 @@ interface Cotacao extends RowDataPacket {
     quantidade_total: number;
 }
 
-interface ItemCotacao extends RowDataPacket {
+export interface ItemCotacao extends RowDataPacket {
     produto_id: number;
     produto_nome: string;
     quantidade: number;
