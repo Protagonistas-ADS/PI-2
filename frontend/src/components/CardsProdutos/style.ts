@@ -13,8 +13,10 @@ export const CardProduto = styled.article`
     position: relative;
     display: flex;
     flex-direction: column;
+    height: 100%;
     min-width: 0;
     overflow: hidden;
+
 
     background-color: #ffffff;
     border: 1px solid #dce2de;
@@ -67,7 +69,7 @@ export const InformacoesProduto = styled.div`
 `;
 
 export const PrecoProduto = styled.strong`
-    margin-top: 14px;
+    margin-top: auto;
     color: #ed8b22;
     font-size: 1.6rem;
     line-height: 1.3;

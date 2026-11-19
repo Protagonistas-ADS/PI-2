@@ -155,6 +155,15 @@ function PedidosCotacoes() {
 
 
     async function handleMarcarComoLida(id: number) {
+        const confirmacao = await swalConfirmacao(`
+            O perídodo de resposta desta cotação expirou.
+            Marcar como lida mostra que está ciente disso.
+            Ainda é possível propor uma nova cotação.
+        `);
+
+        if (!confirmacao.isConfirmed) return;
+
+
         try {
             await marcarComoLida(id);
 
