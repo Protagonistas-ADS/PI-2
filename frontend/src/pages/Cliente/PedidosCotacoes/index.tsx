@@ -20,7 +20,7 @@ import { swalConfirmacao, swalErro, toastSucesso } from "../../../utils/alertas"
 import TabelaGeral from "../../../components/TabelaGeral";
 import Navbar from "../../../components/Navbar";
 import BotaoGeral from "../../../components/BotaoGeral";
-import ModalCarrinho from "../../../components/ModalCarrinho";
+import ModalCarrinho from "../../../components/Modais/ModalCarrinho";
 
 import {
     PaginaContainer,
