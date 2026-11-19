@@ -15,10 +15,10 @@ import {
 
 interface Produto {
     readonly produtoId: number;
-    produtoNome: string;
+    produto_nome: string;
     descricao: string;
-    precoUnitario: number;
-    quantidadeEstoque: number;
+    preco_unitario: number;
+    quantidade_estoque: number;
     imagem: string;
 }
 
@@ -51,7 +51,7 @@ function ModalCarrinho({
     aoRemover
 }: ModalCarrinhoProps) {
     const valorTotal = itens.reduce(
-        (total, item) => total + item.produto.precoUnitario * item.quantidade, 0
+        (total, item) => total + item.produto.preco_unitario * item.quantidade, 0
     );
 console.log("Itens do carrinho:", itens);
     function formatarPreco(valor: number) {
@@ -78,7 +78,7 @@ console.log("Itens do carrinho:", itens);
                 ) : (
                     itens.map((item) => (
                         <ItemProduto key={item.produto.produtoId}>
-                            <h3>{item.produto.produtoNome}</h3>
+                            <h3>{item.produto.produto_nome}</h3>
 
                             <div className="controle-quantidade">
                                 <span>Quantidade:{item.quantidade}</span>
@@ -88,7 +88,7 @@ console.log("Itens do carrinho:", itens);
                                         <button
                                             type="button"
                                             onClick={() => aoDiminuir?.(item.produto.produtoId)}
-                                            aria-label={`Diminuir quantidade de ${item.produto.produtoNome}`}
+                                            aria-label={`Diminuir quantidade de ${item.produto.produto_nome}`}
                                         >
                                             <FiMinus />
                                         </button>
@@ -98,8 +98,8 @@ console.log("Itens do carrinho:", itens);
                                         <button
                                             type="button"
                                             onClick={() => aoAumentar?.(item.produto.produtoId)}
-                                            disabled={item.quantidade >= item.produto.quantidadeEstoque}
-                                            aria-label={`Aumentar quantidade de ${item.produto.produtoNome}`}
+                                            disabled={item.quantidade >= item.produto.quantidade_estoque}
+                                            aria-label={`Aumentar quantidade de ${item.produto.produto_nome}`}
                                         >
                                             <FiPlus />
                                         </button>
@@ -119,11 +119,11 @@ console.log("Itens do carrinho:", itens);
                             </div>
 
                             <p>
-                                Preço Unitário: {formatarPreco(item.produto.precoUnitario)}
+                                Preço Unitário: {formatarPreco(item.produto.preco_unitario)}
                             </p>
 
                             <strong>
-                                Subtotal: {formatarPreco(item.produto.precoUnitario * item.quantidade)}
+                                Subtotal: {formatarPreco(item.produto.preco_unitario * item.quantidade)}
                             </strong>
                         </ItemProduto>
                     ))

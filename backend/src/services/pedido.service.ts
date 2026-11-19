@@ -13,12 +13,12 @@ const PedidoService = {
         return pedidos;
     },
 
-    async ListarItens(id: number, clienteId: number) {
-        if (!id || !clienteId) {
+    async ListarItens(id: number, cliente_id: number) {
+        if (!id || !cliente_id) {
             throw criarErro("Identificação do pedido ou cliente não informada.", 400);
         }
 
-        const produtos = await PedidoRepository.ListarItens(id, clienteId);
+        const produtos = await PedidoRepository.ListarItens(id, cliente_id);
 
         if (produtos.length === 0) {
             throw criarErro("Pedido não encontrado ou sem produtos.", 404);
@@ -27,20 +27,20 @@ const PedidoService = {
         return produtos;
     },
 
-    async Cancelar(id: number, clienteId: number) {
-        if (!id || !clienteId) {
+    async Cancelar(id: number, cliente_id: number) {
+        if (!id || !cliente_id) {
             throw criarErro("Identificação do pedido ou cliente não informada.", 400);
         }
 
-        const resultado = await PedidoRepository.Cancelar(id, clienteId);
+        const resultado = await PedidoRepository.Cancelar(id, cliente_id);
 
         if (resultado.affectedRows === 0) {
             throw criarErro("Pedido não encontrado ou não pode ser cancelado.", 404);
         }
     },
 
-    async Criar(clienteId: number, itens: NovoItemPedido[]) {
-        if (!Number.isInteger(clienteId) || clienteId <= 0) {
+    async Criar(cliente_id: number, itens: NovoItemPedido[]) {
+        if (!Number.isInteger(cliente_id) || cliente_id <= 0) {
             throw criarErro("Identificação do cliente inválida.", 400);
         }
 
@@ -64,7 +64,7 @@ const PedidoService = {
             }
         }
 
-        const pedidoId = await PedidoRepository.Criar(clienteId, itens);
+        const pedidoId = await PedidoRepository.Criar(cliente_id, itens);
 
         return pedidoId;
     }

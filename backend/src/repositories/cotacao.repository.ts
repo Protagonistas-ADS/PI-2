@@ -5,15 +5,15 @@ export interface Cotacao extends RowDataPacket {
     id: number;
     status: string;
     validade: Date | null;
-    lidaEm: Date | null;
-    quantidadeTotal: number;
+    lida_em: Date | null;
+    quantidade_total: number;
 }
 
 export interface ItemCotacao extends RowDataPacket {
     produtoId: number;
-    produtoNome: string;
+    produto_nome: string;
     quantidade: number;
-    precoUnitario: number | null;
+    preco_unitario: number | null;
     subtotal: number | null;
 }
 
@@ -25,7 +25,7 @@ const CotacaoRepository = {
                 c.id,
                 c.status,
                 c.validade,
-                c.lida_em AS lidaEm,
+                c.lida_em,
                 SUM(ci.quantidade) AS quantidade_total
             FROM cotacao c
             INNER JOIN cotacao_item ci ON ci.cotacao_id = c.id
@@ -41,37 +41,37 @@ const CotacaoRepository = {
         return resultado;
     },
 
-    async ListarItens(id: number, clienteId: number): Promise<ItemCotacao[]> {
+    async ListarItens(id: number, cliente_id: number): Promise<ItemCotacao[]> {
         const [resultado] = await db.execute<ItemCotacao[]>(`
             SELECT
-                ci.produto_id AS produtoId,
-                p.nome AS produtoNome,
+                ci.produto_id,
+                p.nome AS produto_nome,
                 ci.quantidade,
-                ci.preco_unitario AS precoUnitario,
+                ci.preco_unitario,
                 ci.subtotal
             FROM cotacao_item ci
             INNER JOIN produto p ON p.id = ci.produto_id
             INNER JOIN cotacao c ON c.id = ci.cotacao_id
             WHERE c.id = ?
               AND c.cliente_id = ?;
-        `, [id, clienteId]);
+        `, [id, cliente_id]);
 
         return resultado;
     },
 
-    async Cancelar(id: number, clienteId: number): Promise<ResultSetHeader> {
+    async Cancelar(id: number, cliente_id: number): Promise<ResultSetHeader> {
         const [resultado] = await db.execute<ResultSetHeader>(`
             UPDATE cotacao
             SET status = 'cancelada'
             WHERE id = ?
               AND cliente_id = ?
               AND status IN ('pendente', 'respondida');
-        `, [id, clienteId]);
+        `, [id, cliente_id]);
 
         return resultado;
     },
 
-    async MarcarComoLida(id: number, clienteId: number): Promise<ResultSetHeader> {
+    async MarcarComoLida(id: number, cliente_id: number): Promise<ResultSetHeader> {
         const [resultado] = await db.execute<ResultSetHeader>(`
             UPDATE cotacao
             SET lida_em = NOW()
@@ -79,31 +79,31 @@ const CotacaoRepository = {
               AND cliente_id = ?
               AND status = 'expirada'
               AND lida_em IS NULL;
-        `, [id, clienteId]);
+        `, [id, cliente_id]);
 
         return resultado;
     },
 
-    async ConverterCotacao(id: number, clienteId: number): Promise<ResultSetHeader> {
+    async ConverterCotacao(id: number, cliente_id: number): Promise<ResultSetHeader> {
         const [resultado] = await db.execute<ResultSetHeader>(`
             UPDATE cotacao
             SET status = "convertida"
             WHERE id = ?
                 AND cliente_id = ?
                 AND status = "respondida"    
-        `, [id, clienteId]);
+        `, [id, cliente_id]);
 
         return resultado;
     },
 
-    async RecusarCotacao(id: number, clienteId: number): Promise<ResultSetHeader> {
+    async RecusarCotacao(id: number, cliente_id: number): Promise<ResultSetHeader> {
         const [resultado] = await db.execute<ResultSetHeader>(`
             UPDATE cotacao
             SET status = "recusada"
             WHERE id = ?
                 AND cliente_id = ?
                 AND status = "respondida"
-        `, [id, clienteId]);
+        `, [id, cliente_id]);
 
         return resultado;
     },

@@ -20,9 +20,9 @@ const CotacaoController = {
     async ListarItens(req: Request, res: Response, next: NextFunction) {
         try {
             const id = Number(req.params.id);
-            const clienteId = req.usuario!.id;
+            const cliente_id = req.usuario!.id;
 
-            const resultado = await CotacaoService.ListarItens(id, clienteId);
+            const resultado = await CotacaoService.ListarItens(id, cliente_id);
 
             res.status(200).json(resultado);
 
@@ -34,9 +34,9 @@ const CotacaoController = {
     async Cancelar(req: Request, res: Response, next: NextFunction) {
         try {
             const id = Number(req.params.id);
-            const clienteId = req.usuario!.id;
+            const cliente_id = req.usuario!.id;
 
-            await CotacaoService.Cancelar(id, clienteId);
+            await CotacaoService.Cancelar(id, cliente_id);
 
             res.sendStatus(204)
 
@@ -48,9 +48,9 @@ const CotacaoController = {
     async MarcarComoLida(req: Request, res: Response, next: NextFunction) {
         try {
             const id = Number(req.params.id);
-            const clienteId = req.usuario!.id;
+            const cliente_id = req.usuario!.id;
 
-            await CotacaoService.MarcarComoLida(id, clienteId);
+            await CotacaoService.MarcarComoLida(id, cliente_id);
 
             res.sendStatus(204);
 
@@ -62,9 +62,9 @@ const CotacaoController = {
     async ConverterCotacao(req: Request, res: Response, next: NextFunction) {
         try {
             const id = Number(req.params);
-            const clienteId = req.usuario!.id;
+            const cliente_id = req.usuario!.id;
 
-            await CotacaoService.ConverterCotacao(Number(id), clienteId);
+            await CotacaoService.ConverterCotacao(Number(id), cliente_id);
 
             res.sendStatus(204);
         } catch (error) {
@@ -75,9 +75,9 @@ const CotacaoController = {
     async RecusarCotacao(req: Request, res: Response, next: NextFunction) {
         try {
             const id = Number(req.params);
-            const clienteId = req.usuario!.id;
+            const cliente_id = req.usuario!.id;
 
-            await CotacaoService.RecusarCotacao(id, clienteId);
+            await CotacaoService.RecusarCotacao(id, cliente_id);
 
             res.sendStatus(204);
         } catch (error) {

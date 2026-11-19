@@ -19,9 +19,9 @@ const PedidoController = {
     async ListarItens(req: Request, res: Response, next: NextFunction) {
         try {
             const id = Number(req.params.id);
-            const clienteId = req.usuario!.id;
+            const cliente_id = req.usuario!.id;
 
-            const produtos = await PedidoService.ListarItens(id, clienteId);
+            const produtos = await PedidoService.ListarItens(id, cliente_id);
 
             res.status(200).json({ produtos });
 
@@ -33,9 +33,9 @@ const PedidoController = {
     async Cancelar(req: Request, res: Response, next: NextFunction) {
         try {
             const id = Number(req.params.id);
-            const clienteId = req.usuario!.id;
+            const cliente_id = req.usuario!.id;
 
-            await PedidoService.Cancelar(id, clienteId);
+            await PedidoService.Cancelar(id, cliente_id);
 
             res.sendStatus(204);
 
@@ -45,10 +45,10 @@ const PedidoController = {
     },
     async Criar(req: Request, res: Response, next: NextFunction) {
         try {
-            const clienteId = req.usuario!.id;
+            const cliente_id = req.usuario!.id;
             const { itens } = req.body;
 
-            const pedidoId = await PedidoService.Criar(clienteId, itens);
+            const pedidoId = await PedidoService.Criar(cliente_id, itens);
 
             res.status(201).json({
                 mensagem: "Pedido criado com sucesso.",

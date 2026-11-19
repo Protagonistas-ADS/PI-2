@@ -10,9 +10,9 @@ export interface Pedido extends RowDataPacket {
 
 export interface ItemPedido extends RowDataPacket {
     produtoId: number;
-    produtoNome: string;
+    produto_nome: string;
     quantidade: number;
-    precoUnitario: number;
+    preco_unitario: number;
 }
 
 export interface NovoItemPedido {
@@ -22,8 +22,8 @@ export interface NovoItemPedido {
 
 interface ProdutoParaPedido extends RowDataPacket {
     id: number;
-    precoUnitario: number;
-    quantidadeEstoque: number;
+    preco_unitario: number;
+    quantidade_estoque: number;
 }
 
 const PedidoRepository = {
@@ -33,8 +33,8 @@ const PedidoRepository = {
             SELECT
                 p.id,
                 p.status,
-                p.previsao_busca AS previsaoBusca,
-                SUM(pi.quantidade) AS quantidadeTotal
+                p.previsao_busca,
+                SUM(pi.quantidade) AS quantidade_total
             FROM pedido p
             INNER JOIN pedido_item pi ON pi.pedido_id = p.id
             WHERE p.cliente_id = ?
@@ -46,36 +46,36 @@ const PedidoRepository = {
         return resultado;
     },
 
-    async ListarItens(id: number, clienteId: number): Promise<ItemPedido[]> {
+    async ListarItens(id: number, cliente_id: number): Promise<ItemPedido[]> {
         const [resultado] = await db.execute<ItemPedido[]>(`
             SELECT
-                pi.produto_id AS produtoId,
-                p.nome AS produtoNome,
+                pi.produto_id,
+                p.nome AS produto_nome,
                 pi.quantidade,
-                pi.preco_unitario AS precoUnitario
+                pi.preco_unitario
             FROM pedido_item pi
             INNER JOIN produto p ON p.id = pi.produto_id
             INNER JOIN pedido pe ON pe.id = pi.pedido_id
             WHERE pe.id = ?
               AND pe.cliente_id = ?;
-        `, [id, clienteId]);
+        `, [id, cliente_id]);
 
         return resultado;
     },
 
-    async Cancelar(id: number, clienteId: number): Promise<ResultSetHeader> {
+    async Cancelar(id: number, cliente_id: number): Promise<ResultSetHeader> {
         const [resultado] = await db.execute<ResultSetHeader>(`
             UPDATE pedido
             SET status = 'cancelado'
             WHERE id = ?
               AND cliente_id = ?
               AND status IN ('pendente', 'respondido');
-        `, [id, clienteId]);
+        `, [id, cliente_id]);
 
         return resultado;
     },
 
-    async Criar(clienteId: number, itens: NovoItemPedido[]) {
+    async Criar(cliente_id: number, itens: NovoItemPedido[]) {
         const idsProdutos = itens.map((item) => item.produtoId);
 
         if (itens.length === 0) {
@@ -104,8 +104,8 @@ const PedidoRepository = {
                 const [resultado] = await conexao.execute<ProdutoParaPedido[]>(`
                 SELECT 
                     id, 
-                    preco_unitario AS precoUnitario, 
-                    quantidade_estoque AS quantidadeEstoque
+                    preco_unitario, 
+                    quantidade_estoque
                 FROM produto
                 WHERE id = ?
                     AND ativo = 1;
@@ -127,7 +127,7 @@ const PedidoRepository = {
             const [resultadoPedido] = await conexao.execute<ResultSetHeader>(`
                 INSERT INTO pedido (cliente_id)
                 VALUES (?);
-            `, [clienteId]);
+            `, [cliente_id]);
 
             const pedidoId = resultadoPedido.insertId;
             for (const item of itens) {
@@ -139,8 +139,8 @@ const PedidoRepository = {
                     throw new Error("Produto não encontrado.");
                 }
 
-                const precoUnitario = Number(produto.preco_unitario);
-                const subtotal = precoUnitario * item.quantidade;
+                const preco_unitario = Number(produto.preco_unitario);
+                const subtotal = preco_unitario * item.quantidade;
 
                 await conexao.execute(`
                     INSERT INTO pedido_item (
@@ -155,7 +155,7 @@ const PedidoRepository = {
                     pedidoId,
                     item.produtoId,
                     item.quantidade,
-                    precoUnitario,
+                    preco_unitario,
                     subtotal
                 ]);
             }

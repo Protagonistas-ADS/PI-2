@@ -25,8 +25,8 @@ interface Produto {
     readonly id: number;
     nome: string;
     descricao: string;
-    precoUnitario: number;
-    quantidadeEstoque: number;
+    preco_unitario: number;
+    quantidade_estoque: number;
     imagem: string;
 }
 
@@ -92,7 +92,7 @@ function Catalogo() {
             // Impede ultrapassar o estoque disponível
             const quantidadeAdicionar = Math.min(
                 quantidade,
-                produto.quantidadeEstoque - quantidadeAtual
+                produto.quantidade_estoque - quantidadeAtual
             );
 
             if (quantidadeAdicionar <= 0) {
@@ -122,7 +122,7 @@ function Catalogo() {
         setCarrinho((carrinhoAtual) =>
             carrinhoAtual.map((item) =>
                 item.produto.id === id &&
-                    item.quantidade < item.produto.quantidadeEstoque
+                    item.quantidade < item.produto.quantidade_estoque
                     ? { ...item, quantidade: item.quantidade + 1 }
                     : item
             )

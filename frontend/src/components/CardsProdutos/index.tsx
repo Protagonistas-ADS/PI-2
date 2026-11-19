@@ -12,8 +12,8 @@ interface Produto {
     readonly id: number;
     nome: string;
     descricao: string;
-    precoUnitario: number;
-    quantidadeEstoque: number;
+    preco_unitario: number;
+    quantidade_estoque: number;
     imagem: string;
 }
 
@@ -32,7 +32,7 @@ function CardsProdutos({ produtos, aoSaberMais }: CardsProdutosProps) {
                         alt={produto.nome}
                     />
 
-                    {produto.quantidadeEstoque <= 0 && (
+                    {produto.quantidade_estoque <= 0 && (
                         <EtiquetaEsgotado>
                             Em falta
                         </EtiquetaEsgotado>
@@ -43,7 +43,7 @@ function CardsProdutos({ produtos, aoSaberMais }: CardsProdutosProps) {
 
                         <p>{produto.descricao}</p>
 
-                        <PrecoProduto>R$ {produto.precoUnitario}</PrecoProduto>
+                        <PrecoProduto>R$ {produto.preco_unitario}</PrecoProduto>
 
                         <BotaoSaberMais
                             type="button"

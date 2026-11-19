@@ -15,8 +15,8 @@ interface Produto {
     readonly id: number;
     nome: string;
     descricao: string;
-    precoUnitario: number;
-    quantidadeEstoque: number;
+    preco_unitario: number;
+    quantidade_estoque: number;
     imagem: string;
 }
 
@@ -29,10 +29,10 @@ interface ModalProdutoProps {
 function ModalProduto({ produto, aoFechar, aoAdicionar }: ModalProdutoProps) {
     const [quantidade, setQuantidade] = useState(1);
 
-    const esgotado = produto.quantidadeEstoque <= 0;
+    const esgotado = produto.quantidade_estoque <= 0;
 
     function handleAdicionar() {
-        if (quantidade < 1 || quantidade > produto.quantidadeEstoque) {
+        if (quantidade < 1 || quantidade > produto.quantidade_estoque) {
             return;
         }
 
@@ -43,7 +43,7 @@ function ModalProduto({ produto, aoFechar, aoAdicionar }: ModalProdutoProps) {
     function handleQuantidade(event: ChangeEvent<HTMLInputElement>) {
         const valor = Number(event.target.value);
 
-        if (Number.isInteger(valor) && valor >= 1 && valor <= produto.quantidadeEstoque) {
+        if (Number.isInteger(valor) && valor >= 1 && valor <= produto.quantidade_estoque) {
             setQuantidade(valor);
         }
     }
@@ -69,7 +69,7 @@ function ModalProduto({ produto, aoFechar, aoAdicionar }: ModalProdutoProps) {
                     <p>{produto.descricao}</p>
 
                     <strong>
-                        R$ {produto.precoUnitario}
+                        R$ {produto.preco_unitario}
                     </strong>
 
                     {esgotado
@@ -88,7 +88,7 @@ function ModalProduto({ produto, aoFechar, aoAdicionar }: ModalProdutoProps) {
                                 color: "#5d6d63",
                                 fontWeight: "bold"
                             }}>
-                            Quantidade em estoque: {produto.quantidadeEstoque} lotes
+                            Quantidade em estoque: {produto.quantidade_estoque} lotes
                         </span>
                     }
 
@@ -100,7 +100,7 @@ function ModalProduto({ produto, aoFechar, aoAdicionar }: ModalProdutoProps) {
                                 id="quantidade"
                                 type="number"
                                 min={1}
-                                max={produto.quantidadeEstoque}
+                                max={produto.quantidade_estoque}
                                 step={1}
                                 value={quantidade}
                                 onChange={handleQuantidade}

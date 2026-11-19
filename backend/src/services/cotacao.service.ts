@@ -14,12 +14,12 @@ const CotacaoService = {
         return cotacoes;
     },
 
-    async ListarItens(id: number, clienteId: number) {
-        if (!id || !clienteId) {
+    async ListarItens(id: number, cliente_id: number) {
+        if (!id || !cliente_id) {
             throw criarErro("Identificação da cotação ou cliente não informada.", 400);
         }
 
-        const produtos = await CotacaoRepository.ListarItens(id, clienteId);
+        const produtos = await CotacaoRepository.ListarItens(id, cliente_id);
 
         if (produtos.length === 0) {
             throw criarErro("Cotação não encontrada ou sem produtos.", 404);
@@ -36,48 +36,48 @@ const CotacaoService = {
         };
     },
 
-    async Cancelar(id: number, clienteId: number) {
-        if (!id || !clienteId) {
+    async Cancelar(id: number, cliente_id: number) {
+        if (!id || !cliente_id) {
             throw criarErro("Identificação da cotação ou cliente não informada.", 400);
         }
 
-        const resultado = await CotacaoRepository.Cancelar(id, clienteId);
+        const resultado = await CotacaoRepository.Cancelar(id, cliente_id);
 
         if (resultado.affectedRows === 0) {
             throw criarErro("Cotação não encontrada ou não pode ser cancelada.", 404);
         }
     },
 
-    async MarcarComoLida(id: number, clienteId: number) {
-        if (!id || !clienteId) {
+    async MarcarComoLida(id: number, cliente_id: number) {
+        if (!id || !cliente_id) {
             throw criarErro("Identificação da cotação ou cliente não informada.", 400);
         }
 
-        const resultado = await CotacaoRepository.MarcarComoLida(id, clienteId);
+        const resultado = await CotacaoRepository.MarcarComoLida(id, cliente_id);
 
         if (resultado.affectedRows === 0) {
             throw criarErro("Cotação não encontrada ou já marcada como lida.", 404);
         }
     },
 
-    async ConverterCotacao(id: number, clienteId: number) {
-        if (!id || !clienteId) {
+    async ConverterCotacao(id: number, cliente_id: number) {
+        if (!id || !cliente_id) {
             throw criarErro("Identificação da cotação ou cliente não informada.", 400);
         }
 
-        const resultado = await CotacaoRepository.ConverterCotacao(id, clienteId);
+        const resultado = await CotacaoRepository.ConverterCotacao(id, cliente_id);
 
         if (resultado.affectedRows === 0) {
             throw criarErro("Cotação não encontrada ou não pode ser convertida.", 404);
         }
     },
 
-    async RecusarCotacao(id: number, clienteId: number) {
-        if (!id || !clienteId) {
+    async RecusarCotacao(id: number, cliente_id: number) {
+        if (!id || !cliente_id) {
             throw criarErro("Identificação da cotação ou cliente não informada.", 400);
         }
 
-        const resultado = await CotacaoRepository.RecusarCotacao(id, clienteId);
+        const resultado = await CotacaoRepository.RecusarCotacao(id, cliente_id);
 
         if (resultado.affectedRows === 0) {
             throw criarErro("Cotação não encontrada ou não pode ser recusada.", 404);

@@ -73,8 +73,8 @@ function PedidosCotacoes() {
                 {
                     produto: {
                         produtoId: produto.produtoId,
-                        produtoNome: produto.produtoNome,
-                        precoUnitario: Number(produto.preco_unitario)
+                        produto_nome: produto.produto_nome,
+                        preco_unitario: Number(produto.preco_unitario)
                     },
 
                     quantidade: produto.quantidade
@@ -96,8 +96,8 @@ function PedidosCotacoes() {
                 {
                     produto: {
                         produtoId: produto.produtoId,
-                        produtoNome: produto.produtoNome,
-                        precoUnitario: Number(produto.precoUnitario ?? 0)
+                        produto_nome: produto.produto_nome,
+                        preco_unitario: Number(produto.preco_unitario ?? 0)
                     },
 
                     quantidade: produto.quantidade

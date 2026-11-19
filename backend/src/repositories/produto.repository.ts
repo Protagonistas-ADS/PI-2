@@ -5,8 +5,8 @@ export interface Produto extends RowDataPacket {
     id: number;
     nome: string;
     descricao: string;
-    precoUnitario: number;
-    quantidadeEstoque: number;
+    preco_unitario: number;
+    quantidade_estoque: number;
     imagem: string | null;
     ativo: boolean;
 }
@@ -27,8 +27,8 @@ const ProdutoRepository = {
             SELECT
                 nome,
                 descricao,
-                preco_unitario AS precoUnitario,
-                quantidade_estoque AS quantidadeEstoque,
+                preco_unitario,
+                quantidade_estoque,
                 imagem,
                 ativo
             FROM produto;
