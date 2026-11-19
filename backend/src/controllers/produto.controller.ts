@@ -56,6 +56,20 @@ const ProdutoController = {
             next(error);
         }
     },
+
+    async Editar(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { id } = req.params;
+            const { nome, descricao, preco, quantidade, imagem } = req.body;
+
+            await ProdutoService.Editar(parseInt(id), nome, descricao, preco, quantidade, imagem);
+
+            res.sendStatus(204);
+
+        } catch (error) {
+            next(error);
+        }
+    }
 };
 
 export default ProdutoController;

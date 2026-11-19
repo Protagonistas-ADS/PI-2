@@ -29,6 +29,14 @@ const ProdutoService = {
         }
 
         return ProdutoRepository.Deletar(id);
+    },
+
+    async Editar(id: number, nome: string, descricao: string, preco: number, quantidade: number, imagem: string) {
+        if (!id || !nome || !descricao || !preco || !quantidade || !imagem) {
+            throw criarErro("Preencha todos os campos obrigatórios.", 400);
+        }
+
+        return ProdutoRepository.Editar(id, nome, descricao, preco, quantidade, imagem);
     }
 };
 

@@ -57,6 +57,14 @@ const ProdutoRepository = {
         await db.execute(
             `DELETE FROM produto WHERE id = ?;`, 
             [id]);
+    },
+
+    async Editar(id: number, nome: string, descricao: string, preco: number, quantidade: number, imagem: string): Promise<void> {
+        await db.execute(
+            `UPDATE produto
+            SET nome = ?, descricao = ?, preco_unitario = ?, quantidade_estoque = ?, imagem = ?
+            WHERE id = ?;`, 
+            [nome, descricao, preco, quantidade, imagem, id]);
     }
 };
 
