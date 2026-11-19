@@ -42,6 +42,22 @@ const PedidoController = {
         } catch (error) {
             next(error);
         }
+    },
+    async Criar(req: Request, res: Response, next: NextFunction) {
+        try {
+            const clienteId = req.usuario!.id;
+            const { itens } = req.body;
+
+            const pedidoId = await PedidoService.Criar(clienteId, itens);
+
+            res.status(201).json({
+                mensagem: "Pedido criado com sucesso.",
+                pedidoId
+            });
+
+        } catch (error) {
+            next(error);
+        }
     }
 };
 
