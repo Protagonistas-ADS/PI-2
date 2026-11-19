@@ -72,8 +72,8 @@ function PedidosCotacoes() {
             const itens = produtos.map((produto: any) => (
                 {
                     produto: {
-                        id: produto.produto_id,
-                        nome: produto.produto_nome,
+                        id: produto.produtoId,
+                        nome: produto.produtoNome,
                         preco: Number(produto.preco_unitario)
                     },
 
@@ -95,9 +95,9 @@ function PedidosCotacoes() {
             const itens = resultado.produtos.map((produto: any) => (
                 {
                     produto: {
-                        id: produto.produto_id,
-                        nome: produto.produto_nome,
-                        preco: Number(produto.preco_unitario ?? 0)
+                        id: produto.produtoId,
+                        nome: produto.produtoNome,
+                        preco: Number(produto.precoUnitario ?? 0)
                     },
 
                     quantidade: produto.quantidade
@@ -180,6 +180,10 @@ function PedidosCotacoes() {
     function handleLogout() {
         localStorage.removeItem("token");
         navigate('/login');
+    }
+
+    function handleResponderCotacao(id: number) {
+        alert("Vou fazer ainda");
     }
 
     // COLUNAS
@@ -295,17 +299,32 @@ function PedidosCotacoes() {
         {
             titulo: "Ações",
             chave: "id",
-            renderizar: (valorCelula: string, registro: any) => (
-                registro.status === "expirada" ? (
+            renderizar: (valorCelula: string, registro: any) => {
+                if (registro.status === "expirada") {
+                    return (
+                        <button
+                            type="button"
+                            className="acao-marcar-lida"
+                            onClick={() => handleMarcarComoLida(registro.id)}
+                        >
+                            Marcar como Lida
+                        </button>
+                    );
+                }
 
-                    <button
-                        type="button"
-                        className="acao-marcar-lida"
-                        onClick={() => handleMarcarComoLida(registro.id)}
-                    >
-                        Marcar como Lida
-                    </button>
-                ) : (
+                if (registro.status === "respondida") {
+                    return (
+                        <button
+                            type="button"
+                            className="acao-responder"
+                            onClick={() => handleResponderCotacao(registro.id)}
+                        >
+                            Responder cotação
+                        </button>
+                    );
+                }
+
+                return (
                     <button
                         type="button"
                         className="acao-cancelar"
@@ -313,8 +332,9 @@ function PedidosCotacoes() {
                     >
                         Cancelar
                     </button>
-                )
-            )
+                );
+
+            }
         }
     ];
 

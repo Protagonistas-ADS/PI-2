@@ -9,21 +9,21 @@ export interface Pedido extends RowDataPacket {
 }
 
 export interface ItemPedido extends RowDataPacket {
-    produto_id: number;
-    produto_nome: string;
+    produtoId: number;
+    produtoNome: string;
     quantidade: number;
-    preco_unitario: number;
+    precoUnitario: number;
 }
 
 export interface NovoItemPedido {
-    produto_id: number;
+    produtoId: number;
     quantidade: number;
 }
 
 interface ProdutoParaPedido extends RowDataPacket {
     id: number;
-    preco_unitario: number;
-    quantidade_estoque: number;
+    precoUnitario: number;
+    quantidadeEstoque: number;
 }
 
 const PedidoRepository = {
@@ -33,8 +33,8 @@ const PedidoRepository = {
             SELECT
                 p.id,
                 p.status,
-                p.previsao_busca,
-                SUM(pi.quantidade) AS quantidade_total
+                p.previsao_busca AS previsaoBusca,
+                SUM(pi.quantidade) AS quantidadeTotal
             FROM pedido p
             INNER JOIN pedido_item pi ON pi.pedido_id = p.id
             WHERE p.cliente_id = ?
@@ -49,10 +49,10 @@ const PedidoRepository = {
     async ListarItens(id: number, clienteId: number): Promise<ItemPedido[]> {
         const [resultado] = await db.execute<ItemPedido[]>(`
             SELECT
-                pi.produto_id,
-                p.nome AS produto_nome,
+                pi.produtoId,
+                p.nome AS produtoNome,
                 pi.quantidade,
-                pi.preco_unitario
+                pi.precoUnitario
             FROM pedido_item pi
             INNER JOIN produto p ON p.id = pi.produto_id
             INNER JOIN pedido pe ON pe.id = pi.pedido_id
@@ -76,7 +76,7 @@ const PedidoRepository = {
     },
 
 async Criar(clienteId: number, itens: NovoItemPedido[]) {
-    const idsProdutos = itens.map((item) => item.produto_id);
+    const idsProdutos = itens.map((item) => item.produtoId);
 
     if (itens.length === 0) {
         throw new Error("O pedido precisa ter pelo menos um produto.");
@@ -94,7 +94,7 @@ async Criar(clienteId: number, itens: NovoItemPedido[]) {
         const produtosEncontrados: ProdutoParaPedido[] = [];
 
         for (const item of itens) {
-            if (!Number.isInteger(item.produto_id) || item.produto_id <= 0) {
+            if (!Number.isInteger(item.produtoId) || item.produtoId <= 0) {
                 throw new Error("Identificação de produto inválida.");
                     }
 
@@ -106,12 +106,12 @@ async Criar(clienteId: number, itens: NovoItemPedido[]) {
                 FROM produto
                 WHERE id = ?
                 AND ativo = 1;
-            `, [item.produto_id]);
+            `, [item.produtoId]);
 
             const produto = resultado[0];
 
             if (!produto) {
-                throw new Error(`Produto ${item.produto_id} não encontrado.`);
+                throw new Error(`Produto ${item.produtoId} não encontrado.`);
             }
 
             if (item.quantidade > produto.quantidade_estoque) {
@@ -129,7 +129,7 @@ async Criar(clienteId: number, itens: NovoItemPedido[]) {
 const pedidoId = resultadoPedido.insertId;
 for (const item of itens) {
     const produto = produtosEncontrados.find(
-        (produto) => produto.id === item.produto_id
+        (produto) => produto.id === item.produtoId
     );
 
     if (!produto) {
@@ -150,7 +150,7 @@ for (const item of itens) {
         VALUES (?, ?, ?, ?, ?);
     `, [
         pedidoId,
-        item.produto_id,
+        item.produtoId,
         item.quantidade,
         precoUnitario,
         subtotal

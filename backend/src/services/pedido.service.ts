@@ -48,14 +48,14 @@ const PedidoService = {
             throw criarErro("O pedido precisa ter pelo menos um produto.", 400);
         }
 
-        const idsProdutos = itens.map((item) => item.produto_id);
+        const idsProdutos = itens.map((item) => item.produtoId);
 
         if (new Set(idsProdutos).size !== idsProdutos.length) {
             throw criarErro("Não é permitido repetir produtos no pedido.", 400);
         }
 
         for (const item of itens) {
-            if (!Number.isInteger(item.produto_id) || item.produto_id <= 0) {
+            if (!Number.isInteger(item.produtoId) || item.produtoId <= 0) {
                 throw criarErro("Identificação de produto inválida.", 400);
             }
 

@@ -5,15 +5,15 @@ export interface Cotacao extends RowDataPacket {
     id: number;
     status: string;
     validade: Date | null;
-    lida_em: Date | null;
-    quantidade_total: number;
+    lidaEm: Date | null;
+    quantidadeTotal: number;
 }
 
 export interface ItemCotacao extends RowDataPacket {
-    produto_id: number;
-    produto_nome: string;
+    produtoId: number;
+    produtoNome: string;
     quantidade: number;
-    preco_unitario: number | null;
+    precoUnitario: number | null;
     subtotal: number | null;
 }
 
@@ -25,7 +25,7 @@ const CotacaoRepository = {
                 c.id,
                 c.status,
                 c.validade,
-                c.lida_em,
+                c.lida_em AS lidaEm,
                 SUM(ci.quantidade) AS quantidade_total
             FROM cotacao c
             INNER JOIN cotacao_item ci ON ci.cotacao_id = c.id
@@ -44,10 +44,10 @@ const CotacaoRepository = {
     async ListarItens(id: number, clienteId: number): Promise<ItemCotacao[]> {
         const [resultado] = await db.execute<ItemCotacao[]>(`
             SELECT
-                ci.produto_id,
-                p.nome AS produto_nome,
+                ci.produto_id AS produtoId,
+                p.nome AS produtoNome,
                 ci.quantidade,
-                ci.preco_unitario,
+                ci.preco_unitario AS precoUnitario,
                 ci.subtotal
             FROM cotacao_item ci
             INNER JOIN produto p ON p.id = ci.produto_id
@@ -82,7 +82,31 @@ const CotacaoRepository = {
         `, [id, clienteId]);
 
         return resultado;
-    }
+    },
+
+    async ConverterCotacao(id: number, clienteId: number): Promise<ResultSetHeader> {
+        const [resultado] = await db.execute<ResultSetHeader>(`
+            UPDATE cotacao
+            SET status = "convertida"
+            WHERE id = ?
+                AND cliente_id = ?
+                AND status = "respondida"    
+        `, [id, clienteId]);
+
+        return resultado;
+    },
+
+    async RecusarCotacao(id: number, clienteId: number): Promise<ResultSetHeader> {
+        const [resultado] = await db.execute<ResultSetHeader>(`
+            UPDATE cotacao
+            SET status = "recusada"
+            WHERE id = ?
+                AND cliente_id = ?
+                AND status = "respondida"
+        `, [id, clienteId]);
+
+        return resultado;
+    },
 
 };
 
