@@ -407,6 +407,23 @@ Rotas marcadas com 🔒 exigem o header `Authorization: Bearer <token>`.
 
 </details>
 
+<details open>
+<summary><b>📊 Estoque</b> (somente administrador)</summary>
+
+<br>
+
+| Método | Rota | Descrição | Auth |
+|:------:|------|-----------|:----:|
+| 🟢 `GET` | `/estoque` | Saldo atual de todos os produtos | 🔒 admin |
+| 🟢 `GET` | `/estoque/movimentacoes` | Histórico de entradas e saídas | 🔒 admin |
+| 🟢 `GET` | `/estoque/movimentacoes/:id` | Saldo e histórico de um produto | 🔒 admin |
+| 🔵 `POST` | `/estoque/entrada` | Registrar entrada `{ produto_id, quantidade }` | 🔒 admin |
+| 🔵 `POST` | `/estoque/saida` | Registrar saída manual `{ produto_id, quantidade }` | 🔒 admin |
+
+Cada entrada ou saída atualiza o saldo do produto e grava o histórico na mesma transação. Saída maior que o saldo retorna `409`.
+
+</details>
+
 <details>
 <summary><b>⚠️ Formato dos erros</b></summary>
 
