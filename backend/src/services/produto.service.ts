@@ -12,7 +12,7 @@ const ProdutoService = {
     },
 
     async Listar() {
-        await ProdutoRepository.Listar();
+        return ProdutoRepository.Listar();
     }
 }
 

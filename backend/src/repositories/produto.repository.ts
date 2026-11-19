@@ -1,7 +1,7 @@
 import db from "../configs/db";
 import { RowDataPacket, ResultSetHeader } from "mysql2";
 
-interface Produto extends RowDataPacket {
+export interface Produto extends RowDataPacket {
     id: number;
     nome: string;
     descricao: string;
