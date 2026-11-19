@@ -1,0 +1,29 @@
+
+@baseUrl = http://localhost:3000
+@token = SEU_TOKEN
+
+### Criar nota fiscal
+POST {{baseUrl}}/notas
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "venda_id": 1,
+    "numero": "000001",
+    "natureza_operacao": "Venda de mercadoria"
+}
+
+### Tentar cadastrar uma segunda nota para a mesma venda
+POST {{baseUrl}}/notas
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "venda_id": 2,
+    "numero": "NOTA-000002",
+    "natureza_operacao": "Venda de mercadoria"
+}
+
+### Listar notas fiscais
+GET {{baseUrl}}/notas
+Authorization: Bearer {{token}}

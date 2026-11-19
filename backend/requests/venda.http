@@ -1,0 +1,11 @@
+@baseUrl = http://localhost:3000
+@token = SEU_TOKEN
+
+### Criar venda
+POST {{baseUrl}}/vendas
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "pedido_id": 2
+}
