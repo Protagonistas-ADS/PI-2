@@ -72,9 +72,9 @@ function PedidosCotacoes() {
             const itens = produtos.map((produto: any) => (
                 {
                     produto: {
-                        id: produto.produtoId,
-                        nome: produto.produtoNome,
-                        preco: Number(produto.preco_unitario)
+                        produtoId: produto.produtoId,
+                        produtoNome: produto.produtoNome,
+                        precoUnitario: Number(produto.preco_unitario)
                     },
 
                     quantidade: produto.quantidade
@@ -95,9 +95,9 @@ function PedidosCotacoes() {
             const itens = resultado.produtos.map((produto: any) => (
                 {
                     produto: {
-                        id: produto.produtoId,
-                        nome: produto.produtoNome,
-                        preco: Number(produto.precoUnitario ?? 0)
+                        produtoId: produto.produtoId,
+                        produtoNome: produto.produtoNome,
+                        precoUnitario: Number(produto.precoUnitario ?? 0)
                     },
 
                     quantidade: produto.quantidade

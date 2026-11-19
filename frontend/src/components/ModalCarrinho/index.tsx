@@ -14,8 +14,8 @@ import {
 } from "./style";
 
 interface Produto {
-    readonly id: number;
-    nome: string;
+    readonly produtoId: number;
+    produtoNome: string;
     descricao: string;
     precoUnitario: number;
     quantidadeEstoque: number;
@@ -53,7 +53,7 @@ function ModalCarrinho({
     const valorTotal = itens.reduce(
         (total, item) => total + item.produto.precoUnitario * item.quantidade, 0
     );
-
+console.log("Itens do carrinho:", itens);
     function formatarPreco(valor: number) {
         return valor.toLocaleString("pt-BR", {
             style: "currency",
@@ -77,8 +77,8 @@ function ModalCarrinho({
                     <p>Seu carrinho está vazio.</p>
                 ) : (
                     itens.map((item) => (
-                        <ItemProduto key={item.produto.id}>
-                            <h3>{item.produto.nome}</h3>
+                        <ItemProduto key={item.produto.produtoId}>
+                            <h3>{item.produto.produtoNome}</h3>
 
                             <div className="controle-quantidade">
                                 <span>Quantidade:{item.quantidade}</span>
@@ -87,8 +87,8 @@ function ModalCarrinho({
                                     <div className="botoes-quantidade">
                                         <button
                                             type="button"
-                                            onClick={() => aoDiminuir?.(item.produto.id)}
-                                            aria-label={`Diminuir quantidade de ${item.produto.nome}`}
+                                            onClick={() => aoDiminuir?.(item.produto.produtoId)}
+                                            aria-label={`Diminuir quantidade de ${item.produto.produtoNome}`}
                                         >
                                             <FiMinus />
                                         </button>
@@ -97,9 +97,9 @@ function ModalCarrinho({
 
                                         <button
                                             type="button"
-                                            onClick={() => aoAumentar?.(item.produto.id)}
+                                            onClick={() => aoAumentar?.(item.produto.produtoId)}
                                             disabled={item.quantidade >= item.produto.quantidadeEstoque}
-                                            aria-label={`Aumentar quantidade de ${item.produto.nome}`}
+                                            aria-label={`Aumentar quantidade de ${item.produto.produtoNome}`}
                                         >
                                             <FiPlus />
                                         </button>
@@ -110,7 +110,7 @@ function ModalCarrinho({
                                     <button
                                         className="botao-remover"
                                         type="button"
-                                        onClick={() => aoRemover?.(item.produto.id)}
+                                        onClick={() => aoRemover?.(item.produto.produtoId)}
                                     >
                                         <FiTrash2 />
                                         Remover
