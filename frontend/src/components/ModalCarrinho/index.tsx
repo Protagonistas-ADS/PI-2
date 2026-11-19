@@ -16,8 +16,10 @@ import {
 interface Produto {
     readonly id: number;
     nome: string;
-    preco: number;
+    descricao: string;
+    precoUnitario: number;
     quantidadeEstoque: number;
+    imagem: string;
 }
 
 interface ItemCarrinho {
@@ -49,7 +51,7 @@ function ModalCarrinho({
     aoRemover
 }: ModalCarrinhoProps) {
     const valorTotal = itens.reduce(
-        (total, item) => total + item.produto.preco * item.quantidade, 0
+        (total, item) => total + item.produto.precoUnitario * item.quantidade, 0
     );
 
     function formatarPreco(valor: number) {
@@ -117,11 +119,11 @@ function ModalCarrinho({
                             </div>
 
                             <p>
-                                Preço Unitário: {formatarPreco(item.produto.preco)}
+                                Preço Unitário: {formatarPreco(item.produto.precoUnitario)}
                             </p>
 
                             <strong>
-                                Subtotal: {formatarPreco(item.produto.preco * item.quantidade)}
+                                Subtotal: {formatarPreco(item.produto.precoUnitario * item.quantidade)}
                             </strong>
                         </ItemProduto>
                     ))

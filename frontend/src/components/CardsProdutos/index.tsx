@@ -9,12 +9,12 @@ import {
 } from "./style";
 
 interface Produto {
-    id: number;
+    readonly id: number;
     nome: string;
-    imagem: string;
     descricao: string;
-    preco: number;
+    precoUnitario: number;
     quantidadeEstoque: number;
+    imagem: string;
 }
 
 interface CardsProdutosProps {
@@ -43,7 +43,7 @@ function CardsProdutos({ produtos, aoSaberMais }: CardsProdutosProps) {
 
                         <p>{produto.descricao}</p>
 
-                        <PrecoProduto>R$ {produto.preco}</PrecoProduto>
+                        <PrecoProduto>R$ {produto.precoUnitario}</PrecoProduto>
 
                         <BotaoSaberMais
                             type="button"

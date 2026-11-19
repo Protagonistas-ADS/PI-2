@@ -14,10 +14,10 @@ import { FiX } from "react-icons/fi";
 interface Produto {
     readonly id: number;
     nome: string;
-    imagem: string;
     descricao: string;
-    preco: number;
+    precoUnitario: number;
     quantidadeEstoque: number;
+    imagem: string;
 }
 
 interface ModalProdutoProps {
@@ -69,7 +69,7 @@ function ModalProduto({ produto, aoFechar, aoAdicionar }: ModalProdutoProps) {
                     <p>{produto.descricao}</p>
 
                     <strong>
-                        R$ {produto.preco}
+                        R$ {produto.precoUnitario}
                     </strong>
 
                     {esgotado

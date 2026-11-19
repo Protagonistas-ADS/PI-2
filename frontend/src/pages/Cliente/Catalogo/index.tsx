@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiShoppingCart } from "react-icons/fi";
 
+import { listar } from "../../../services/produtoApi";
+
 import Navbar from "../../../components/Navbar";
 import Footer from "../../../components/Footer";
 import CardsProdutos from "../../../components/CardsProdutos";
@@ -22,10 +24,10 @@ import ProdutoImagemExemplo from "../../../assets/PaleteBackground.png";
 interface Produto {
     readonly id: number;
     nome: string;
-    imagem: string;
     descricao: string;
-    preco: number;
+    precoUnitario: number;
     quantidadeEstoque: number;
+    imagem: string;
 }
 
 interface ItemCarrinho {
@@ -33,31 +35,23 @@ interface ItemCarrinho {
     quantidade: number;
 }
 
-// Banco para teste apagar depois
-const bancoProdutos: Produto[] = [
-    { id: 1, nome: 'produto1', imagem: ProdutoImagemExemplo, descricao: 'primeiro produto', preco: 15.44, quantidadeEstoque: 92 },
-    { id: 2, nome: 'produto2', imagem: ProdutoImagemExemplo, descricao: 'segundo produto', preco: 20.44, quantidadeEstoque: 16 },
-    { id: 3, nome: 'produto3', imagem: ProdutoImagemExemplo, descricao: 'terceiro produto', preco: 35.43, quantidadeEstoque: 92 },
-];
-
 
 function Catalogo() {
-    
-    const [produtos, setProdutos] = useState<Produto[]>(bancoProdutos);
+    const [produtos, setProdutos] = useState<Produto[]>([]);
     const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
+
     const [carrinho, setCarrinho] = useState<ItemCarrinho[]>(() => {
-    const carrinhoSalvo = localStorage.getItem("carrinho");
+        const carrinhoSalvo = localStorage.getItem("carrinho");
 
-    return carrinhoSalvo ? JSON.parse(carrinhoSalvo) : [];
-    
-});
+        return carrinhoSalvo ? JSON.parse(carrinhoSalvo) : [];
 
-useEffect(() => {
-    localStorage.setItem("carrinho", JSON.stringify(carrinho));
-}, [carrinho]);
+    });
+
+    useEffect(() => {
+        localStorage.setItem("carrinho", JSON.stringify(carrinho));
+    }, [carrinho]);
 
     const [carrinhoAberto, setCarrinhoAberto] = useState(false);
-
     const navigate = useNavigate();
 
     function abrirModal(produto: Produto) {
@@ -74,19 +68,18 @@ useEffect(() => {
     }
 
     function handleFazerPedido() {
-    alert("Pedido feito com sucesso");
+        alert("Pedido feito com sucesso");
 
-    setCarrinho([]);
-    setCarrinhoAberto(false);
-}
+        setCarrinho([]);
+        setCarrinhoAberto(false);
+    }
 
-function handleFazerCotacao() {
-    alert("Cotação feita com sucesso");
+    function handleFazerCotacao() {
+        alert("Cotação feita com sucesso");
 
-    setCarrinho([]);
-    setCarrinhoAberto(false);
-}
-
+        setCarrinho([]);
+        setCarrinhoAberto(false);
+    }
 
     function adicionarNoCarrinho(produto: Produto, quantidade: number) {
         setCarrinho((carrinhoAtual) => {
@@ -129,7 +122,7 @@ function handleFazerCotacao() {
         setCarrinho((carrinhoAtual) =>
             carrinhoAtual.map((item) =>
                 item.produto.id === id &&
-                item.quantidade < item.produto.quantidadeEstoque
+                    item.quantidade < item.produto.quantidadeEstoque
                     ? { ...item, quantidade: item.quantidade + 1 }
                     : item
             )
@@ -163,6 +156,16 @@ function handleFazerCotacao() {
         );
     }
 
+    async function carregarProdutos() {
+        const resposta = await listar();
+
+        const produtosFormatados = resposta.map((produto: Produto) => ({
+            ...produto,
+            imagem: `${import.meta.env.VITE_API_URL}/uploads/${produto.imagem.replace(/^\/+/, "")}`
+        }));
+        setProdutos(produtosFormatados);
+    }
+
     const linksNavegacao = [
         { id: 3, texto: "Catálogo", href: "/catalogo", ativo: false },
         { id: 2, texto: "Pedidos/Cotações", href: "/clientePedidos", ativo: false },
@@ -170,6 +173,9 @@ function handleFazerCotacao() {
         { id: 4, texto: "Sair", href: "/login", ativo: false, aoClicar: handleLogout },
     ];
 
+    useEffect(() => {
+        carregarProdutos();
+    }, []);
 
     return (
         <ContainerPagina>
@@ -218,22 +224,22 @@ function handleFazerCotacao() {
 
             {carrinhoAberto && (
 
-<ModalCarrinho
-    itens={carrinho}
-    aoFechar={() => setCarrinhoAberto(false)}
-    aoFazerPedido={handleFazerPedido}
-    aoFazerCotacao={handleFazerCotacao}
-    aoAumentar={aumentarQuantidade}
-    aoDiminuir={diminuirQuantidade}
-    aoRemover={removerDoCarrinho}
-/>
+                <ModalCarrinho
+                    itens={carrinho}
+                    aoFechar={() => setCarrinhoAberto(false)}
+                    aoFazerPedido={handleFazerPedido}
+                    aoFazerCotacao={handleFazerCotacao}
+                    aoAumentar={aumentarQuantidade}
+                    aoDiminuir={diminuirQuantidade}
+                    aoRemover={removerDoCarrinho}
+                />
             )}
 
         </ContainerPagina>
 
 
     )
-    
+
 }
 
 export default Catalogo;
