@@ -1,0 +1,26 @@
+### Listar pedidos do cliente
+GET http://localhost:3000/pedidos/cliente
+Authorization: Bearer SEU_TOKEN
+### Listar produtos
+GET http://localhost:3000/produtos
+Authorization: Bearer SEU_TOKEN
+### Criar pedido
+POST http://localhost:3000/pedidos
+Authorization: Bearer SEU_TOKEN
+
+{
+    "itens": [
+        {
+            "produto_id": 1,
+            "quantidade": 10
+        },
+        {
+            "produto_id": 3,
+            "quantidade": 5
+        }
+    ]
+}
+
+### Consultar itens do pedido 4
+GET http://localhost:3000/pedidos/itens/4
+Authorization: Bearer SEU_TOKEN
