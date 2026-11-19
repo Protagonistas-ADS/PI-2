@@ -13,7 +13,7 @@ export interface Produto extends RowDataPacket {
 
 const ProdutoRepository = {
 
-    async Criar(nome: string, descricao: string, preco: number, quantidade: number, imagem: string): Promise<ResultSetHeader> {
+    async Criar(nome: string, descricao: string, preco: number, quantidade: number, imagem: string | null): Promise<ResultSetHeader> {
         const [resultado] = await db.execute<ResultSetHeader>(`
             INSERT INTO produto (nome, descricao, preco_unitario, quantidade_estoque, imagem)
             VALUES (?, ?, ?, ?, ?);
