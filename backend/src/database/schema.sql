@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS produto (
     descricao VARCHAR(255),
     preco_unitario DECIMAL(10,2) NOT NULL,
     quantidade_estoque INT NOT NULL DEFAULT 0,
+    imagem VARCHAR(255),
     ativo BOOLEAN DEFAULT true
 );
 

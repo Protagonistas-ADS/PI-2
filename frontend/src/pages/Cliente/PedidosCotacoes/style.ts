@@ -74,7 +74,7 @@ export const PedidosConteudo = styled.div`
         display: inline-block;
         padding: 5px 10px;
         border-radius: 6px;
-        font-size: 14px;
+        font-size: 18px;
         font-weight: 600;
     }
 
@@ -100,7 +100,7 @@ export const PedidosConteudo = styled.div`
     border: 1px solid #f5b5b5;
     border-radius: 6px;
     padding: 7px 12px;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s;
@@ -111,12 +111,12 @@ export const PedidosConteudo = styled.div`
 }
 
 .acao-marcar-lida {
-    background: #fbf9b0;
-    color: #0e0e0e;
+    background: #fff3cd;
+    color: #856404;
     border: 1px solid #e5d875;
     border-radius: 6px;
     padding: 7px 12px;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s;
