@@ -37,6 +37,21 @@ const ProdutoRepository = {
         return resultado;
     },
 
+    async Buscar(id: number): Promise<Produto | null> {
+        const [resultado] = await db.execute<Produto[]>(
+            `SELECT
+                nome,
+                descricao,
+                preco_unitario,
+                quantidade_estoque,
+                imagem,
+                ativo
+            FROM produto
+            WHERE id = ?;`, 
+            [id]);
+
+        return resultado.length > 0 ? resultado[0] : null;
+    }
 };
 
 export default ProdutoRepository;

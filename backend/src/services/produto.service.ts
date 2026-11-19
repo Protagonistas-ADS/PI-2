@@ -13,7 +13,15 @@ const ProdutoService = {
 
     async Listar() {
         return ProdutoRepository.Listar();
+    },
+
+    async Buscar(id: number) {
+        if (!id) {
+            throw criarErro("ID do produto não fornecido.", 400);
+        }
+
+        return ProdutoRepository.Buscar(id);
     }
-}
+};
 
 export default ProdutoService;
