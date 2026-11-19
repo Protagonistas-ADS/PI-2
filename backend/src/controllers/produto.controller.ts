@@ -5,9 +5,9 @@ import { criarErro } from "../utils/criarErro";
 const ProdutoController = {
     async Criar(req: Request, res: Response, next: NextFunction) {
         try {
-            const { nome, descricao, preco, quantidade } = req.body;
+            const { nome, descricao, preco, quantidade, imagem } = req.body;
 
-            await ProdutoService.Criar(nome, descricao, preco, quantidade);
+            await ProdutoService.Criar(nome, descricao, preco, quantidade, imagem);
 
             res.sendStatus(201);
 
