@@ -7,8 +7,8 @@ import { listar } from "../../../services/produtoApi";
 import Navbar from "../../../components/Navbar";
 import Footer from "../../../components/Footer";
 import CardsProdutos from "../../../components/CardsProdutos";
-import ModalProduto from "../../../components/ModalProduto";
-import ModalCarrinho from "../../../components/ModalCarrinho";
+import ModalProduto from "../../../components/Modais/ModalProduto";
+import ModalCarrinho from "../../../components/Modais/ModalCarrinho";
 
 import {
     ContainerPagina,
@@ -18,7 +18,6 @@ import {
     SessaoProdutos,
     BotaoCarrinho,
 } from "./style";
-import ProdutoImagemExemplo from "../../../assets/PaleteBackground.png";
 
 
 interface Produto {

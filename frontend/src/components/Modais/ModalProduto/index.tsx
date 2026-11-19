@@ -27,23 +27,25 @@ interface ModalProdutoProps {
 }
 
 function ModalProduto({ produto, aoFechar, aoAdicionar }: ModalProdutoProps) {
-    const [quantidade, setQuantidade] = useState(1);
+    const [quantidade, setQuantidade] = useState("1");
 
     const esgotado = produto.quantidade_estoque <= 0;
 
     function handleAdicionar() {
-        if (quantidade < 1 || quantidade > produto.quantidade_estoque) {
+        const quantidade_numero = Number(quantidade);
+
+        if (quantidade === "" || quantidade_numero < 1 || quantidade_numero > produto.quantidade_estoque) {
             return;
         }
 
-        aoAdicionar(produto, quantidade);
+        aoAdicionar(produto, quantidade_numero);
         aoFechar();
     }
 
     function handleQuantidade(event: ChangeEvent<HTMLInputElement>) {
-        const valor = Number(event.target.value);
+        const valor = event.target.value;
 
-        if (Number.isInteger(valor) && valor >= 1 && valor <= produto.quantidade_estoque) {
+        if (valor === "" || /^\d+$/.test(valor)) {
             setQuantidade(valor);
         }
     }
@@ -94,14 +96,10 @@ function ModalProduto({ produto, aoFechar, aoAdicionar }: ModalProdutoProps) {
 
                     {!esgotado && (
                         <>
-                            <label htmlFor="quantidade">Quantidade:</label>
 
                             <CampoQuantidade
                                 id="quantidade"
-                                type="number"
-                                min={1}
-                                max={produto.quantidade_estoque}
-                                step={1}
+                                type="text"
                                 value={quantidade}
                                 onChange={handleQuantidade}
                             />
