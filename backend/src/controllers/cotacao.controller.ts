@@ -57,6 +57,32 @@ const CotacaoController = {
         } catch (error) {
             next(error);
         }
+    },
+
+    async ConverterCotacao(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = Number(req.params);
+            const clienteId = req.usuario!.id;
+
+            await CotacaoService.ConverterCotacao(Number(id), clienteId);
+
+            res.sendStatus(204);
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    async RecusarCotacao(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = Number(req.params);
+            const clienteId = req.usuario!.id;
+
+            await CotacaoService.RecusarCotacao(id, clienteId);
+
+            res.sendStatus(204);
+        } catch (error) {
+            next(error);
+        }
     }
 
 };

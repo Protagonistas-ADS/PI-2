@@ -58,6 +58,30 @@ const CotacaoService = {
         if (resultado.affectedRows === 0) {
             throw criarErro("Cotação não encontrada ou já marcada como lida.", 404);
         }
+    },
+
+    async ConverterCotacao(id: number, clienteId: number) {
+        if (!id || !clienteId) {
+            throw criarErro("Identificação da cotação ou cliente não informada.", 400);
+        }
+
+        const resultado = await CotacaoRepository.ConverterCotacao(id, clienteId);
+
+        if (resultado.affectedRows === 0) {
+            throw criarErro("Cotação não encontrada ou não pode ser convertida.", 404);
+        }
+    },
+
+    async RecusarCotacao(id: number, clienteId: number) {
+        if (!id || !clienteId) {
+            throw criarErro("Identificação da cotação ou cliente não informada.", 400);
+        }
+
+        const resultado = await CotacaoRepository.RecusarCotacao(id, clienteId);
+
+        if (resultado.affectedRows === 0) {
+            throw criarErro("Cotação não encontrada ou não pode ser recusada.", 404);
+        }
     }
 
 };
