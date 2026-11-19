@@ -9,5 +9,6 @@ const router = Router();
 router.get("/", autenticacaoMiddleware, ProdutoController.Listar);
 router.post("/", autenticacaoMiddleware, validarSchema(ProdutoSchema), ProdutoController.Criar);
 router.get("/:id", autenticacaoMiddleware, ProdutoController.Buscar);
+router.delete("/:id", autenticacaoMiddleware, ProdutoController.Deletar);
 
 export default router;

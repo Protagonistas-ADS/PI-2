@@ -51,6 +51,12 @@ const ProdutoRepository = {
             [id]);
 
         return resultado.length > 0 ? resultado[0] : null;
+    },
+
+    async Deletar(id: number): Promise<void> {
+        await db.execute(
+            `DELETE FROM produto WHERE id = ?;`, 
+            [id]);
     }
 };
 

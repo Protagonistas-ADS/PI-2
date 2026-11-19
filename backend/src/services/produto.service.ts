@@ -21,6 +21,14 @@ const ProdutoService = {
         }
 
         return ProdutoRepository.Buscar(id);
+    },
+
+    async Deletar(id: number) {
+        if (!id) {
+            throw criarErro("ID do produto não fornecido.", 400);
+        }
+
+        return ProdutoRepository.Deletar(id);
     }
 };
 

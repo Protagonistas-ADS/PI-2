@@ -25,7 +25,7 @@ const ProdutoController = {
         } catch (error) {
             next(error);
         }
-    }
+    },
 
     async Buscar(req: Request, res: Response, next: NextFunction) {
         try {
@@ -42,7 +42,20 @@ const ProdutoController = {
         } catch (error) {
             next(error);
         }
-    }
+    },
+
+    async Deletar(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { id } = req.params;
+
+            await ProdutoService.Deletar(parseInt(id));
+
+            res.sendStatus(204);
+
+        } catch (error) {
+            next(error);
+        }
+    },
 };
 
 export default ProdutoController;
