@@ -1,4 +1,9 @@
-import { useState, type ChangeEvent } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
+import { FiX } from "react-icons/fi";
+
+import type { Produto } from "../../../types/produto";
+import { buscar } from "../../../services/produtoApi";
+import { formatarPreco, urlImagemProduto, usarImagemPadrao } from "../../../utils/produto";
 
 import {
     FundoModal,
@@ -6,113 +11,87 @@ import {
     BotaoFechar,
     ImagemProduto,
     InformacoesProduto,
-    BotaoContato,
-    CampoQuantidade,
+    EtiquetaEstoque,
+    BotaoVoltar,
 } from "./style";
-import { FiX } from "react-icons/fi";
-
-interface Produto {
-    readonly id: number;
-    nome: string;
-    descricao: string;
-    preco_unitario: number;
-    quantidade_estoque: number;
-    imagem: string;
-}
 
 interface ModalProdutoProps {
     produto: Produto;
     aoFechar: () => void;
-    aoAdicionar: (produto: Produto, quantidade: number) => void;
 }
 
-function ModalProduto({ produto, aoFechar, aoAdicionar }: ModalProdutoProps) {
-    const [quantidade, setQuantidade] = useState("1");
+// "Saber mais": janela só de detalhes do produto (a compra fica no card do catálogo).
+function ModalProduto({ produto, aoFechar }: ModalProdutoProps) {
+    // Mostra na hora o que já veio da lista e atualiza com os dados mais recentes do servidor
+    const [detalhes, setDetalhes] = useState<Produto>(produto);
+    const [indisponivel, setIndisponivel] = useState(false);
 
-    const esgotado = produto.quantidade_estoque <= 0;
+    useEffect(() => {
+        let ativo = true;
 
-    function handleAdicionar() {
-        const quantidade_numero = Number(quantidade);
+        buscar(produto.id)
+            .then((dados) => { if (ativo) setDetalhes(dados); })
+            .catch(() => { if (ativo) setIndisponivel(true); });
 
-        if (quantidade === "" || quantidade_numero < 1 || quantidade_numero > produto.quantidade_estoque) {
-            return;
+        return () => { ativo = false; };
+    }, [produto.id]);
+
+    // Fecha com a tecla Esc
+    useEffect(() => {
+        function aoApertarTecla(event: KeyboardEvent) {
+            if (event.key === "Escape") aoFechar();
         }
 
-        aoAdicionar(produto, quantidade_numero);
-        aoFechar();
+        window.addEventListener("keydown", aoApertarTecla);
+        return () => window.removeEventListener("keydown", aoApertarTecla);
+    }, [aoFechar]);
+
+    function impedirFechamento(event: MouseEvent<HTMLDivElement>) {
+        event.stopPropagation();
     }
 
-    function handleQuantidade(event: ChangeEvent<HTMLInputElement>) {
-        const valor = event.target.value;
-
-        if (valor === "" || /^\d+$/.test(valor)) {
-            setQuantidade(valor);
-        }
-    }
+    const esgotado = indisponivel || detalhes.quantidade_estoque <= 0;
 
     return (
-        <FundoModal>
-            <ConteudoModal>
+        <FundoModal onClick={aoFechar}>
+            <ConteudoModal
+                role="dialog"
+                aria-modal="true"
+                aria-label={`Detalhes de ${detalhes.nome}`}
+                onClick={impedirFechamento}
+            >
                 <BotaoFechar
                     type="button"
                     onClick={aoFechar}
+                    aria-label="Fechar detalhes"
                 >
-                    <FiX size={'48px'} />
+                    <FiX size={'40px'} />
                 </BotaoFechar>
 
                 <ImagemProduto
-                    src={produto.imagem}
-                    alt={produto.nome}
+                    src={urlImagemProduto(detalhes.imagem)}
+                    alt={detalhes.nome}
+                    onError={usarImagemPadrao}
                 />
 
                 <InformacoesProduto>
-                    <h2>{produto.nome}</h2>
+                    <h2>{detalhes.nome}</h2>
 
-                    <p>{produto.descricao}</p>
+                    <p>{detalhes.descricao}</p>
 
-                    <strong>
-                        R$ {produto.preco_unitario}
-                    </strong>
+                    <strong>{formatarPreco(detalhes.preco_unitario)}</strong>
 
-                    {esgotado
-                        ? <span
-                            style={{
-                                backgroundColor: "#cc1010",
-                                fontWeight: "bold",
-                                color: "#fff",
-                                borderRadius: "6px",
-                                padding: "2px"
-                            }}>
-                            Produto esgotado
-                        </span>
-                        : <span
-                            style={{
-                                color: "#5d6d63",
-                                fontWeight: "bold"
-                            }}>
-                            Quantidade em estoque: {produto.quantidade_estoque} lotes
-                        </span>
-                    }
+                    <EtiquetaEstoque $esgotado={esgotado}>
+                        {indisponivel
+                            ? "Produto indisponível no momento"
+                            : esgotado
+                                ? "Produto esgotado"
+                                : `Em estoque: ${detalhes.quantidade_estoque} unidades`}
+                    </EtiquetaEstoque>
 
-                    {!esgotado && (
-                        <>
-
-                            <CampoQuantidade
-                                id="quantidade"
-                                type="text"
-                                value={quantidade}
-                                onChange={handleQuantidade}
-                            />
-                        </>
-                    )}
-
-                    <BotaoContato
-                        type="button"
-                        disabled={esgotado}
-                        onClick={handleAdicionar}
-                    >
-                        Adicionar ao carrinho
-                    </BotaoContato>
+                    <BotaoVoltar type="button" onClick={aoFechar}>
+                        Voltar ao catálogo
+                    </BotaoVoltar>
                 </InformacoesProduto>
             </ConteudoModal>
         </FundoModal>

@@ -28,6 +28,18 @@ export const ConteudoModal = styled.div`
     background-color: #ffffff;
     border-radius: 20px;
     box-shadow: 0 12px 40px rgba(33, 53, 43, 0.18);
+
+    /* No celular, a foto fica em cima e o texto embaixo */
+    @media (max-width: 700px) {
+        flex-direction: column;
+        gap: 20px;
+        padding: 56px 20px 24px;
+
+        img {
+            width: 100%;
+            max-height: 240px;
+        }
+    }
 `;
 
 export const BotaoFechar = styled.button`
@@ -73,38 +85,29 @@ export const InformacoesProduto = styled.div`
     }
 `;
 
-export const BotaoContato = styled.button`
-    width: 100%;
-    padding: 16px 20px;
+export const EtiquetaEstoque = styled.span<{ $esgotado: boolean }>`
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    color: ${({ $esgotado }) => ($esgotado ? "#ffffff" : "#5d6d63")};
+    background-color: ${({ $esgotado }) => ($esgotado ? "#cc1010" : "#eef2ef")};
+`;
 
-    border: none;
+export const BotaoVoltar = styled.button`
+    width: 100%;
+    margin-top: auto;
+    padding: 14px 20px;
+
+    border: 1px solid #2b4b3c;
     border-radius: 12px;
-    background-color: #ed8b22;
-    color: #ffffff;
+    background-color: transparent;
+    color: #2b4b3c;
 
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
 
     &:hover {
-        background-color: #d97713;
-    }
-`;
-
-export const CampoQuantidade = styled.input`
-    width: 100%;
-    padding: 12px;
-
-    border: 1px solid #cbd5ce;
-    border-radius: 8px;
-
-    background-color: #ffffff;
-    color: #21352b;
-    font-size: 1rem;
-
-    &:focus {
-        outline: none;
-        border-color: #5d806b;
-        box-shadow: 0 0 0 2px rgba(93, 128, 107, 0.15);
+        background-color: #eef2ef;
     }
 `;

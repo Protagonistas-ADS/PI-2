@@ -75,10 +75,63 @@ export const PrecoProduto = styled.strong`
     line-height: 1.3;
 `;
 
-export const BotaoSaberMais = styled.button`
-    align-self: flex-start;
-    margin-top: 14px;
-    padding: 16px 25px;
+export const SeletorQuantidade = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+
+    button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+
+        border: 1px solid #cbd5ce;
+        border-radius: 10px;
+        background-color: #ffffff;
+        color: #2b4b3c;
+        cursor: pointer;
+
+        &:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+    }
+
+    input {
+        width: 64px;
+        height: 40px;
+        text-align: center;
+
+        border: 1px solid #cbd5ce;
+        border-radius: 10px;
+        color: #21352b;
+        font-size: 1rem;
+
+        &:focus {
+            outline: none;
+            border-color: #5d806b;
+            box-shadow: 0 0 0 2px rgba(93, 128, 107, 0.15);
+        }
+    }
+`;
+
+export const AcoesCard = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+`;
+
+export const BotaoAdicionar = styled.button`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px 20px;
 
     border: none;
     border-radius: 14px;
@@ -90,7 +143,32 @@ export const BotaoSaberMais = styled.button`
     cursor: pointer;
     transition: background-color 0.2s ease;
 
-    &:hover {
+    &:hover:not(:disabled) {
         background-color: #d97713;
+    }
+
+    &:disabled {
+        background-color: #c9cfcb;
+        cursor: not-allowed;
+    }
+`;
+
+// "Saber mais" agora só abre os detalhes, por isso fica com aparência secundária
+export const BotaoSaberMais = styled.button`
+    width: 100%;
+    padding: 12px 20px;
+
+    border: 1px solid #2b4b3c;
+    border-radius: 14px;
+    background-color: transparent;
+    color: #2b4b3c;
+
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background-color: #eef2ef;
     }
 `;

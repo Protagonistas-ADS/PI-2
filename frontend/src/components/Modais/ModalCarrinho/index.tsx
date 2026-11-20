@@ -19,7 +19,7 @@ interface Produto {
     descricao: string;
     preco_unitario: number;
     quantidade_estoque: number;
-    imagem: string;
+    imagem: string | null;
 }
 
 interface ItemCarrinho {
