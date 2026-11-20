@@ -26,6 +26,11 @@ app.use("/estoque", EstoqueRoutes);
 app.use("/notas", NotaRoutes);
 app.use("/vendas", VendaRoutes);
 
+// Endereço que não existe: responde no mesmo formato de erro da API
+app.use((req, res) => {
+    res.status(404).json({ erro: "Rota não encontrada." });
+});
+
 // Middleware de erro
 app.use(erroMiddleware);
 
