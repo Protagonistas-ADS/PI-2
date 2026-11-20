@@ -13,6 +13,17 @@ export interface ProdutoEstoqueBaixo extends RowDataPacket {
     quantidade_estoque: number;
 }
 
+// Usuário na tabela do painel (a senha nunca sai do banco)
+export interface UsuarioListado extends RowDataPacket {
+    id: number;
+    nome: string;
+    email: string;
+    perfil: "cliente" | "administrador";
+    criado_em: Date;
+    total_pedidos: number;
+    total_comprado: string | number;
+}
+
 interface TotaisVendas extends RowDataPacket {
     quantidade: number;
     valor_total: string | number;
@@ -70,6 +81,30 @@ const AdminRepository = {
             quantidade: Number(resultado[0]?.quantidade ?? 0),
             valor_total: Number(resultado[0]?.valor_total ?? 0)
         };
+    },
+
+    // Todos os usuários, sem a senha, com quantos pedidos fizeram e quanto já compraram
+    // (soma das vendas = pedidos entregues). Subconsultas evitam somar linhas repetidas.
+    async ListarUsuarios(): Promise<UsuarioListado[]> {
+        const [resultado] = await db.execute<UsuarioListado[]>(`
+            SELECT
+                u.id,
+                u.nome,
+                u.email,
+                u.perfil,
+                u.criado_em,
+                (SELECT COUNT(*) FROM pedido p WHERE p.cliente_id = u.id) AS total_pedidos,
+                (
+                    SELECT COALESCE(SUM(v.valor_total), 0)
+                    FROM venda v
+                    INNER JOIN pedido p ON p.id = v.pedido_id
+                    WHERE p.cliente_id = u.id
+                ) AS total_comprado
+            FROM usuario u
+            ORDER BY u.criado_em DESC, u.id DESC;
+        `);
+
+        return resultado;
     }
 };
 

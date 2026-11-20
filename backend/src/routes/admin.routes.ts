@@ -11,4 +11,7 @@ router.use(autenticacaoMiddleware, autorizarAdministrador);
 // Números do dashboard (pendentes, a retirar hoje, estoque baixo, vendas do mês)
 router.get("/resumo", AdminController.BuscarResumo);
 
+// Tabela de usuários (sem senha), com total de pedidos e valor comprado
+router.get("/usuarios", AdminController.ListarUsuarios);
+
 export default router;

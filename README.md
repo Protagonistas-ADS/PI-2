@@ -116,7 +116,9 @@ Na entrevista com o cliente, identificamos três dores principais:
 
 - 🧭 Painel próprio (`/admin`) com menu lateral — o admin cai nele ao fazer login
 - 📊 Dashboard: pedidos pendentes, a retirar hoje, estoque baixo e vendas do mês
-- 📋 Gerenciamento de pedidos: confirmar, marcar pronto, entregar ou cancelar direto no dashboard
+- 📋 Gerenciamento de pedidos: confirmar, marcar pronto, entregar ou cancelar (no dashboard e na tabela de pedidos)
+- 🔎 Tabela de pedidos completa: busca por nº/cliente/e-mail, filtro por status e período, ordenação e soma dos valores
+- 👥 Tabela de usuários: busca, filtro por perfil, nº de pedidos e total comprado de cada cliente
 - 👤 Perfil do administrador (nome e senha)
 - 📦 Gerenciamento de produtos
 - 🧾 Histórico de vendas, notas fiscais e movimentações
@@ -405,6 +407,29 @@ Corpo de `POST /pedidos`:
 | Método | Rota | Descrição | Auth |
 |:------:|------|-----------|:----:|
 | 🟢 `GET` | `/admin/resumo` | Números do dashboard | 🔒 admin |
+| 🟢 `GET` | `/admin/usuarios` | Todos os usuários (sem senha), do cadastro mais novo ao mais antigo → `{ usuarios: [...] }` | 🔒 admin |
+
+Resposta de `GET /admin/usuarios`:
+
+```json
+{
+  "usuarios": [
+    {
+      "id": 1,
+      "nome": "Cliente Teste",
+      "email": "usuario@gmail.com",
+      "perfil": "cliente",
+      "criado_em": "2026-11-20T13:00:00.000Z",
+      "total_pedidos": 3,
+      "total_comprado": 1050
+    }
+  ]
+}
+```
+
+- `total_pedidos`: todos os pedidos do usuário (qualquer status).
+- `total_comprado`: soma das vendas do usuário (pedidos entregues).
+- A senha nunca sai do banco. Sem token → `401`; cliente → `403`.
 
 Resposta de `GET /admin/resumo`:
 
@@ -485,9 +510,11 @@ Erros seguem o formato `{ "erro": "mensagem" }`, sempre em português. Erros de 
 | `/carrinho` | Carrinho: revisar itens, data de retirada, observação e enviar o pedido | 🌐 Pública (envio exige login de cliente) |
 | `/perfil` | Perfil do cliente | 🔒 Cliente |
 | `/clientePedidos` | Meus Pedidos (acompanhamento dos pedidos) | 🔒 Cliente |
-| `/admin` | Dashboard: indicadores e pedidos em andamento com botões de status | 🔒 Admin |
+| `/admin` | Dashboard: indicadores e pedidos em andamento com botões de status (+ link "Ver todos os pedidos") | 🔒 Admin |
+| `/admin/pedidos` | Tabela de todos os pedidos: busca, status, período, ordenação, itens e botões de status | 🔒 Admin |
+| `/admin/usuarios` | Tabela de usuários: busca, perfil, ordenação, nº de pedidos e total comprado | 🔒 Admin |
 | `/admin/perfil` | Perfil do administrador | 🔒 Admin |
-| `/admin/pedidos`, `/usuarios`, `/movimentacoes`, `/vendas`, `/notas` | Tabelas do admin (em construção — Etapa 9) | 🔒 Admin |
+| `/admin/movimentacoes`, `/vendas`, `/notas` | Tabelas do admin (em construção — Etapa 9, bloco B) | 🔒 Admin |
 
 Quem decide o acesso é o servidor: o front-end confere o perfil em `GET /usuarios/logado` e só ajuda na navegação. Admin que abre tela de cliente vai para `/admin`; cliente que abre `/admin` volta para o catálogo com o aviso "Área restrita"; sem login vai para `/login` e, depois de entrar, volta para a tela que tentou abrir. Mesmo que alguém force o caminho, a API responde `401`/`403`.
 
@@ -903,7 +930,8 @@ Legenda: ✅ pronto · 🚧 em andamento · ⏳ a fazer
 | Perfil do usuário | ✅ |
 | Meus Pedidos do cliente | ✅ |
 | Painel do admin: menu, dashboard de pedidos e perfil | ✅ |
-| Tabelas do administrador (pedidos, usuários, movimentações, vendas, notas) | ⏳ |
+| Tabelas do administrador: pedidos e usuários | ✅ |
+| Tabelas do administrador: movimentações, vendas e notas | ⏳ |
 
 </td>
 </tr>
