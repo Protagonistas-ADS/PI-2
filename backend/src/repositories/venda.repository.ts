@@ -14,7 +14,46 @@ interface ItemPedido extends RowDataPacket {
     preco_unitario: number;
 }
 
+// Venda na tabela do painel: com o cliente e a nota 'emitida' (se houver)
+export interface VendaListada extends RowDataPacket {
+    id: number;
+    pedido_id: number;
+    valor_total: string | number;
+    data_venda: Date;
+    cliente_id: number;
+    cliente_nome: string;
+    cliente_email: string;
+    quantidade_total: string | number;
+    nota_id: number | null;
+    nota_numero: string | null;
+}
+
 const VendaRepository = {
+
+    // Todas as vendas, da mais nova para a mais antiga.
+    // A nota entra só se estiver 'emitida' (nota cancelada = venda sem nota).
+    async ListarTodas(): Promise<VendaListada[]> {
+        const [resultado] = await db.execute<VendaListada[]>(`
+            SELECT
+                v.id,
+                v.pedido_id,
+                v.valor_total,
+                v.data_venda,
+                u.id AS cliente_id,
+                u.nome AS cliente_nome,
+                u.email AS cliente_email,
+                (SELECT COALESCE(SUM(pi.quantidade), 0) FROM pedido_item pi WHERE pi.pedido_id = v.pedido_id) AS quantidade_total,
+                n.id AS nota_id,
+                n.numero AS nota_numero
+            FROM venda v
+            INNER JOIN pedido p ON p.id = v.pedido_id
+            INNER JOIN usuario u ON u.id = p.cliente_id
+            LEFT JOIN nota n ON n.venda_id = v.id AND n.status = 'emitida'
+            ORDER BY v.data_venda DESC, v.id DESC;
+        `);
+
+        return resultado;
+    },
 
     async BuscarPedido(conexao: PoolConnection, pedidoId: number): Promise<PedidoParaVenda | null> {
         const [resultado] = await conexao.execute<PedidoParaVenda[]>(`

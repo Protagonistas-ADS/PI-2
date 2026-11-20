@@ -1,4 +1,3 @@
-import NotaRoutes from "./routes/nota.routes";
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
@@ -9,6 +8,7 @@ import ProdutoRoutes from "./routes/produto.routes";
 import PedidoRoutes from "./routes/pedido.routes";
 import EstoqueRoutes from "./routes/estoque.routes";
 import VendaRoutes from "./routes/venda.routes";
+import NotaRoutes from "./routes/nota.routes";
 import AdminRoutes from "./routes/admin.routes";
 
 import erroMiddleware from "./middlewares/error.middleware";

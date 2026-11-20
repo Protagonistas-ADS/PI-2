@@ -7,6 +7,24 @@ import { criarErro } from "../utils/criarErro";
 // O estoque NÃO baixa aqui: ele já baixou quando o administrador confirmou o pedido.
 const VendaService = {
 
+    // GET /vendas: tabela de vendas do painel (o MySQL devolve DECIMAL e SUM como texto)
+    async ListarTodas() {
+        const vendas = await VendaRepository.ListarTodas();
+
+        return vendas.map((venda) => ({
+            id: venda.id,
+            pedido_id: venda.pedido_id,
+            valor_total: Number(venda.valor_total),
+            data_venda: venda.data_venda,
+            cliente_id: venda.cliente_id,
+            cliente_nome: venda.cliente_nome,
+            cliente_email: venda.cliente_email,
+            quantidade_total: Number(venda.quantidade_total),
+            nota_id: venda.nota_id,
+            nota_numero: venda.nota_numero
+        }));
+    },
+
     // Registra a venda usando a transação de quem chamou
     // (ex.: PedidoService ao marcar o pedido como entregue).
     async RegistrarNaTransacao(conexao: PoolConnection, pedidoId: number) {
