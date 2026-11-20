@@ -14,6 +14,13 @@ export function erroMiddleware(
         });
     }
 
+    // JSON mal formado no corpo (o express.json() avisa com type "entity.parse.failed")
+    if (erro instanceof Error && "type" in erro && erro.type === "entity.parse.failed") {
+        return res.status(400).json({
+            erro: "Os dados enviados não estão em um formato válido (JSON)."
+        });
+    }
+
     if (erro instanceof Error && "status" in erro) {
         return res.status(Number(erro.status)).json({
             erro: erro.message

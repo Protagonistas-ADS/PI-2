@@ -21,19 +21,21 @@ INSERT INTO usuario (id, nome, email, senha, perfil) VALUES
 -- Os saldos consideram as movimentações históricas inseridas ao final:
 -- produto 1: 200 - 10 = 190
 -- produto 2: 300 + 50 = 350
--- produto 3: 100 (sem movimentação)
--- produto 4: 50 - 5 = 45
+-- produto 3: 100 - 8 = 92 (confirmação do pedido 2)
+-- produto 4: 50 - 5 - 3 = 42 (pedido 3 entregue e confirmação do pedido 2)
 INSERT INTO produto (id, nome, descricao, preco_unitario, quantidade_estoque, ativo, imagem) VALUES
 (1, 'Palete PBR', 'Palete padrão PBR de madeira', 45.00, 190, TRUE, 'protagonistasLogo.png'),
 (2, 'Palete descartável', 'Palete de madeira descartável', 25.00, 350, TRUE, 'protagonistasLogo.png'),
-(3, 'Palete reforçado', 'Palete de madeira reforçado', 75.00, 100, TRUE, 'protagonistasLogo.png'),
-(4, 'Palete plástico', 'Palete plástico industrial', 120.00, 45, TRUE, 'protagonistasLogo.png');
+(3, 'Palete reforçado', 'Palete de madeira reforçado', 75.00, 92, TRUE, 'protagonistasLogo.png'),
+(4, 'Palete plástico', 'Palete plástico industrial', 120.00, 42, TRUE, 'protagonistasLogo.png');
 
 -- PEDIDOS
-INSERT INTO pedido (id, cliente_id, status, previsao_busca) VALUES
-(1, 1, 'pendente', NULL),
-(2, 1, 'respondido', '2026-11-21 10:00:00'),
-(3, 1, 'entregue', '2026-11-10 14:00:00');
+-- Fluxo: pendente -> confirmado -> pronto_retirada -> entregue (ou cancelado).
+-- O estoque baixa quando o administrador confirma (pedidos 2 e 3 já baixaram).
+INSERT INTO pedido (id, cliente_id, status, previsao_busca, observacao) VALUES
+(1, 1, 'pendente', NULL, 'Posso retirar no fim da tarde.'),
+(2, 1, 'confirmado', '2026-11-21 10:00:00', NULL),
+(3, 1, 'entregue', '2026-11-10 14:00:00', NULL);
 
 -- ITENS DOS PEDIDOS
 INSERT INTO pedido_item (pedido_id, produto_id, quantidade, preco_unitario, subtotal) VALUES
@@ -61,7 +63,11 @@ INSERT INTO nota_item (nota_id, produto_id, quantidade, preco_unitario, subtotal
 INSERT INTO movimentacao_estoque (produto_id, nota_id, tipo, quantidade) VALUES
 (1, 1, 'saida', 10),
 (4, 1, 'saida', 5),
-(2, NULL, 'entrada', 50);
+(2, NULL, 'entrada', 50),
+(3, NULL, 'saida', 8),
+(4, NULL, 'saida', 3);
 
--- O pedido 2 permanece como 'respondido' e sem venda para permitir testar
--- a criação de uma venda pelo administrador.
+-- Pedido 1 (pendente): serve para testar a confirmação pelo administrador
+-- (baixa do estoque) e o cancelamento pelo cliente.
+-- Pedido 2 (confirmado): segue para 'pronto_retirada' e depois 'entregue';
+-- ao ser entregue, a venda é registrada automaticamente.

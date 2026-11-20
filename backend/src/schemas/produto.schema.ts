@@ -29,10 +29,3 @@ export const ProdutoSchema = z.object({
 export const AlterarAtivoSchema = z.object({
     ativo: z.boolean({ error: "Informe se o produto fica ativo (true) ou inativo (false)." })
 });
-
-// O :id da URL precisa ser um número inteiro positivo.
-export const IdParamSchema = z.object({
-    id: z.coerce.number({ error: "O id deve ser um número." })
-        .int("O id deve ser um número inteiro.")
-        .positive("O id deve ser maior que zero.")
-});

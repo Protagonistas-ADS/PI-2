@@ -1,7 +1,8 @@
 import { Router } from "express";
 import ProdutoController from "../controllers/produto.controller";
 import { validarSchema } from "../middlewares/validarSchema.middleware";
-import { ProdutoSchema, AlterarAtivoSchema, IdParamSchema } from "../schemas/produto.schema";
+import { ProdutoSchema, AlterarAtivoSchema } from "../schemas/produto.schema";
+import { IdParamSchema } from "../schemas/comum.schema";
 import { autenticacaoMiddleware } from "../middlewares/autenticacao.middleware";
 import { autorizarAdministrador } from "../middlewares/autenticarAdministrador.middleware";
 

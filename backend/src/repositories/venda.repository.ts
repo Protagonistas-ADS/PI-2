@@ -55,16 +55,6 @@ const VendaRepository = {
         `, [pedidoId, valorTotal]);
 
         return resultado;
-    },
-
-    async AtualizarStatusPedido(conexao: PoolConnection, pedidoId: number): Promise<ResultSetHeader> {
-        const [resultado] = await conexao.execute<ResultSetHeader>(`
-            UPDATE pedido
-            SET status = 'entregue'
-            WHERE id = ?;
-        `, [pedidoId]);
-
-        return resultado;
     }
 
 };

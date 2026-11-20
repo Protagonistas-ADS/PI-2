@@ -1,13 +1,23 @@
 import { Request, Response, NextFunction } from "express";
 import PedidoService from "../services/pedido.service";
 
+// Os dados já chegam conferidos pelo Zod (schemas/pedido.schema.ts e o :id).
 const PedidoController = {
 
     async ListarPorCliente(req: Request, res: Response, next: NextFunction) {
         try {
-            const id = req.usuario!.id;
+            const pedidos = await PedidoService.ListarPorCliente(req.usuario.id);
 
-            const pedidos = await PedidoService.ListarPorCliente(id);
+            res.status(200).json({ pedidos });
+
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    async ListarTodos(req: Request, res: Response, next: NextFunction) {
+        try {
+            const pedidos = await PedidoService.ListarTodos();
 
             res.status(200).json({ pedidos });
 
@@ -18,10 +28,7 @@ const PedidoController = {
 
     async ListarItens(req: Request, res: Response, next: NextFunction) {
         try {
-            const id = Number(req.params.id);
-            const cliente_id = req.usuario!.id;
-
-            const produtos = await PedidoService.ListarItens(id, cliente_id);
+            const produtos = await PedidoService.ListarItens(Number(req.params.id), req.usuario.id);
 
             res.status(200).json({ produtos });
 
@@ -32,10 +39,7 @@ const PedidoController = {
 
     async Cancelar(req: Request, res: Response, next: NextFunction) {
         try {
-            const id = Number(req.params.id);
-            const cliente_id = req.usuario!.id;
-
-            await PedidoService.Cancelar(id, cliente_id);
+            await PedidoService.Cancelar(Number(req.params.id), req.usuario.id);
 
             res.sendStatus(204);
 
@@ -43,17 +47,26 @@ const PedidoController = {
             next(error);
         }
     },
+
     async Criar(req: Request, res: Response, next: NextFunction) {
         try {
-            const cliente_id = req.usuario!.id;
-            const { itens } = req.body;
-
-            const pedidoId = await PedidoService.Criar(cliente_id, itens);
+            const pedidoId = await PedidoService.Criar(req.usuario.id, req.body);
 
             res.status(201).json({
                 mensagem: "Pedido criado com sucesso.",
                 pedidoId
             });
+
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    async AlterarStatus(req: Request, res: Response, next: NextFunction) {
+        try {
+            const resultado = await PedidoService.AlterarStatus(Number(req.params.id), req.body.status);
+
+            res.status(200).json(resultado);
 
         } catch (error) {
             next(error);

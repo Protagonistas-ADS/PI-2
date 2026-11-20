@@ -8,6 +8,7 @@ import FormularioGeral from "../../../components/FormularioGeral";
 import InputGeral from "../../../components/InputGeral";
 
 import { obterMensagemErro } from "../../../utils/obterMensagemErro";
+import { obterDestinoAposLogin } from "../../../utils/destinoAposLogin";
 import { 
     swalErro
 } from "../../../utils/alertas";
@@ -35,7 +36,7 @@ function Login() {
                 
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("payload", JSON.stringify(data.payload));
-                navigate("/catalogo");
+                navigate(obterDestinoAposLogin());
             } catch (error) {
                 swalErro(obterMensagemErro(error, "Não foi possível fazer login"));
             }
