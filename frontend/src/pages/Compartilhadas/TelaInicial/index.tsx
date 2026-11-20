@@ -24,6 +24,7 @@ import {
 function TelaInicial() {
 
     const linksNavegacao = [
+        { id: 1, texto: "Catálogo", href: "/catalogo", ativo: false },
         { id: 4, texto: "Entrar", href: "/login", ativo: false },
         { id: 5, texto: "Criar Conta", href: "/cadastro", ativo: false },
         { id: 3, texto: "Contatos", href: "#contatos", ativo: false },
@@ -43,8 +44,8 @@ function TelaInicial() {
                             com qualidade e confiança para sua empresa.
                         </p>
 
-                        <BotaoPrincipal href="/cadastro">
-                            Fazer Cadastro
+                        <BotaoPrincipal href="/catalogo">
+                            Ver catálogo
                         </BotaoPrincipal>
                     </ConteudoHero>
                 </Hero>

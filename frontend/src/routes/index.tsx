@@ -37,14 +37,8 @@ function Rotas() {
                     </RotaPublica>
                 }
             />
-            <Route
-                path="/catalogo"
-                element={
-                    <RotaProtegida>
-                        <Catalogo />
-                    </RotaProtegida>
-                }
-            />
+            {/* Catálogo é público: o visitante vê os produtos sem login */}
+            <Route path="/catalogo" element={<Catalogo />} />
             <Route
                 path="/perfil"
                 element={

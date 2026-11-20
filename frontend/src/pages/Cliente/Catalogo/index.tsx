@@ -1,8 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiShoppingCart } from "react-icons/fi";
 
 import { listar } from "../../../services/produtoApi";
+import { buscarUsuarioLogado } from "../../../services/usuarioApi";
+import type { Produto, ItemCarrinho } from "../../../types/produto";
+import { obterMensagemErro } from "../../../utils/obterMensagemErro";
+import { swalAviso, toastSucesso } from "../../../utils/alertas";
 
 import Navbar from "../../../components/Navbar";
 import Footer from "../../../components/Footer";
@@ -19,54 +23,73 @@ import {
     BotaoCarrinho,
 } from "./style";
 
+// Lê o carrinho salvo no navegador e descarta itens antigos/estragados
+// (versões anteriores salvavam produtos sem id, o que misturava os itens).
+function carregarCarrinhoSalvo(): ItemCarrinho[] {
+    try {
+        const salvo = JSON.parse(localStorage.getItem("carrinho") ?? "[]");
 
-interface Produto {
-    readonly id: number;
-    nome: string;
-    descricao: string;
-    preco_unitario: number;
-    quantidade_estoque: number;
-    imagem: string;
+        if (!Array.isArray(salvo)) return [];
+
+        return salvo.filter((item) =>
+            Number.isInteger(item?.produto?.id) && Number.isInteger(item?.quantidade) && item.quantidade > 0
+        );
+    } catch {
+        return [];
+    }
 }
 
-interface ItemCarrinho {
-    produto: Produto;
-    quantidade: number;
-}
-
-
+// Catálogo público: qualquer pessoa vê os produtos e monta o carrinho.
+// O login só é pedido na hora de fazer o pedido.
 function Catalogo() {
     const [produtos, setProdutos] = useState<Produto[]>([]);
+    const [carregando, setCarregando] = useState(true);
+    const [erroCarregamento, setErroCarregamento] = useState("");
     const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
+    const [logado, setLogado] = useState(false);
 
-    const [carrinho, setCarrinho] = useState<ItemCarrinho[]>(() => {
-        const carrinhoSalvo = localStorage.getItem("carrinho");
-
-        return carrinhoSalvo ? JSON.parse(carrinhoSalvo) : [];
-
-    });
+    const [carrinho, setCarrinho] = useState<ItemCarrinho[]>(carregarCarrinhoSalvo);
+    const [carrinhoAberto, setCarrinhoAberto] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         localStorage.setItem("carrinho", JSON.stringify(carrinho));
     }, [carrinho]);
 
-    const [carrinhoAberto, setCarrinhoAberto] = useState(false);
-    const navigate = useNavigate();
+    // Descobre se a pessoa está logada só para montar o menu certo
+    useEffect(() => {
+        if (!localStorage.getItem("token")) return;
 
-    function abrirModal(produto: Produto) {
-        setProdutoSelecionado(produto);
-    }
+        buscarUsuarioLogado()
+            .then(() => setLogado(true))
+            .catch(() => localStorage.removeItem("token"));
+    }, []);
 
-    function fecharModal() {
-        setProdutoSelecionado(null);
-    }
+    useEffect(() => {
+        listar()
+            .then(setProdutos)
+            .catch((error) => setErroCarregamento(
+                obterMensagemErro(error, "Não foi possível carregar os produtos. Tente novamente em instantes.")
+            ))
+            .finally(() => setCarregando(false));
+    }, []);
+
+    const fecharModal = useCallback(() => setProdutoSelecionado(null), []);
 
     function handleLogout() {
         localStorage.removeItem("token");
         navigate('/login');
     }
 
-    function handleFazerPedido() {
+    async function handleFazerPedido() {
+        if (!logado) {
+            setCarrinhoAberto(false);
+            await swalAviso("Entre na sua conta (ou crie uma) para finalizar o pedido. Seu carrinho fica guardado.");
+            navigate("/login");
+            return;
+        }
+
+        // A finalização de verdade (gravar o pedido no banco) chega na Etapa 6.
         alert("Pedido feito com sucesso");
 
         setCarrinho([]);
@@ -74,39 +97,30 @@ function Catalogo() {
     }
 
     function adicionarNoCarrinho(produto: Produto, quantidade: number) {
+        const itemExistente = carrinho.find((item) => item.produto.id === produto.id);
+        const quantidadeAtual = itemExistente?.quantidade ?? 0;
+
+        // Impede ultrapassar o estoque disponível
+        const quantidadeAdicionar = Math.min(quantidade, produto.quantidade_estoque - quantidadeAtual);
+
+        if (quantidadeAdicionar <= 0) {
+            swalAviso(`Você já tem todo o estoque de "${produto.nome}" no carrinho (${quantidadeAtual}).`);
+            return;
+        }
+
         setCarrinho((carrinhoAtual) => {
-            const itemExistente = carrinhoAtual.find(
-                (item) => item.produto.id === produto.id
-            );
-
-            const quantidadeAtual = itemExistente?.quantidade ?? 0;
-
-            // Impede ultrapassar o estoque disponível
-            const quantidadeAdicionar = Math.min(
-                quantidade,
-                produto.quantidade_estoque - quantidadeAtual
-            );
-
-            if (quantidadeAdicionar <= 0) {
-                return carrinhoAtual;
-            }
-
             if (itemExistente) {
                 return carrinhoAtual.map((item) =>
                     item.produto.id === produto.id
-                        ? {
-                            ...item,
-                            quantidade: item.quantidade + quantidadeAdicionar
-                        }
+                        ? { ...item, quantidade: item.quantidade + quantidadeAdicionar }
                         : item
                 );
             }
 
-            return [
-                ...carrinhoAtual,
-                { produto, quantidade: quantidadeAdicionar }
-            ];
+            return [...carrinhoAtual, { produto, quantidade: quantidadeAdicionar }];
         });
+
+        toastSucesso(`${quantidadeAdicionar}x ${produto.nome} adicionado ao carrinho.`);
     }
 
     // Aumenta a quantidade de um produto
@@ -121,22 +135,13 @@ function Catalogo() {
         );
     }
 
-    // Diminui a quantidade de um produto
+    // Diminui a quantidade de um produto (remove quando chega a zero)
     function diminuirQuantidade(id: number) {
         setCarrinho((carrinhoAtual) =>
             carrinhoAtual.flatMap((item) => {
-                if (item.produto.id !== id) {
-                    return [item];
-                }
-
-                // Remove o produto quando chegar a zero
-                if (item.quantidade <= 1) {
-                    return [];
-                }
-
-                return [
-                    { ...item, quantidade: item.quantidade - 1 }
-                ];
+                if (item.produto.id !== id) return [item];
+                if (item.quantidade <= 1) return [];
+                return [{ ...item, quantidade: item.quantidade - 1 }];
             })
         );
     }
@@ -148,30 +153,24 @@ function Catalogo() {
         );
     }
 
-    async function carregarProdutos() {
-        const resposta = await listar();
+    const linksNavegacao = logado
+        ? [
+            { id: 1, texto: "Catálogo", href: "/catalogo", ativo: true },
+            { id: 2, texto: "Meus Pedidos", href: "/clientePedidos", ativo: false },
+            { id: 3, texto: "Perfil", href: "/perfil", ativo: false },
+            { id: 4, texto: "Sair", href: "/login", ativo: false, aoClicar: handleLogout },
+        ]
+        : [
+            { id: 1, texto: "Catálogo", href: "/catalogo", ativo: true },
+            { id: 2, texto: "Entrar", href: "/login", ativo: false },
+            { id: 3, texto: "Criar Conta", href: "/cadastro", ativo: false },
+        ];
 
-        const produtosFormatados = resposta.map((produto: Produto) => ({
-            ...produto,
-            imagem: `${import.meta.env.VITE_API_URL}/uploads/${produto.imagem.replace(/^\/+/, "")}`
-        }));
-        setProdutos(produtosFormatados);
-    }
-
-    const linksNavegacao = [
-        { id: 3, texto: "Catálogo", href: "/catalogo", ativo: false },
-        { id: 2, texto: "Meus Pedidos", href: "/clientePedidos", ativo: false },
-        { id: 1, texto: "Perfil", href: "/perfil", ativo: false },
-        { id: 4, texto: "Sair", href: "/login", ativo: false, aoClicar: handleLogout },
-    ];
-
-    useEffect(() => {
-        carregarProdutos();
-    }, []);
+    const totalItens = carrinho.reduce((total, item) => total + item.quantidade, 0);
 
     return (
         <ContainerPagina>
-            <Navbar linkLogo="/catalogo" links={linksNavegacao} />
+            <Navbar linkLogo={logado ? "/catalogo" : "/"} links={linksNavegacao} />
 
             {carrinho.length > 0 && (
                 <BotaoCarrinho
@@ -179,9 +178,7 @@ function Catalogo() {
                     onClick={() => setCarrinhoAberto(true)}
                 >
                     <FiShoppingCart />
-                    Carrinho ({carrinho.reduce(
-                        (total, item) => total + item.quantidade, 0
-                    )})
+                    Carrinho ({totalItens})
                 </BotaoCarrinho>
             )}
 
@@ -197,25 +194,32 @@ function Catalogo() {
                 </SessaoBusca>
 
                 <SessaoProdutos>
+                    {carregando && <p>Carregando produtos...</p>}
+
+                    {!carregando && erroCarregamento && <p>{erroCarregamento}</p>}
+
+                    {!carregando && !erroCarregamento && produtos.length === 0 && (
+                        <p>Nenhum produto disponível no momento.</p>
+                    )}
+
                     <CardsProdutos
                         produtos={produtos}
-                        aoSaberMais={abrirModal}
+                        aoSaberMais={setProdutoSelecionado}
+                        aoAdicionar={adicionarNoCarrinho}
                     />
 
                     {produtoSelecionado && (
                         <ModalProduto
                             produto={produtoSelecionado}
                             aoFechar={fecharModal}
-                            aoAdicionar={adicionarNoCarrinho}
                         />
                     )}
                 </SessaoProdutos>
             </Conteudo>
 
-            <Footer linkLogo="/catalogo" />
+            <Footer linkLogo={logado ? "/catalogo" : "/"} />
 
             {carrinhoAberto && (
-
                 <ModalCarrinho
                     itens={carrinho}
                     aoFechar={() => setCarrinhoAberto(false)}
@@ -225,12 +229,8 @@ function Catalogo() {
                     aoRemover={removerDoCarrinho}
                 />
             )}
-
         </ContainerPagina>
-
-
-    )
-
+    );
 }
 
 export default Catalogo;
