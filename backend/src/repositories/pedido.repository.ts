@@ -1,58 +1,99 @@
 import db from "../configs/db";
 import { RowDataPacket, ResultSetHeader } from "mysql2";
+import type { PoolConnection } from "mysql2/promise";
+import type { StatusPedido } from "../schemas/pedido.schema";
 
+// Mesmos nomes das colunas do banco (e do que o frontend recebe).
 export interface Pedido extends RowDataPacket {
     id: number;
-    status: 'pendente' | 'respondido';
+    status: StatusPedido;
     previsao_busca: Date | null;
+    observacao: string | null;
+    criado_em: Date;
     quantidade_total: number;
+    valor_total: number;
+}
+
+export interface PedidoComCliente extends Pedido {
+    cliente_id: number;
+    cliente_nome: string;
+    cliente_email: string;
 }
 
 export interface ItemPedido extends RowDataPacket {
-    produtoId: number;
+    produto_id: number;
     produto_nome: string;
     quantidade: number;
     preco_unitario: number;
+    subtotal: number;
 }
 
-export interface NovoItemPedido {
-    produtoId: number;
-    quantidade: number;
-}
-
-interface ProdutoParaPedido extends RowDataPacket {
+export interface PedidoBloqueado extends RowDataPacket {
     id: number;
+    cliente_id: number;
+    status: StatusPedido;
+}
+
+export interface ProdutoParaPedido extends RowDataPacket {
+    id: number;
+    nome: string;
     preco_unitario: number;
     quantidade_estoque: number;
+    ativo: number;
 }
+
+// Colunas e totais usados nas duas listagens (cliente e administrador)
+const CAMPOS_PEDIDO = `
+    p.id,
+    p.status,
+    p.previsao_busca,
+    p.observacao,
+    p.criado_em,
+    SUM(pi.quantidade) AS quantidade_total,
+    SUM(pi.subtotal) AS valor_total
+`;
 
 const PedidoRepository = {
 
-    async ListarPorCliente(id: number): Promise<Pedido[]> {
+    async ListarPorCliente(cliente_id: number): Promise<Pedido[]> {
         const [resultado] = await db.execute<Pedido[]>(`
-            SELECT
-                p.id,
-                p.status,
-                p.previsao_busca,
-                SUM(pi.quantidade) AS quantidade_total
+            SELECT ${CAMPOS_PEDIDO}
             FROM pedido p
             INNER JOIN pedido_item pi ON pi.pedido_id = p.id
             WHERE p.cliente_id = ?
-              AND p.status IN ('pendente', 'respondido')
-            GROUP BY p.id, p.status, p.previsao_busca
+            GROUP BY p.id
             ORDER BY p.id DESC;
-        `, [id]);
+        `, [cliente_id]);
 
         return resultado;
     },
 
+    async ListarTodos(): Promise<PedidoComCliente[]> {
+        const [resultado] = await db.execute<PedidoComCliente[]>(`
+            SELECT
+                ${CAMPOS_PEDIDO},
+                u.id AS cliente_id,
+                u.nome AS cliente_nome,
+                u.email AS cliente_email
+            FROM pedido p
+            INNER JOIN pedido_item pi ON pi.pedido_id = p.id
+            INNER JOIN usuario u ON u.id = p.cliente_id
+            GROUP BY p.id, u.id
+            ORDER BY p.id DESC;
+        `);
+
+        return resultado;
+    },
+
+    // Itens de um pedido do próprio cliente (pedido de outro cliente volta vazio)
     async ListarItens(id: number, cliente_id: number): Promise<ItemPedido[]> {
         const [resultado] = await db.execute<ItemPedido[]>(`
             SELECT
                 pi.produto_id,
                 p.nome AS produto_nome,
                 pi.quantidade,
-                pi.preco_unitario
+                pi.preco_unitario,
+                pi.subtotal
             FROM pedido_item pi
             INNER JOIN produto p ON p.id = pi.produto_id
             INNER JOIN pedido pe ON pe.id = pi.pedido_id
@@ -63,113 +104,104 @@ const PedidoRepository = {
         return resultado;
     },
 
-    async Cancelar(id: number, cliente_id: number): Promise<ResultSetHeader> {
+    // Status e dono do pedido, sem trava (para montar mensagens de erro)
+    async BuscarResumo(id: number): Promise<PedidoBloqueado | null> {
+        const [resultado] = await db.execute<PedidoBloqueado[]>(`
+            SELECT id, cliente_id, status
+            FROM pedido
+            WHERE id = ?;
+        `, [id]);
+
+        return resultado[0] ?? null;
+    },
+
+    // O cliente só cancela enquanto o pedido está pendente (o estoque ainda não baixou)
+    async CancelarPendente(id: number, cliente_id: number): Promise<ResultSetHeader> {
         const [resultado] = await db.execute<ResultSetHeader>(`
             UPDATE pedido
             SET status = 'cancelado'
             WHERE id = ?
               AND cliente_id = ?
-              AND status IN ('pendente', 'respondido');
+              AND status = 'pendente';
         `, [id, cliente_id]);
 
         return resultado;
     },
 
-    async Criar(cliente_id: number, itens: NovoItemPedido[]) {
-        const idsProdutos = itens.map((item) => item.produtoId);
+    // As funções abaixo recebem a conexão da transação aberta no service.
 
-        if (itens.length === 0) {
-            throw new Error("O pedido precisa ter pelo menos um produto.");
-        }
+    async BuscarProduto(conexao: PoolConnection, produto_id: number): Promise<ProdutoParaPedido | null> {
+        const [resultado] = await conexao.execute<ProdutoParaPedido[]>(`
+            SELECT id, nome, preco_unitario, quantidade_estoque, ativo
+            FROM produto
+            WHERE id = ?;
+        `, [produto_id]);
 
-        if (new Set(idsProdutos).size !== idsProdutos.length) {
-            throw new Error("Não é permitido repetir produtos no pedido.");
-        }
+        return resultado[0] ?? null;
+    },
 
-        const conexao = await db.getConnection();
+    async Inserir(
+        conexao: PoolConnection,
+        cliente_id: number,
+        previsao_busca: string | null,
+        observacao: string | null
+    ): Promise<number> {
+        const [resultado] = await conexao.execute<ResultSetHeader>(`
+            INSERT INTO pedido (cliente_id, previsao_busca, observacao)
+            VALUES (?, ?, ?);
+        `, [cliente_id, previsao_busca, observacao]);
 
-        try {
-            await conexao.beginTransaction();
+        return resultado.insertId;
+    },
 
-            const produtosEncontrados: ProdutoParaPedido[] = [];
+    async InserirItem(
+        conexao: PoolConnection,
+        pedido_id: number,
+        produto_id: number,
+        quantidade: number,
+        preco_unitario: number
+    ): Promise<void> {
+        await conexao.execute(`
+            INSERT INTO pedido_item (pedido_id, produto_id, quantidade, preco_unitario, subtotal)
+            VALUES (?, ?, ?, ?, ?);
+        `, [pedido_id, produto_id, quantidade, preco_unitario, preco_unitario * quantidade]);
+    },
 
-            for (const item of itens) {
-                if (!Number.isInteger(item.produtoId) || item.produtoId <= 0) {
-                    throw new Error("Identificação de produto inválida.");
-                }
+    // "FOR UPDATE" trava o pedido até o fim da transação:
+    // dois cliques ao mesmo tempo não confirmam (nem baixam o estoque) duas vezes.
+    async BuscarParaAtualizar(conexao: PoolConnection, id: number): Promise<PedidoBloqueado | null> {
+        const [resultado] = await conexao.execute<PedidoBloqueado[]>(`
+            SELECT id, cliente_id, status
+            FROM pedido
+            WHERE id = ?
+            FOR UPDATE;
+        `, [id]);
 
-                if (!Number.isInteger(item.quantidade) || item.quantidade <= 0) {
-                    throw new Error("A quantidade deve ser um número inteiro positivo.");
-                }
-                const [resultado] = await conexao.execute<ProdutoParaPedido[]>(`
-                SELECT 
-                    id, 
-                    preco_unitario, 
-                    quantidade_estoque
-                FROM produto
-                WHERE id = ?
-                    AND ativo = 1;
-            `, [item.produtoId]);
+        return resultado[0] ?? null;
+    },
 
-                const produto = resultado[0];
+    async ListarItensParaEstoque(conexao: PoolConnection, id: number): Promise<ItemPedido[]> {
+        const [resultado] = await conexao.execute<ItemPedido[]>(`
+            SELECT
+                pi.produto_id,
+                p.nome AS produto_nome,
+                pi.quantidade,
+                pi.preco_unitario,
+                pi.subtotal
+            FROM pedido_item pi
+            INNER JOIN produto p ON p.id = pi.produto_id
+            WHERE pi.pedido_id = ?;
+        `, [id]);
 
-                if (!produto) {
-                    throw new Error(`Produto ${item.produtoId} não encontrado.`);
-                }
+        return resultado;
+    },
 
-                if (item.quantidade > produto.quantidade_estoque) {
-                    throw new Error(`Estoque insuficiente para o produto ${produto.id}.`);
-                }
-
-                produtosEncontrados.push(produto);
-            }
-
-            const [resultadoPedido] = await conexao.execute<ResultSetHeader>(`
-                INSERT INTO pedido (cliente_id)
-                VALUES (?);
-            `, [cliente_id]);
-
-            const pedidoId = resultadoPedido.insertId;
-            for (const item of itens) {
-                const produto = produtosEncontrados.find(
-                    (produto) => produto.id === item.produtoId
-                );
-
-                if (!produto) {
-                    throw new Error("Produto não encontrado.");
-                }
-
-                const preco_unitario = Number(produto.preco_unitario);
-                const subtotal = preco_unitario * item.quantidade;
-
-                await conexao.execute(`
-                    INSERT INTO pedido_item (
-                        pedido_id,
-                        produto_id,
-                        quantidade,
-                        preco_unitario,
-                        subtotal
-                        )
-                    VALUES (?, ?, ?, ?, ?);
-                `, [
-                    pedidoId,
-                    item.produtoId,
-                    item.quantidade,
-                    preco_unitario,
-                    subtotal
-                ]);
-            }
-
-            await conexao.commit();
-
-            return pedidoId;
-
-        } catch (error) {
-            await conexao.rollback();
-            throw error;
-        } finally {
-            conexao.release();
-        }
+    async AtualizarStatus(conexao: PoolConnection, id: number, status: StatusPedido): Promise<void> {
+        await conexao.execute(`
+            UPDATE pedido
+            SET status = ?
+            WHERE id = ?;
+        `, [status, id]);
     }
 };
 
