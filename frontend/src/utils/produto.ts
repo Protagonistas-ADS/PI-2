@@ -1,5 +1,5 @@
 import type { SyntheticEvent } from "react";
-import imagemPadrao from "../assets/PaleteBackground.png";
+import imagemPadrao from "../assets/PaleteBackground.jpg";
 
 // Monta o endereço da foto do produto, que fica na pasta uploads do backend.
 // Sem foto cadastrada, mostra uma imagem padrão em vez de um ícone quebrado.
