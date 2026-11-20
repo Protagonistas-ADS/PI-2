@@ -24,10 +24,10 @@ INSERT INTO usuario (id, nome, email, senha, perfil) VALUES
 -- produto 3: 100 (sem movimentação)
 -- produto 4: 50 - 5 = 45
 INSERT INTO produto (id, nome, descricao, preco_unitario, quantidade_estoque, ativo, imagem) VALUES
-(1, 'Palete PBR', 'Palete padrão PBR de madeira', 45.00, 190, TRUE, '/uploads/protagonistasLogo.jpg'),
-(2, 'Palete descartável', 'Palete de madeira descartável', 25.00, 350, TRUE, '/uploads/protagonistasLogo.jpg'),
-(3, 'Palete reforçado', 'Palete de madeira reforçado', 75.00, 100, TRUE, '/uploads/protagonistasLogo.jpg'),
-(4, 'Palete plástico', 'Palete plástico industrial', 120.00, 45, TRUE, '/uploads/protagonistasLogo.jpg');
+(1, 'Palete PBR', 'Palete padrão PBR de madeira', 45.00, 190, TRUE, 'protagonistasLogo.png'),
+(2, 'Palete descartável', 'Palete de madeira descartável', 25.00, 350, TRUE, 'protagonistasLogo.png'),
+(3, 'Palete reforçado', 'Palete de madeira reforçado', 75.00, 100, TRUE, 'protagonistasLogo.png'),
+(4, 'Palete plástico', 'Palete plástico industrial', 120.00, 45, TRUE, 'protagonistasLogo.png');
 
 -- PEDIDOS
 INSERT INTO pedido (id, cliente_id, status, previsao_busca) VALUES
