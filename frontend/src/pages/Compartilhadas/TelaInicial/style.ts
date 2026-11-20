@@ -39,7 +39,7 @@ export const ConteudoHero = styled.div`
     }
 `;
 
-export const BotaoOrcamento = styled.a`
+export const BotaoPrincipal = styled.a`
     display: inline-block;
     padding: 14px 24px;
     background-color: #d97713;

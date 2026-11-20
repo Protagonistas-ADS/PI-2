@@ -166,15 +166,6 @@ export const AcoesCarrinho = styled.div`
         }
     }
 
-    .acao-cotacao {
-        background-color: #2b4b3c;
-        color: #ffffff;
-
-        &:hover {
-            background-color: #21352b;
-        }
-    }
-
     @media (max-width: 500px) {
         flex-direction: column;
     }

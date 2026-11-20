@@ -5,7 +5,7 @@ import Catalogo from "../pages/Cliente/Catalogo";
 import Cadastro from "../pages/Compartilhadas/Cadastro";
 import Login from "../pages/Compartilhadas/Login";
 import Perfil from "../pages/Cliente/Perfil";
-import PedidosCotacoes from "../pages/Cliente/PedidosCotacoes";
+import MeusPedidos from "../pages/Cliente/MeusPedidos";
 
 import RotaProtegida from "../components/RotaProtegida";
 import RotaPublica from "../components/RotaPublica";
@@ -57,7 +57,7 @@ function Rotas() {
                 path="/clientePedidos"
                 element={
                     <RotaProtegida>
-                        <PedidosCotacoes />
+                        <MeusPedidos />
                     </RotaProtegida>
                 }
             />

@@ -34,7 +34,7 @@ export default function TabelaGeral({
                 <thead>
                     <Linha>
                         {colunas.map((coluna) => (
-                            <Cabecalho key={coluna.chave}>
+                            <Cabecalho key={coluna.titulo}>
                                 {coluna.titulo}
                             </Cabecalho>
                         ))}
@@ -48,7 +48,7 @@ export default function TabelaGeral({
                                 const valor = registro[coluna.chave];
 
                                 return (
-                                    <Celula key={coluna.chave}>
+                                    <Celula key={coluna.titulo}>
                                         {coluna.renderizar
                                             ? coluna.renderizar(valor, registro)
                                             : valor ?? "-"}
