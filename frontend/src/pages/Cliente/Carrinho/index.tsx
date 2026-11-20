@@ -8,7 +8,7 @@ import { criarPedido } from "../../../services/pedidoApi";
 import { useCarrinho } from "../../../hooks/useCarrinho";
 import { formatarPreco, urlImagemProduto, usarImagemPadrao } from "../../../utils/produto";
 import { obterMensagemErro } from "../../../utils/obterMensagemErro";
-import { guardarDestinoAposLogin } from "../../../utils/destinoAposLogin";
+import { guardarDestinoAposLogin, sairDaConta } from "../../../utils/destinoAposLogin";
 import { dadosEmpresa } from "../../../utils/dadosEmpresa";
 import { swalAviso, swalErro, swalSucesso } from "../../../utils/alertas";
 
@@ -83,7 +83,7 @@ function Carrinho() {
     }, []);
 
     function handleLogout() {
-        localStorage.removeItem("token");
+        sairDaConta();
         setPerfil("visitante");
     }
 
@@ -160,12 +160,18 @@ function Carrinho() {
             { id: 2, texto: "Entrar", href: "/login", ativo: false, aoClicar: () => guardarDestinoAposLogin("/carrinho") },
             { id: 3, texto: "Criar Conta", href: "/cadastro", ativo: false, aoClicar: () => guardarDestinoAposLogin("/carrinho") },
         ]
-        : [
-            { id: 1, texto: "Catálogo", href: "/catalogo", ativo: false },
-            { id: 2, texto: "Meus Pedidos", href: "/clientePedidos", ativo: false },
-            { id: 3, texto: "Perfil", href: "/perfil", ativo: false },
-            { id: 4, texto: "Sair", href: "/carrinho", ativo: false, aoClicar: handleLogout },
-        ];
+        : perfil === "administrador"
+            ? [
+                { id: 1, texto: "Catálogo", href: "/catalogo", ativo: false },
+                { id: 2, texto: "Painel", href: "/admin", ativo: false },
+                { id: 4, texto: "Sair", href: "/carrinho", ativo: false, aoClicar: handleLogout },
+            ]
+            : [
+                { id: 1, texto: "Catálogo", href: "/catalogo", ativo: false },
+                { id: 2, texto: "Meus Pedidos", href: "/clientePedidos", ativo: false },
+                { id: 3, texto: "Perfil", href: "/perfil", ativo: false },
+                { id: 4, texto: "Sair", href: "/carrinho", ativo: false, aoClicar: handleLogout },
+            ];
 
     return (
         <ContainerPagina>

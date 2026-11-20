@@ -7,6 +7,8 @@ import { buscarUsuarioLogado } from "../../../services/usuarioApi";
 import type { Produto } from "../../../types/produto";
 import { obterMensagemErro } from "../../../utils/obterMensagemErro";
 import { useCarrinho } from "../../../hooks/useCarrinho";
+import { sairDaConta } from "../../../utils/destinoAposLogin";
+import type { PerfilUsuario } from "../../../types/usuario";
 
 import Navbar from "../../../components/Navbar";
 import Footer from "../../../components/Footer";
@@ -30,7 +32,8 @@ function Catalogo() {
     const [carregando, setCarregando] = useState(true);
     const [erroCarregamento, setErroCarregamento] = useState("");
     const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
-    const [logado, setLogado] = useState(false);
+    const [perfil, setPerfil] = useState<PerfilUsuario | null>(null);
+    const logado = perfil !== null;
 
     const carrinho = useCarrinho();
     const [carrinhoAberto, setCarrinhoAberto] = useState(false);
@@ -41,8 +44,8 @@ function Catalogo() {
         if (!localStorage.getItem("token")) return;
 
         buscarUsuarioLogado()
-            .then(() => setLogado(true))
-            .catch(() => localStorage.removeItem("token"));
+            .then((usuario) => setPerfil(usuario.perfil))
+            .catch(() => sairDaConta());
     }, []);
 
     useEffect(() => {
@@ -57,11 +60,17 @@ function Catalogo() {
     const fecharModal = useCallback(() => setProdutoSelecionado(null), []);
 
     function handleLogout() {
-        localStorage.removeItem("token");
+        sairDaConta();
         navigate('/login');
     }
 
-    const linksNavegacao = logado
+    const linksNavegacao = perfil === "administrador"
+        ? [
+            { id: 1, texto: "Catálogo", href: "/catalogo", ativo: true },
+            { id: 2, texto: "Painel", href: "/admin", ativo: false },
+            { id: 4, texto: "Sair", href: "/login", ativo: false, aoClicar: handleLogout },
+        ]
+        : logado
         ? [
             { id: 1, texto: "Catálogo", href: "/catalogo", ativo: true },
             { id: 2, texto: "Meus Pedidos", href: "/clientePedidos", ativo: false },

@@ -12,6 +12,7 @@ import { NOME_STATUS_PEDIDO, type Pedido } from "../../../types/pedido";
 import { swalConfirmacao, swalErro, toastSucesso } from "../../../utils/alertas";
 import { obterMensagemErro } from "../../../utils/obterMensagemErro";
 import { formatarPreco } from "../../../utils/produto";
+import { sairDaConta } from "../../../utils/destinoAposLogin";
 
 import TabelaGeral from "../../../components/TabelaGeral";
 import Navbar from "../../../components/Navbar";
@@ -96,7 +97,7 @@ function MeusPedidos() {
     }
 
     function handleLogout() {
-        localStorage.removeItem("token");
+        sairDaConta();
         navigate('/login');
     }
 

@@ -36,7 +36,8 @@ function Login() {
                 
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("payload", JSON.stringify(data.payload));
-                navigate(obterDestinoAposLogin());
+                // Admin vai para o painel; cliente volta para onde estava (ou catálogo)
+                navigate(obterDestinoAposLogin(data.payload.perfil), { replace: true });
             } catch (error) {
                 swalErro(obterMensagemErro(error, "Não foi possível fazer login"));
             }

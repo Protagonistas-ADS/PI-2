@@ -1,4 +1,5 @@
 import api from "./api";
+import type { UsuarioLogado } from "../types/usuario";
 
 interface CadastroUsuario {
     nome: string;
@@ -29,7 +30,7 @@ export async function autenticarLogin(dados: LoginUsuario) {
     return response.data;
 }
 
-export async function buscarUsuarioLogado() {
+export async function buscarUsuarioLogado(): Promise<UsuarioLogado> {
     const response = await api.get("/usuarios/logado");
 
     return response.data.usuario;
