@@ -53,18 +53,50 @@ export const PedidosConteudo = styled.div`
         font-weight: 600;
     }
 
+    .subtitulo {
+        font-size: 1.1rem;
+        color: gray;
+        margin: 0 16px 24px;
+        text-align: center;
+    }
+
+    .mensagem {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin: 24px 16px;
+        font-size: 1.1rem;
+        color: #2b4b3c;
+
+        a {
+            color: #d97713;
+            font-weight: 700;
+        }
+    }
+
+    /* Uma cor por etapa do pedido */
     .status-pendente {
         background: #fff3cd;
         color: #856404;
     }
 
-    .status-respondido,
-    .status-respondida {
+    .status-confirmado {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .status-pronto_retirada {
+        background: #ffe8cc;
+        color: #9a4a00;
+    }
+
+    .status-entregue {
         background: #d4edda;
         color: #155724;
     }
 
-    .status-expirada {
+    .status-cancelado {
         background: #e2e3e5;
         color: #383d41;
     }

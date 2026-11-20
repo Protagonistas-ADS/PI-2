@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 
 import {
@@ -7,9 +7,11 @@ import {
     listarItensPedido,
     cancelarPedido,
 } from "../../../services/pedidoApi";
+import { NOME_STATUS_PEDIDO, type Pedido } from "../../../types/pedido";
 
 import { swalConfirmacao, swalErro, toastSucesso } from "../../../utils/alertas";
 import { obterMensagemErro } from "../../../utils/obterMensagemErro";
+import { formatarPreco } from "../../../utils/produto";
 
 import TabelaGeral from "../../../components/TabelaGeral";
 import Navbar from "../../../components/Navbar";
@@ -22,20 +24,32 @@ import {
     PedidosConteudo
 } from "./style";
 
+// "2026-11-21T03:00:00.000Z" -> "21/11/2026" (no horário do navegador)
+function formatarData(valor: string | null) {
+    if (!valor) return null;
+    return new Date(valor).toLocaleDateString("pt-BR");
+}
+
+interface ItemJanela {
+    produto: { id: number; nome: string; preco_unitario: number };
+    quantidade: number;
+}
 
 function MeusPedidos() {
-    const [pedidos, setPedidos] = useState([]);
-    const [produtosPedido, setProdutosPedido] = useState([]);
-    const [modalPedidoAberto, setModalPedidoAberto] = useState(false);
+    const [pedidos, setPedidos] = useState<Pedido[]>([]);
+    const [carregando, setCarregando] = useState(true);
+    const [erroCarregamento, setErroCarregamento] = useState("");
+    const [pedidoAberto, setPedidoAberto] = useState<{ id: number; itens: ItemJanela[] } | null>(null);
 
     const navigate = useNavigate();
 
     async function carregarPedidosCliente() {
         try {
-            const dados = await listarPedidosCliente();
-            setPedidos(dados);
+            setPedidos(await listarPedidosCliente());
         } catch (error) {
-            swalErro(obterMensagemErro(error, "Não foi possível carregar seus pedidos."));
+            setErroCarregamento(obterMensagemErro(error, "Não foi possível carregar seus pedidos."));
+        } finally {
+            setCarregando(false);
         }
     }
 
@@ -43,21 +57,17 @@ function MeusPedidos() {
         try {
             const produtos = await listarItensPedido(id);
 
-            // O backend devolve produto_id e produto_nome; o ModalCarrinho espera id e nome
-            const itens = produtos.map((produto: any) => (
-                {
-                    produto: {
-                        id: produto.produto_id,
-                        nome: produto.produto_nome,
-                        preco_unitario: Number(produto.preco_unitario)
-                    },
+            // A janela espera { produto: { id, nome, preco_unitario }, quantidade }
+            const itens = produtos.map((produto) => ({
+                produto: {
+                    id: produto.produto_id,
+                    nome: produto.produto_nome,
+                    preco_unitario: produto.preco_unitario
+                },
+                quantidade: produto.quantidade
+            }));
 
-                    quantidade: produto.quantidade
-                }
-            ));
-
-            setProdutosPedido(itens);
-            setModalPedidoAberto(true);
+            setPedidoAberto({ id, itens });
         } catch (error) {
             swalErro(obterMensagemErro(error, "Não foi possível abrir os itens do pedido."));
         }
@@ -65,7 +75,7 @@ function MeusPedidos() {
 
     async function handleCancelarPedido(id: number) {
         const confirmacao = await swalConfirmacao(
-            "Tem certeza que deseja cancelar este pedido?"
+            `Tem certeza que deseja cancelar o pedido nº ${id}?`
         );
 
         if (!confirmacao.isConfirmed) return;
@@ -73,13 +83,15 @@ function MeusPedidos() {
         try {
             await cancelarPedido(id);
 
-            setPedidos((pedidosAtuais) =>
-                pedidosAtuais.filter((pedido: any) => pedido.id !== id)
+            // O pedido continua na lista (histórico), agora como cancelado
+            setPedidos((atuais) =>
+                atuais.map((pedido) => pedido.id === id ? { ...pedido, status: "cancelado" } : pedido)
             );
 
             toastSucesso("Pedido cancelado com sucesso.");
         } catch (error) {
             swalErro(obterMensagemErro(error, "Não foi possível cancelar o pedido."));
+            carregarPedidosCliente();
         }
     }
 
@@ -88,57 +100,54 @@ function MeusPedidos() {
         navigate('/login');
     }
 
-    // COLUNAS
     const colunasPedidos = [
         {
             titulo: "Pedido",
-            chave: "id"
+            chave: "id",
+            renderizar: (valorCelula: number) => `nº ${valorCelula}`
         },
         {
-            titulo: "Quantidade",
+            titulo: "Feito em",
+            chave: "criado_em",
+            renderizar: (valorCelula: string) => formatarData(valorCelula)
+        },
+        {
+            titulo: "Itens",
             chave: "quantidade_total",
-            renderizar: (valorCelula: number, registro: any) => (
+            renderizar: (valorCelula: number, registro: Pedido) => (
                 <button
                     className="botao-quantidade"
                     type="button"
                     onClick={() => abrirProdutosPedido(registro.id)}
                 >
-                    {valorCelula} unidades
+                    {valorCelula} {valorCelula === 1 ? "unidade" : "unidades"}
                 </button>
             )
         },
         {
-            titulo: "Status",
-            chave: "status",
-            renderizar: (valorCelula: string) => {
-                const status = {
-                    pendente: "Pendente",
-                    respondido: "Respondido"
-                };
-
-                return (
-                    <span className={`status status-${valorCelula}`}>
-                        {status[valorCelula as keyof typeof status] ?? valorCelula}
-                    </span>
-                );
-            }
+            titulo: "Total",
+            chave: "valor_total",
+            renderizar: (valorCelula: number) => formatarPreco(valorCelula)
         },
         {
-            titulo: "Previsão de busca",
+            titulo: "Status",
+            chave: "status",
+            renderizar: (valorCelula: Pedido["status"]) => (
+                <span className={`status status-${valorCelula}`}>
+                    {NOME_STATUS_PEDIDO[valorCelula] ?? valorCelula}
+                </span>
+            )
+        },
+        {
+            titulo: "Retirada prevista",
             chave: "previsao_busca",
-            renderizar: (valorCelula: string | null) => {
-                if (!valorCelula) return "Aguardando definição";
-
-                const data = String(valorCelula).slice(0, 10);
-                const [ano, mes, dia] = data.split("-");
-
-                return `${dia}/${mes}/${ano}`;
-            }
+            renderizar: (valorCelula: string | null) => formatarData(valorCelula) ?? "A combinar"
         },
         {
             titulo: "Ações",
-            chave: "id",
-            renderizar: (_valorCelula: string, registro: any) => (
+            chave: "acoes",
+            // Só dá para cancelar pelo site enquanto a loja não confirmou
+            renderizar: (_valorCelula: unknown, registro: Pedido) => registro.status === "pendente" ? (
                 <button
                     type="button"
                     className="acao-cancelar"
@@ -146,7 +155,7 @@ function MeusPedidos() {
                 >
                     Cancelar
                 </button>
-            )
+            ) : "—"
         }
     ];
 
@@ -155,16 +164,16 @@ function MeusPedidos() {
     }, []);
 
     const linksNavegacao = [
-        { id: 3, texto: "Catálogo", href: "/catalogo", ativo: false },
-        { id: 2, texto: "Meus Pedidos", href: "/clientePedidos", ativo: false },
-        { id: 1, texto: "Perfil", href: "/perfil", ativo: false },
+        { id: 1, texto: "Catálogo", href: "/catalogo", ativo: false },
+        { id: 2, texto: "Meus Pedidos", href: "/clientePedidos", ativo: true },
+        { id: 3, texto: "Perfil", href: "/perfil", ativo: false },
         { id: 4, texto: "Sair", href: "/login", ativo: false, aoClicar: handleLogout },
     ];
 
     return (
         <PaginaContainer>
             <Navbar
-                linkLogo="/clientePedidos"
+                linkLogo="/catalogo"
                 links={linksNavegacao}
             />
 
@@ -178,22 +187,35 @@ function MeusPedidos() {
                     />
                     <h1>Meus Pedidos</h1>
                 </PedidosCabecalho>
-                <p style={{ fontSize: "1.2rem", color: "gray", marginBottom: "24px" }}>
-                    Acompanhe o andamento dos seus pedidos.
+                <p className="subtitulo">
+                    Acompanhe o andamento: aguardando confirmação → confirmado → pronto para retirada → entregue.
                 </p>
 
-                <TabelaGeral
-                    titulo={`Meus Pedidos - ${pedidos.length} Registros`}
-                    colunas={colunasPedidos}
-                    dados={pedidos}
-                />
+                {carregando && <p className="mensagem">Carregando seus pedidos...</p>}
+
+                {!carregando && erroCarregamento && <p className="mensagem">{erroCarregamento}</p>}
+
+                {!carregando && !erroCarregamento && pedidos.length === 0 && (
+                    <div className="mensagem">
+                        <p>Você ainda não fez nenhum pedido.</p>
+                        <Link to="/catalogo">Ver catálogo</Link>
+                    </div>
+                )}
+
+                {!carregando && !erroCarregamento && pedidos.length > 0 && (
+                    <TabelaGeral
+                        titulo={`Meus Pedidos - ${pedidos.length} ${pedidos.length === 1 ? "registro" : "registros"}`}
+                        colunas={colunasPedidos}
+                        dados={pedidos}
+                    />
+                )}
             </PedidosConteudo>
 
-            {modalPedidoAberto && (
+            {pedidoAberto && (
                 <ModalCarrinho
-                    itens={produtosPedido}
-                    aoFechar={() => setModalPedidoAberto(false)}
-                    titulo="Produtos do Pedido"
+                    itens={pedidoAberto.itens}
+                    aoFechar={() => setPedidoAberto(null)}
+                    titulo={`Produtos do pedido nº ${pedidoAberto.id}`}
                 />
             )}
 
