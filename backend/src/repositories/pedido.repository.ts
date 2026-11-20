@@ -105,6 +105,23 @@ const PedidoRepository = {
     },
 
     // Status e dono do pedido, sem trava (para montar mensagens de erro)
+    // Itens de qualquer pedido (uso do administrador)
+    async ListarItensDoPedido(id: number): Promise<ItemPedido[]> {
+        const [resultado] = await db.execute<ItemPedido[]>(`
+            SELECT
+                pi.produto_id,
+                p.nome AS produto_nome,
+                pi.quantidade,
+                pi.preco_unitario,
+                pi.subtotal
+            FROM pedido_item pi
+            INNER JOIN produto p ON p.id = pi.produto_id
+            WHERE pi.pedido_id = ?;
+        `, [id]);
+
+        return resultado;
+    },
+
     async BuscarResumo(id: number): Promise<PedidoBloqueado | null> {
         const [resultado] = await db.execute<PedidoBloqueado[]>(`
             SELECT id, cliente_id, status

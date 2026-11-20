@@ -69,6 +69,17 @@ const PedidoService = {
         return produtos.map(itemComoNumero);
     },
 
+    // Administrador vê os itens de qualquer pedido
+    async ListarItensAdmin(id: number) {
+        const produtos = await PedidoRepository.ListarItensDoPedido(id);
+
+        if (produtos.length === 0) {
+            throw criarErro("Pedido não encontrado.", 404);
+        }
+
+        return produtos.map(itemComoNumero);
+    },
+
     // Cliente cancela o próprio pedido (só enquanto está pendente)
     async Cancelar(id: number, cliente_id: number) {
         const resultado = await PedidoRepository.CancelarPendente(id, cliente_id);

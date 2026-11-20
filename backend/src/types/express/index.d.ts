@@ -8,6 +8,7 @@ declare global {
                 nome: string;
                 email: string;
                 perfil: "cliente" | "administrador";
+                criado_em: Date;
             };
         }
     }

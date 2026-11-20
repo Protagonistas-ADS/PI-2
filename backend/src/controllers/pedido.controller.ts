@@ -37,6 +37,18 @@ const PedidoController = {
         }
     },
 
+    // Administrador: itens de qualquer pedido
+    async ListarItensAdmin(req: Request, res: Response, next: NextFunction) {
+        try {
+            const produtos = await PedidoService.ListarItensAdmin(Number(req.params.id));
+
+            res.status(200).json({ produtos });
+
+        } catch (error) {
+            next(error);
+        }
+    },
+
     async Cancelar(req: Request, res: Response, next: NextFunction) {
         try {
             await PedidoService.Cancelar(Number(req.params.id), req.usuario.id);

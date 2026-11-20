@@ -8,8 +8,13 @@ import Perfil from "../pages/Cliente/Perfil";
 import MeusPedidos from "../pages/Cliente/MeusPedidos";
 import Carrinho from "../pages/Cliente/Carrinho";
 
+import Dashboard from "../pages/Admin/Dashboard";
+import PerfilAdmin from "../pages/Admin/Perfil";
+import EmBreve from "../pages/Admin/EmBreve";
+
 import RotaProtegida from "../components/RotaProtegida";
 import RotaPublica from "../components/RotaPublica";
+import LayoutAdmin from "../components/LayoutAdmin";
 
 function Rotas() {
     return (
@@ -42,10 +47,12 @@ function Rotas() {
             <Route path="/catalogo" element={<Catalogo />} />
             {/* Carrinho também é público; o login é pedido só para enviar o pedido */}
             <Route path="/carrinho" element={<Carrinho />} />
+
+            {/* Telas do cliente (o admin que tentar abrir vai para o painel) */}
             <Route
                 path="/perfil"
                 element={
-                    <RotaProtegida>
+                    <RotaProtegida perfil="cliente">
                         <Perfil />
                     </RotaProtegida>
                 }
@@ -53,12 +60,31 @@ function Rotas() {
             <Route
                 path="/clientePedidos"
                 element={
-                    <RotaProtegida>
+                    <RotaProtegida perfil="cliente">
                         <MeusPedidos />
                     </RotaProtegida>
                 }
             />
 
+            {/* Painel do administrador (o cliente que tentar abrir volta para o catálogo) */}
+            <Route
+                path="/admin"
+                element={
+                    <RotaProtegida perfil="administrador">
+                        <LayoutAdmin />
+                    </RotaProtegida>
+                }
+            >
+                <Route index element={<Dashboard />} />
+                <Route path="perfil" element={<PerfilAdmin />} />
+                {/* Tabelas da Etapa 9 */}
+                <Route path="pedidos" element={<EmBreve titulo="Pedidos" />} />
+                <Route path="usuarios" element={<EmBreve titulo="Usuários" />} />
+                <Route path="movimentacoes" element={<EmBreve titulo="Movimentações de estoque" />} />
+                <Route path="vendas" element={<EmBreve titulo="Vendas" />} />
+                <Route path="notas" element={<EmBreve titulo="Notas fiscais" />} />
+                <Route path="*" element={<EmBreve titulo="Página não encontrada" />} />
+            </Route>
         </Routes>
     );
 }

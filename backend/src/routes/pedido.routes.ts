@@ -21,6 +21,7 @@ router.patch("/cancelar/:id", ...somenteCliente, validarId, PedidoController.Can
 
 // Administrador: ver todos os pedidos e mudar o status
 router.get("/", ...somenteAdministrador, PedidoController.ListarTodos);
+router.get("/:id/itens", ...somenteAdministrador, validarId, PedidoController.ListarItensAdmin);
 router.patch("/:id/status", ...somenteAdministrador, validarId, validarSchema(AlterarStatusPedidoSchema), PedidoController.AlterarStatus);
 
 export default router;

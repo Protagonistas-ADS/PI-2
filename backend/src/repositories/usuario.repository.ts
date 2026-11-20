@@ -7,6 +7,7 @@ interface Usuario extends RowDataPacket {
     email: string;
     senha: string;
     perfil: 'cliente' | 'administrador';
+    criado_em: Date;
 }
 
 interface DadosAtualizacao {
@@ -37,7 +38,7 @@ const UsuarioRepository = {
 
     async BuscarPorId(id: number): Promise<Usuario | null> {
         const [resultado] = await db.execute<Usuario[]>(`
-            SELECT id, nome, email, senha, perfil
+            SELECT id, nome, email, senha, perfil, criado_em
             FROM usuario
             WHERE id = ?;
         `, [id]);

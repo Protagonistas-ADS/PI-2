@@ -36,14 +36,15 @@ export function swalAviso(mensagem: string) {
     });
 }
 
-export function swalConfirmacao(mensagem: string) {
+// Os textos dos botões podem mudar (ex.: "Sim, cancelar pedido" / "Voltar")
+export function swalConfirmacao(mensagem: string, textoConfirmar = "Confirmar", textoVoltar = "Cancelar") {
     return Swal.fire({
         title: "Confirmação",
         text: mensagem,
         icon: "question",
         showCancelButton: true,
-        confirmButtonText: "Confirmar",
-        cancelButtonText: "Cancelar",
+        confirmButtonText: textoConfirmar,
+        cancelButtonText: textoVoltar,
         confirmButtonColor: "#d97713",
         cancelButtonColor: "#6b7280",
     });
@@ -55,12 +56,6 @@ export function toastSucesso(mensagem: string) {
     toast.success(mensagem);
 }
 
-// Caso precise
-
-// export function toastErro(mensagem: string) {
-//     toast.error(mensagem);
-// }
-
-// export function toastAviso(mensagem: string) {
-//     toast.warning(mensagem);
-// }
+export function toastAviso(mensagem: string) {
+    toast.warning(mensagem);
+}

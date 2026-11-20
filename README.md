@@ -114,8 +114,11 @@ Na entrevista com o cliente, identificamos três dores principais:
 
 ### 🛠️ Administrador
 
+- 🧭 Painel próprio (`/admin`) com menu lateral — o admin cai nele ao fazer login
+- 📊 Dashboard: pedidos pendentes, a retirar hoje, estoque baixo e vendas do mês
+- 📋 Gerenciamento de pedidos: confirmar, marcar pronto, entregar ou cancelar direto no dashboard
+- 👤 Perfil do administrador (nome e senha)
 - 📦 Gerenciamento de produtos
-- 📋 Gerenciamento de pedidos
 - 🧾 Histórico de vendas, notas fiscais e movimentações
 - 📊 Controle de estoque (entradas e saídas)
 
@@ -339,7 +342,7 @@ Rotas marcadas com 🔒 exigem o header `Authorization: Bearer <token>`.
 |:------:|------|-----------|:----:|
 | 🔵 `POST` | `/usuarios` | Cadastro de usuário | |
 | 🔵 `POST` | `/usuarios/login` | Login (retorna o token JWT) | |
-| 🟢 `GET` | `/usuarios/logado` | Dados do usuário logado | 🔒 |
+| 🟢 `GET` | `/usuarios/logado` | Dados do usuário logado `{ usuario: { id, nome, email, perfil, criado_em } }` | 🔒 |
 | 🟠 `PATCH` | `/usuarios` | Atualizar nome e senha | 🔒 |
 
 </details>
@@ -374,6 +377,7 @@ Produtos não são apagados: desativar tira o produto do catálogo, mas preserva
 | 🟢 `GET` | `/pedidos/itens/:id` | Itens de um pedido do próprio cliente | 🔒 cliente |
 | 🟠 `PATCH` | `/pedidos/cancelar/:id` | Cancelar pedido (só `pendente`) → `204` | 🔒 cliente |
 | 🟢 `GET` | `/pedidos` | Todos os pedidos, com nome e e-mail do cliente | 🔒 admin |
+| 🟢 `GET` | `/pedidos/:id/itens` | Itens de qualquer pedido → `{ produtos: [...] }` (`404` se não existir) | 🔒 admin |
 | 🟠 `PATCH` | `/pedidos/:id/status` | Mudar status `{ "status": "confirmado" }` → `200 { id, status_anterior, status }` | 🔒 admin |
 
 Corpo de `POST /pedidos`:
@@ -390,6 +394,33 @@ Corpo de `POST /pedidos`:
 - Estoque insuficiente ou produto desativado → `409` com o nome do produto. Produto inexistente → `404`.
 - Status: `pendente → confirmado → pronto_retirada → entregue`, ou `cancelado`. Mudança fora dessa ordem → `409`.
 - **Confirmar** baixa o estoque (saída); **cancelar** um pedido confirmado devolve (entrada); **entregar** registra a venda. Tudo na mesma transação.
+
+</details>
+
+<details open>
+<summary><b>🧭 Painel do administrador</b></summary>
+
+<br>
+
+| Método | Rota | Descrição | Auth |
+|:------:|------|-----------|:----:|
+| 🟢 `GET` | `/admin/resumo` | Números do dashboard | 🔒 admin |
+
+Resposta de `GET /admin/resumo`:
+
+```json
+{
+  "pendentes": 1,
+  "retirar_hoje": 1,
+  "limite_estoque_baixo": 10,
+  "estoque_baixo": [{ "id": 4, "nome": "Palete plástico", "quantidade_estoque": 7 }],
+  "vendas_mes": { "quantidade": 2, "valor_total": 5700 }
+}
+```
+
+- `retirar_hoje`: pedidos `pronto_retirada` + pedidos `confirmado` com retirada marcada para hoje.
+- `estoque_baixo`: produtos ativos com `limite_estoque_baixo` (10) unidades ou menos, do menor para o maior.
+- `vendas_mes`: vendas registradas no mês atual (pedidos entregues).
 
 </details>
 
@@ -428,7 +459,7 @@ Cada entrada ou saída atualiza o saldo do produto e grava o histórico na mesma
 
 <br>
 
-Erros seguem o formato `{ "erro": "mensagem" }`, sempre em português. Erros de validação (Zod) retornam `400` com os detalhes em `detalhes`. Os códigos usados: `400` dados inválidos (inclusive JSON mal formado), `401` sem login, `403` sem permissão, `404` não encontrado (inclusive rota inexistente), `409` conflito com a regra de negócio (ex.: estoque insuficiente), `500` erro interno.
+Erros seguem o formato `{ "erro": "mensagem" }`, sempre em português. Erros de validação (Zod) retornam `400` com os detalhes em `detalhes`. Os códigos usados: `400` dados inválidos (inclusive JSON mal formado), `401` sem login (ou sessão expirada/token inválido), `403` sem permissão, `404` não encontrado (inclusive rota inexistente), `409` conflito com a regra de negócio (ex.: estoque insuficiente), `500` erro interno.
 
 ```json
 {
@@ -452,8 +483,13 @@ Erros seguem o formato `{ "erro": "mensagem" }`, sempre em português. Erros de 
 | `/login` | Login | 🌐 Pública |
 | `/catalogo` | Catálogo de produtos e carrinho (login só para finalizar o pedido) | 🌐 Pública |
 | `/carrinho` | Carrinho: revisar itens, data de retirada, observação e enviar o pedido | 🌐 Pública (envio exige login de cliente) |
-| `/perfil` | Perfil do usuário | 🔒 Logado |
-| `/clientePedidos` | Meus Pedidos (acompanhamento dos pedidos) | 🔒 Logado |
+| `/perfil` | Perfil do cliente | 🔒 Cliente |
+| `/clientePedidos` | Meus Pedidos (acompanhamento dos pedidos) | 🔒 Cliente |
+| `/admin` | Dashboard: indicadores e pedidos em andamento com botões de status | 🔒 Admin |
+| `/admin/perfil` | Perfil do administrador | 🔒 Admin |
+| `/admin/pedidos`, `/usuarios`, `/movimentacoes`, `/vendas`, `/notas` | Tabelas do admin (em construção — Etapa 9) | 🔒 Admin |
+
+Quem decide o acesso é o servidor: o front-end confere o perfil em `GET /usuarios/logado` e só ajuda na navegação. Admin que abre tela de cliente vai para `/admin`; cliente que abre `/admin` volta para o catálogo com o aviso "Área restrita"; sem login vai para `/login` e, depois de entrar, volta para a tela que tentou abrir. Mesmo que alguém force o caminho, a API responde `401`/`403`.
 
 <div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
 
@@ -765,7 +801,7 @@ PI-2/
 │   └── src/
 │       ├── assets/
 │       ├── components/     # componentes reutilizáveis
-│       ├── pages/          # Cliente/ e Compartilhadas/
+│       ├── pages/          # Admin/, Cliente/ e Compartilhadas/
 │       ├── routes/
 │       ├── services/       # chamadas à API
 │       ├── utils/
@@ -835,7 +871,7 @@ Legenda: ✅ pronto · 🚧 em andamento · ⏳ a fazer
 | Área | Progresso | Módulos prontos |
 |------|-----------|:---------------:|
 | ⚙️ Back-end | `▰▰▰▱▱▱▱` | 3 de 7 |
-| 🖥️ Front-end | `▰▰▰▰▱` | 4 de 5 |
+| 🖥️ Front-end | `▰▰▰▰▰▱` | 5 de 6 |
 
 <table>
 <tr>
@@ -850,7 +886,7 @@ Legenda: ✅ pronto · 🚧 em andamento · ⏳ a fazer
 | Pedido (visão do cliente) | ✅ |
 | Produto (catálogo público, cadastro, edição, ativar/desativar) | ✅ |
 | Estoque e movimentações | 🚧 |
-| Pedido (visão do admin: listar e mudar status) | ✅ |
+| Pedido (visão do admin: listar, ver itens e mudar status) + resumo do dashboard | ✅ |
 | Venda (automática na entrega) | ✅ |
 | Nota fiscal | ⏳ |
 
@@ -866,7 +902,8 @@ Legenda: ✅ pronto · 🚧 em andamento · ⏳ a fazer
 | Página do carrinho e envio do pedido | ✅ |
 | Perfil do usuário | ✅ |
 | Meus Pedidos do cliente | ✅ |
-| Dashboard e tabelas do administrador | ⏳ |
+| Painel do admin: menu, dashboard de pedidos e perfil | ✅ |
+| Tabelas do administrador (pedidos, usuários, movimentações, vendas, notas) | ⏳ |
 
 </td>
 </tr>
