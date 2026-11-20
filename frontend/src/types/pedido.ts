@@ -35,3 +35,13 @@ export interface NovoPedido {
     previsao_busca: string | null; // "AAAA-MM-DD"
     observacao: string | null;
 }
+
+// GET /pedidos (só administrador): pedido com os dados do cliente
+export interface PedidoComCliente extends Pedido {
+    cliente_id: number;
+    cliente_nome: string;
+    cliente_email: string;
+}
+
+// Corpo de PATCH /pedidos/:id/status ('pendente' não volta)
+export type NovoStatusPedido = Exclude<StatusPedido, "pendente">;
