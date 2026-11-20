@@ -54,9 +54,11 @@ CREATE TABLE IF NOT EXISTS pedido (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cliente_id INT NOT NULL,
     -- endereco_id INT DEFAULT NULL,
-    status ENUM('pendente','respondido','entregue','cancelado') NOT NULL DEFAULT 'pendente',
-    previsao_busca DATETIME,
-    -- observacoes_entrega VARCHAR(255),
+    -- Fluxo: pendente -> confirmado -> pronto_retirada -> entregue (ou cancelado)
+    -- O estoque baixa quando o administrador confirma o pedido.
+    status ENUM('pendente','confirmado','pronto_retirada','entregue','cancelado') NOT NULL DEFAULT 'pendente',
+    previsao_busca DATETIME, -- data em que o cliente pretende retirar (opcional)
+    observacao VARCHAR(500), -- recado do cliente para a loja (opcional)
     criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_pedido_cliente
     FOREIGN KEY (cliente_id) REFERENCES usuario(id)
