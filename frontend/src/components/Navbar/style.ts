@@ -52,6 +52,13 @@ export const Logo = styled(Link)`
         height: auto;
         object-fit: contain;
     }
+
+    /* Tablet: logo menor para o menu caber na mesma linha */
+    @media (768px <= width < 1024px) {
+        img {
+            width: 210px;
+        }
+    }
 `;
 
 export const BotaoMenu = styled.button`
@@ -101,10 +108,13 @@ export const ListaLinks = styled.ul`
     margin: 0;
     padding: 0;
     list-style: none;
-    }
 
     @media (width >= 768px) {
         flex-direction: row;
+        gap: 1.25rem;
+    }
+
+    @media (width >= 1024px) {
         gap: 2rem;
     }
 `;
@@ -116,6 +126,7 @@ export const ItemLink = styled(Link) <LinkProps>`
     font-size: 1rem;
     font-weight: bold;
     text-decoration: none;
+    white-space: nowrap;
 
     border-bottom: 2px solid
         ${({ $ativo }) => $ativo ? "#e8912a" : "transparent"};
@@ -132,6 +143,7 @@ export const ItemAncora = styled.a`
     font-size: 1rem;
     font-weight: bold;
     text-decoration: none;
+    white-space: nowrap;
 
     border-bottom: 2px solid transparent;
 
