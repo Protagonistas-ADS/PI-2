@@ -11,20 +11,46 @@ export interface SaldoProduto extends RowDataPacket {
     ativo: boolean;
 }
 
+// Mesmos nomes que a API devolve (e o frontend usa)
 export interface Movimentacao extends RowDataPacket {
     id: number;
     produto_id: number;
     produto_nome: string;
-    nota_id: number | null;
+    pedido_id: number | null;
+    usuario_id: number | null;
+    responsavel_nome: string | null;
     tipo: TipoMovimentacao;
     quantidade: number;
+    motivo: string | null;
     data_mov: Date;
+}
+
+// De onde veio a movimentação: quem fez, por quê e (se houver) de qual pedido
+export interface OrigemMovimentacao {
+    usuarioId: number;
+    motivo: string;
+    pedidoId?: number | null;
 }
 
 interface ProdutoBloqueado extends RowDataPacket {
     id: number;
     quantidade_estoque: number;
 }
+
+// Colunas do histórico: o responsável vem da tabela usuario (LEFT JOIN porque
+// movimentações antigas, de antes da migração, podem não ter responsável)
+const CAMPOS_MOVIMENTACAO = `
+    m.id,
+    m.produto_id,
+    p.nome AS produto_nome,
+    m.pedido_id,
+    m.usuario_id,
+    u.nome AS responsavel_nome,
+    m.tipo,
+    m.quantidade,
+    m.motivo,
+    m.data_mov
+`;
 
 const EstoqueRepository = {
 
@@ -50,16 +76,10 @@ const EstoqueRepository = {
 
     async ListarMovimentacoes(): Promise<Movimentacao[]> {
         const [resultado] = await db.execute<Movimentacao[]>(`
-            SELECT
-                m.id,
-                m.produto_id,
-                p.nome AS produto_nome,
-                m.nota_id,
-                m.tipo,
-                m.quantidade,
-                m.data_mov
+            SELECT ${CAMPOS_MOVIMENTACAO}
             FROM movimentacao_estoque m
             INNER JOIN produto p ON p.id = m.produto_id
+            LEFT JOIN usuario u ON u.id = m.usuario_id
             ORDER BY m.data_mov DESC, m.id DESC;
         `);
 
@@ -68,16 +88,10 @@ const EstoqueRepository = {
 
     async ListarMovimentacoesPorProduto(produtoId: number): Promise<Movimentacao[]> {
         const [resultado] = await db.execute<Movimentacao[]>(`
-            SELECT
-                m.id,
-                m.produto_id,
-                p.nome AS produto_nome,
-                m.nota_id,
-                m.tipo,
-                m.quantidade,
-                m.data_mov
+            SELECT ${CAMPOS_MOVIMENTACAO}
             FROM movimentacao_estoque m
             INNER JOIN produto p ON p.id = m.produto_id
+            LEFT JOIN usuario u ON u.id = m.usuario_id
             WHERE m.produto_id = ?
             ORDER BY m.data_mov DESC, m.id DESC;
         `, [produtoId]);
@@ -115,12 +129,12 @@ const EstoqueRepository = {
         produtoId: number,
         tipo: TipoMovimentacao,
         quantidade: number,
-        notaId: number | null
+        origem: OrigemMovimentacao
     ): Promise<ResultSetHeader> {
         const [resultado] = await conexao.execute<ResultSetHeader>(`
-            INSERT INTO movimentacao_estoque (produto_id, nota_id, tipo, quantidade)
-            VALUES (?, ?, ?, ?);
-        `, [produtoId, notaId, tipo, quantidade]);
+            INSERT INTO movimentacao_estoque (produto_id, pedido_id, usuario_id, tipo, quantidade, motivo)
+            VALUES (?, ?, ?, ?, ?, ?);
+        `, [produtoId, origem.pedidoId ?? null, origem.usuarioId, tipo, quantidade, origem.motivo]);
 
         return resultado;
     }

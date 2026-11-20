@@ -1,6 +1,6 @@
 import type { PoolConnection } from "mysql2/promise";
 import db from "../configs/db";
-import EstoqueRepository, { TipoMovimentacao } from "../repositories/estoque.repository";
+import EstoqueRepository, { type TipoMovimentacao, type OrigemMovimentacao } from "../repositories/estoque.repository";
 import { criarErro } from "../utils/criarErro";
 
 // Maior valor aceito pela coluna INT do MySQL
@@ -42,33 +42,42 @@ const EstoqueService = {
         return { produto, movimentacoes };
     },
 
-    async RegistrarEntrada(produtoId: number, quantidade: number) {
-        return await EstoqueService.RegistrarMovimentacao("entrada", produtoId, quantidade);
+    // Entrada/saída manual pela tela do admin (sem pedido; o motivo é obrigatório)
+    async RegistrarEntrada(produtoId: number, quantidade: number, origem: OrigemMovimentacao) {
+        return await EstoqueService.RegistrarMovimentacao("entrada", produtoId, quantidade, origem);
     },
 
-    async RegistrarSaida(produtoId: number, quantidade: number) {
-        return await EstoqueService.RegistrarMovimentacao("saida", produtoId, quantidade);
+    async RegistrarSaida(produtoId: number, quantidade: number, origem: OrigemMovimentacao) {
+        return await EstoqueService.RegistrarMovimentacao("saida", produtoId, quantidade, origem);
     },
 
     /**
-     * Atualiza o saldo do produto e grava o histórico da movimentação.
+     * Atualiza o saldo do produto e grava o histórico da movimentação
+     * (quem fez, o motivo e, se houver, o pedido que causou).
      *
      * Sem `conexaoExterna`, abre e fecha a própria transação.
-     * Com `conexaoExterna` (ex.: futuro módulo de Venda/NF), usa a transação
+     * Com `conexaoExterna` (ex.: PedidoService ao confirmar/cancelar), usa a transação
      * de quem chamou: quem chamou é responsável pelo commit/rollback.
      */
     async RegistrarMovimentacao(
         tipo: TipoMovimentacao,
         produtoId: number,
         quantidade: number,
-        notaId: number | null = null,
+        origem: OrigemMovimentacao,
         conexaoExterna?: PoolConnection
     ) {
         validarId(produtoId, "Identificação do produto inválida.");
         validarQuantidade(quantidade);
+        validarId(origem.usuarioId, "Responsável pela movimentação inválido.");
 
-        if (notaId !== null) {
-            validarId(notaId, "Identificação da nota inválida.");
+        if (origem.pedidoId != null) {
+            validarId(origem.pedidoId, "Identificação do pedido inválida.");
+        }
+
+        const motivo = origem.motivo.trim();
+
+        if (!motivo) {
+            throw criarErro("Informe o motivo da movimentação.", 400);
         }
 
         const gerenciaTransacao = conexaoExterna === undefined;
@@ -108,7 +117,7 @@ const EstoqueService = {
                 produtoId,
                 tipo,
                 quantidade,
-                notaId
+                { ...origem, motivo }
             );
 
             if (gerenciaTransacao) {
@@ -120,6 +129,8 @@ const EstoqueService = {
                 produto_id: produtoId,
                 tipo,
                 quantidade,
+                motivo,
+                pedido_id: origem.pedidoId ?? null,
                 saldo_anterior: saldoAnterior,
                 saldo_atual: saldoAtual
             };

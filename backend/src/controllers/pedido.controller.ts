@@ -76,7 +76,7 @@ const PedidoController = {
 
     async AlterarStatus(req: Request, res: Response, next: NextFunction) {
         try {
-            const resultado = await PedidoService.AlterarStatus(Number(req.params.id), req.body.status);
+            const resultado = await PedidoService.AlterarStatus(Number(req.params.id), req.body.status, req.usuario.id);
 
             res.status(200).json(resultado);
 
