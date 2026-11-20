@@ -50,22 +50,23 @@ INSERT INTO pedido_item (pedido_id, produto_id, quantidade, preco_unitario, subt
 INSERT INTO venda (id, pedido_id, valor_total) VALUES
 (1, 3, 1050.00);
 
--- NOTA FISCAL DE EXEMPLO (venda 1)
-INSERT INTO nota (id, venda_id, numero, natureza_operacao, valor_total) VALUES
-(1, 1, 'NOTA-000001', 'Venda de mercadoria', 1050.00);
+-- NOTA FISCAL DE EXEMPLO (venda 1). Sem link: o PDF real vem do Emitte.
+INSERT INTO nota (id, venda_id, numero, natureza_operacao, valor_total, status, link_pdf) VALUES
+(1, 1, 'NOTA-000001', 'Venda de mercadoria', 1050.00, 'emitida', NULL);
 
 -- ITENS DA NOTA
 INSERT INTO nota_item (nota_id, produto_id, quantidade, preco_unitario, subtotal) VALUES
 (1, 1, 10, 45.00, 450.00),
 (1, 4, 5, 120.00, 600.00);
 
--- MOVIMENTAÇÕES DE ESTOQUE
-INSERT INTO movimentacao_estoque (produto_id, nota_id, tipo, quantidade) VALUES
-(1, 1, 'saida', 10),
-(4, 1, 'saida', 5),
-(2, NULL, 'entrada', 50),
-(3, NULL, 'saida', 8),
-(4, NULL, 'saida', 3);
+-- MOVIMENTAÇÕES DE ESTOQUE (responsável = administrador 2)
+-- Saídas da confirmação dos pedidos 3 e 2 (com pedido_id) e uma entrada manual.
+INSERT INTO movimentacao_estoque (produto_id, pedido_id, usuario_id, tipo, quantidade, motivo) VALUES
+(1, 3, 2, 'saida', 10, 'Confirmação do pedido nº 3'),
+(4, 3, 2, 'saida', 5, 'Confirmação do pedido nº 3'),
+(2, NULL, 2, 'entrada', 50, 'Chegada de lote do fornecedor'),
+(3, 2, 2, 'saida', 8, 'Confirmação do pedido nº 2'),
+(4, 2, 2, 'saida', 3, 'Confirmação do pedido nº 2');
 
 -- Pedido 1 (pendente): serve para testar a confirmação pelo administrador
 -- (baixa do estoque) e o cancelamento pelo cliente.

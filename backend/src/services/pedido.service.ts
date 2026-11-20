@@ -165,7 +165,8 @@ const PedidoService = {
     // - cancelar depois de confirmado: devolve o estoque (entrada);
     // - entregar: registra a venda.
     // Tudo numa transação só: se um passo falhar, nada é gravado.
-    async AlterarStatus(id: number, novoStatus: StatusPedido) {
+    // `usuarioId` = administrador que mudou o status (vira o responsável nas movimentações).
+    async AlterarStatus(id: number, novoStatus: StatusPedido, usuarioId: number) {
         const conexao = await db.getConnection();
 
         try {
@@ -191,7 +192,13 @@ const PedidoService = {
             if (novoStatus === "confirmado") {
                 for (const item of itens) {
                     try {
-                        await EstoqueService.RegistrarMovimentacao("saida", item.produto_id, item.quantidade, null, conexao);
+                        await EstoqueService.RegistrarMovimentacao(
+                            "saida",
+                            item.produto_id,
+                            item.quantidade,
+                            { usuarioId, pedidoId: id, motivo: `Confirmação do pedido nº ${id}` },
+                            conexao
+                        );
                     } catch (erro) {
                         if (temStatus(erro, 409)) {
                             throw criarErro(`"${item.produto_nome}": ${(erro as Error).message}`, 409);
@@ -203,7 +210,13 @@ const PedidoService = {
 
             if (novoStatus === "cancelado" && STATUS_COM_ESTOQUE_BAIXADO.includes(statusAnterior)) {
                 for (const item of itens) {
-                    await EstoqueService.RegistrarMovimentacao("entrada", item.produto_id, item.quantidade, null, conexao);
+                    await EstoqueService.RegistrarMovimentacao(
+                        "entrada",
+                        item.produto_id,
+                        item.quantidade,
+                        { usuarioId, pedidoId: id, motivo: `Cancelamento do pedido nº ${id} (estoque devolvido)` },
+                        conexao
+                    );
                 }
             }
 

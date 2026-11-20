@@ -40,9 +40,9 @@ const EstoqueController = {
 
     async RegistrarEntrada(req: Request, res: Response, next: NextFunction) {
         try {
-            const { produto_id, quantidade } = req.body;
+            const { produto_id, quantidade, motivo } = req.body;
 
-            const resultado = await EstoqueService.RegistrarEntrada(produto_id, quantidade);
+            const resultado = await EstoqueService.RegistrarEntrada(produto_id, quantidade, { usuarioId: req.usuario.id, motivo });
 
             res.status(201).json(resultado);
 
@@ -53,9 +53,9 @@ const EstoqueController = {
 
     async RegistrarSaida(req: Request, res: Response, next: NextFunction) {
         try {
-            const { produto_id, quantidade } = req.body;
+            const { produto_id, quantidade, motivo } = req.body;
 
-            const resultado = await EstoqueService.RegistrarSaida(produto_id, quantidade);
+            const resultado = await EstoqueService.RegistrarSaida(produto_id, quantidade, { usuarioId: req.usuario.id, motivo });
 
             res.status(201).json(resultado);
 

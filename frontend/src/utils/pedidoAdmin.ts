@@ -1,4 +1,5 @@
 import type { NovoStatusPedido, StatusPedido } from "../types/pedido";
+import { formatarData } from "./filtrosAdmin";
 
 // Regras de tela dos pedidos do administrador (usadas no Dashboard e na tabela de Pedidos)
 
@@ -24,27 +25,6 @@ export function emAndamento(status: StatusPedido): status is StatusEmAndamento {
     return (STATUS_EM_ANDAMENTO as StatusPedido[]).includes(status);
 }
 
-// "2026-11-21T03:00:00.000Z" -> "21/11/2026" (no horário do navegador)
-export function formatarData(valor: string | null) {
-    return valor ? new Date(valor).toLocaleDateString("pt-BR") : null;
-}
-
 export function ehHoje(valor: string | null) {
     return valor !== null && formatarData(valor) === new Date().toLocaleDateString("pt-BR");
-}
-
-// "2026-11-21T03:00:00.000Z" -> "2026-11-21" no horário do navegador
-// (mesmo formato do campo de data, para comparar períodos)
-export function dataLocalAAAAMMDD(valor: string) {
-    const data = new Date(valor);
-    const ano = data.getFullYear();
-    const mes = String(data.getMonth() + 1).padStart(2, "0");
-    const dia = String(data.getDate()).padStart(2, "0");
-
-    return `${ano}-${mes}-${dia}`;
-}
-
-// Busca sem diferenciar maiúsculas nem acentos ("JOÃO" encontra "joao")
-export function normalizarBusca(texto: string) {
-    return texto.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
 }

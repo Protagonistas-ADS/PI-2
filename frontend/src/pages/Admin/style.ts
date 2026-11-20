@@ -70,6 +70,11 @@ export const TopoSecao = styled.div`
         font-size: 0.9rem;
     }
 
+    p a {
+        color: ${LARANJA};
+        font-weight: bold;
+    }
+
     .botoes-topo {
         display: flex;
         gap: 8px;
@@ -183,6 +188,170 @@ export const BarraBusca = styled.div`
             padding: 9px 8px;
             font-size: 0.9rem;
         }
+    }
+`;
+
+// Formulário do painel (registrar movimentação, emitir nota, editar link)
+export const FormularioAdmin = styled.form`
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    .linha {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+        gap: 14px;
+    }
+
+    label {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 0;
+        color: ${VERDE};
+        font-size: 0.9rem;
+        font-weight: bold;
+    }
+
+    input,
+    select {
+        width: 100%;
+        min-width: 0;
+        padding: 10px 12px;
+        border: 1px solid #cbd5ce;
+        border-radius: 8px;
+        background-color: #ffffff;
+        color: #21352b;
+        font-family: inherit;
+        font-size: 0.95rem;
+        font-weight: normal;
+    }
+
+    input:focus,
+    select:focus {
+        outline: 2px solid ${LARANJA};
+        outline-offset: 1px;
+    }
+
+    input[aria-invalid="true"] {
+        border-color: #c0392b;
+    }
+
+    .dica {
+        color: #5f6b64;
+        font-size: 0.82rem;
+        font-weight: normal;
+    }
+
+    .erro {
+        color: #b02a37;
+        font-size: 0.82rem;
+        font-weight: bold;
+    }
+
+    /* Escolha entre entrada e saída (dois botões que funcionam como opção única) */
+    .tipos {
+        display: flex;
+        gap: 8px;
+    }
+
+    .tipos button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        flex: 1;
+        padding: 10px 12px;
+        border: 1px solid #cbd5ce;
+        border-radius: 8px;
+        background-color: #ffffff;
+        color: ${VERDE};
+        font-family: inherit;
+        font-size: 0.95rem;
+        cursor: pointer;
+    }
+
+    .tipos button[aria-pressed="true"].entrada {
+        border-color: #1e7b3a;
+        background-color: #d4edda;
+        color: #155724;
+        font-weight: bold;
+    }
+
+    .tipos button[aria-pressed="true"].saida {
+        border-color: #b02a37;
+        background-color: #f8d7da;
+        color: #721c24;
+        font-weight: bold;
+    }
+
+    .acoes-formulario {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .acoes-formulario button {
+        padding: 11px 18px;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 0.95rem;
+        cursor: pointer;
+    }
+
+    .acoes-formulario button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .botao-principal {
+        border: none;
+        background-color: ${LARANJA};
+        color: #ffffff;
+        font-weight: bold;
+    }
+
+    .botao-voltar {
+        border: 1px solid #cbd5ce;
+        background-color: #ffffff;
+        color: #4b5b52;
+    }
+
+    @media (max-width: 480px) {
+        .acoes-formulario button {
+            flex: 1;
+        }
+    }
+`;
+
+// Título da janela (modal) com o botão X
+export const CabecalhoJanela = styled.header`
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+
+    h2 {
+        color: ${VERDE};
+        font-size: 1.4rem;
+    }
+
+    p {
+        margin-top: 4px;
+        color: #5f6b64;
+        font-size: 0.9rem;
+    }
+
+    button {
+        display: flex;
+        padding: 4px;
+        border: none;
+        background: transparent;
+        color: #21352b;
+        font-size: 1.6rem;
+        cursor: pointer;
     }
 `;
 
@@ -333,6 +502,40 @@ export const TabelaAdmin = styled.table`
         color: #9a4a00;
     }
 
+    .status-emitida,
+    .status-entrada {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .status-cancelada,
+    .status-saida {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .status-sem-nota {
+        background: #f1f3f2;
+        color: #4b5b52;
+    }
+
+    /* Quantidade da movimentação: +30 (verde) / −4 (vermelho) */
+    .qtd-entrada {
+        color: #1e7b3a;
+        font-weight: bold;
+    }
+
+    .qtd-saida {
+        color: #b02a37;
+        font-weight: bold;
+    }
+
+    .link-pdf {
+        color: ${LARANJA};
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
     .sem-acao {
         color: #6b7280;
         font-size: 0.9rem;
@@ -369,6 +572,12 @@ export const TabelaAdmin = styled.table`
         border: 1px solid #c0392b;
         background-color: #ffffff;
         color: #c0392b;
+    }
+
+    .acao-secundaria {
+        border: 1px solid ${VERDE};
+        background-color: #ffffff;
+        color: ${VERDE};
     }
 
     /* Telas menores (tablet, notebook pequeno, celular): a tabela não cabe,

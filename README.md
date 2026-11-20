@@ -119,10 +119,11 @@ Na entrevista com o cliente, identificamos três dores principais:
 - 📋 Gerenciamento de pedidos: confirmar, marcar pronto, entregar ou cancelar (no dashboard e na tabela de pedidos)
 - 🔎 Tabela de pedidos completa: busca por nº/cliente/e-mail, filtro por status e período, ordenação e soma dos valores
 - 👥 Tabela de usuários: busca, filtro por perfil, nº de pedidos e total comprado de cada cliente
+- 📦 Movimentações de estoque: histórico com responsável, motivo e pedido de origem + entrada/saída manual com motivo obrigatório
+- 💰 Tabela de vendas: total do período, média por venda, itens e botão "Emitir nota" para vendas sem nota
+- 🧾 Tabela de notas fiscais: número, status (emitida/cancelada), link do PDF no Emitte, editar link e cancelar
 - 👤 Perfil do administrador (nome e senha)
 - 📦 Gerenciamento de produtos
-- 🧾 Histórico de vendas, notas fiscais e movimentações
-- 📊 Controle de estoque (entradas e saídas)
 
 </td>
 </tr>
@@ -320,8 +321,8 @@ erDiagram
 | `produto` | Paletes do catálogo, com preço e saldo em estoque |
 | `pedido` / `pedido_item` | Pedidos e seus itens, com data prevista de retirada e observação. Status: pendente, confirmado, pronto_retirada, entregue, cancelado |
 | `venda` | Venda gerada a partir de um pedido |
-| `nota` / `nota_item` | Nota fiscal da venda e seus itens |
-| `movimentacao_estoque` | Histórico de entradas e saídas por produto |
+| `nota` / `nota_item` | Nota fiscal da venda e seus itens, com `status` (emitida/cancelada) e `link_pdf` (PDF no Emitte). Cada venda tem no máximo uma nota emitida; se ela for cancelada, dá para registrar outra |
+| `movimentacao_estoque` | Histórico de entradas e saídas por produto, com `usuario_id` (responsável), `motivo` e `pedido_id` (pedido de origem; manual = vazio) |
 
 </details>
 
@@ -456,9 +457,45 @@ Resposta de `GET /admin/resumo`:
 
 | Método | Rota | Descrição | Auth |
 |:------:|------|-----------|:----:|
+| 🟢 `GET` | `/vendas` | Todas as vendas, da mais nova para a mais antiga → `{ vendas: [...] }` | 🔒 admin |
 | 🔵 `POST` | `/vendas` | Registrar a venda de um pedido `entregue` que ficou sem venda `{ "pedido_id": 3 }` | 🔒 admin |
 
-Pedidos marcados como entregues pelo sistema já ganham a venda sozinhos; esta rota serve para pedidos antigos. Não mexe no estoque (ele baixou na confirmação).
+Pedidos marcados como entregues pelo sistema já ganham a venda sozinhos; o `POST` serve para pedidos antigos. Não mexe no estoque (ele baixou na confirmação).
+
+Cada venda de `GET /vendas` traz: `id`, `pedido_id`, `valor_total`, `data_venda`, `cliente_id`, `cliente_nome`, `cliente_email`, `quantidade_total` e a nota **emitida** (`nota_id`, `nota_numero`; `null` = sem nota).
+
+</details>
+
+<details open>
+<summary><b>🧾 Notas fiscais</b> (somente administrador)</summary>
+
+<br>
+
+A nota é emitida no **Emitte**; o sistema guarda o número, o status e o link do PDF.
+
+| Método | Rota | Descrição | Auth |
+|:------:|------|-----------|:----:|
+| 🟢 `GET` | `/notas` | Todas as notas (com venda, pedido e cliente) → `{ notas: [...] }` | 🔒 admin |
+| 🔵 `POST` | `/notas` | Registrar a nota de uma venda → `201` | 🔒 admin |
+| 🟡 `PATCH` | `/notas/:id/link` | Trocar ou apagar o link do PDF `{ "link_pdf": "https://..." \| null }` | 🔒 admin |
+| 🟡 `PATCH` | `/notas/:id/cancelar` | Cancelar a nota (fica no histórico) | 🔒 admin |
+
+Corpo de `POST /notas`:
+
+```json
+{
+  "venda_id": 2,
+  "numero": "NF-000002",
+  "natureza_operacao": "Venda de mercadoria",
+  "link_pdf": "https://app.emitte.com.br/nfe/NF-000002.pdf"
+}
+```
+
+- `numero`: obrigatório, até 30 caracteres, só letras, números, `.`, `/` e `-`; não pode repetir (nem de nota cancelada) → `409`.
+- `natureza_operacao`: opcional (vazio = "Venda de mercadoria").
+- `link_pdf`: opcional; só aceita `http://` ou `https://` (bloqueia `javascript:` e afins) → `400`.
+- Venda que já tem nota emitida → `409`; venda inexistente → `404`.
+- Cancelar nota já cancelada ou mudar o link de nota cancelada → `409`. Depois de cancelar, a venda volta a ficar "sem nota" e aceita uma nota nova.
 
 </details>
 
@@ -470,12 +507,14 @@ Pedidos marcados como entregues pelo sistema já ganham a venda sozinhos; esta r
 | Método | Rota | Descrição | Auth |
 |:------:|------|-----------|:----:|
 | 🟢 `GET` | `/estoque` | Saldo atual de todos os produtos | 🔒 admin |
-| 🟢 `GET` | `/estoque/movimentacoes` | Histórico de entradas e saídas | 🔒 admin |
-| 🟢 `GET` | `/estoque/movimentacoes/:id` | Saldo e histórico de um produto | 🔒 admin |
-| 🔵 `POST` | `/estoque/entrada` | Registrar entrada `{ produto_id, quantidade }` | 🔒 admin |
-| 🔵 `POST` | `/estoque/saida` | Registrar saída manual `{ produto_id, quantidade }` | 🔒 admin |
+| 🟢 `GET` | `/estoque/movimentacoes` | Histórico de entradas e saídas (com responsável, motivo e pedido) | 🔒 admin |
+| 🟢 `GET` | `/estoque/movimentacoes/:id` | Saldo e histórico de um produto (`:id` inválido → `400`, inexistente → `404`) | 🔒 admin |
+| 🔵 `POST` | `/estoque/entrada` | Registrar entrada `{ produto_id, quantidade, motivo }` | 🔒 admin |
+| 🔵 `POST` | `/estoque/saida` | Registrar saída manual `{ produto_id, quantidade, motivo }` | 🔒 admin |
 
-Cada entrada ou saída atualiza o saldo do produto e grava o histórico na mesma transação. Saída maior que o saldo retorna `409`.
+Cada entrada ou saída atualiza o saldo do produto e grava o histórico na mesma transação. O `motivo` é obrigatório (3 a 255 caracteres) e o responsável é o administrador logado (vem do token, não do corpo). Saída maior que o saldo retorna `409`.
+
+Cada movimentação do histórico traz: `id`, `produto_id`, `produto_nome`, `tipo` (`entrada`/`saida`), `quantidade`, `motivo`, `usuario_id`, `responsavel_nome`, `pedido_id` (`null` = manual) e `data_mov`. Confirmar um pedido gera as saídas com o motivo "Confirmação do pedido nº X"; cancelar um pedido confirmado gera as entradas "Cancelamento do pedido nº X (estoque devolvido)".
 
 </details>
 
@@ -513,8 +552,10 @@ Erros seguem o formato `{ "erro": "mensagem" }`, sempre em português. Erros de 
 | `/admin` | Dashboard: indicadores e pedidos em andamento com botões de status (+ link "Ver todos os pedidos") | 🔒 Admin |
 | `/admin/pedidos` | Tabela de todos os pedidos: busca, status, período, ordenação, itens e botões de status | 🔒 Admin |
 | `/admin/usuarios` | Tabela de usuários: busca, perfil, ordenação, nº de pedidos e total comprado | 🔒 Admin |
+| `/admin/movimentacoes` | Movimentações de estoque: registrar entrada/saída manual e histórico com busca, produto, tipo e período | 🔒 Admin |
+| `/admin/vendas` | Tabela de vendas: busca, período, com/sem nota, total e média, itens e "Emitir nota" | 🔒 Admin |
+| `/admin/notas` | Tabela de notas fiscais: busca, status, período, link do PDF, editar link e cancelar | 🔒 Admin |
 | `/admin/perfil` | Perfil do administrador | 🔒 Admin |
-| `/admin/movimentacoes`, `/vendas`, `/notas` | Tabelas do admin (em construção — Etapa 9, bloco B) | 🔒 Admin |
 
 Quem decide o acesso é o servidor: o front-end confere o perfil em `GET /usuarios/logado` e só ajuda na navegação. Admin que abre tela de cliente vai para `/admin`; cliente que abre `/admin` volta para o catálogo com o aviso "Área restrita"; sem login vai para `/login` e, depois de entrar, volta para a tela que tentou abrir. Mesmo que alguém force o caminho, a API responde `401`/`403`.
 
@@ -625,6 +666,7 @@ Os scripts ficam em `backend/src/database/`:
 | `migracao-imagens-produto.sql` | Só para quem já tinha o seed antigo: corrige o caminho das imagens dos produtos | Só se o banco é antigo |
 | `migracao-status-pedido.sql` | Só para quem já tinha o banco antigo: novo fluxo de status do pedido (tira o `respondido`) e coluna `observacao` | Só se o banco é antigo |
 | `migracao-imagem-padrao-produto.sql` | Só para quem já tinha o seed antigo: tira o logo da equipe das fotos dos produtos (o site mostra a foto padrão de paletes) | Só se o banco é antigo |
+| `migracao-movimentacao-nota.sql` | Só para quem já tinha o banco antigo: movimentação com responsável, motivo e pedido; nota fiscal com status e link do Emitte | Só se o banco é antigo |
 
 <details open>
 <summary><b>Opção A: MySQL Workbench</b></summary>
@@ -897,8 +939,8 @@ Legenda: ✅ pronto · 🚧 em andamento · ⏳ a fazer
 
 | Área | Progresso | Módulos prontos |
 |------|-----------|:---------------:|
-| ⚙️ Back-end | `▰▰▰▱▱▱▱` | 3 de 7 |
-| 🖥️ Front-end | `▰▰▰▰▰▱` | 5 de 6 |
+| ⚙️ Back-end | `▰▰▰▰▰▰▰▰` | 8 de 8 |
+| 🖥️ Front-end | `▰▰▰▰▰▰▰` | 7 de 7 |
 
 <table>
 <tr>
@@ -912,10 +954,10 @@ Legenda: ✅ pronto · 🚧 em andamento · ⏳ a fazer
 | Middlewares (token, perfil admin, validação, erros) | ✅ |
 | Pedido (visão do cliente) | ✅ |
 | Produto (catálogo público, cadastro, edição, ativar/desativar) | ✅ |
-| Estoque e movimentações | 🚧 |
+| Estoque e movimentações (responsável, motivo e pedido) | ✅ |
 | Pedido (visão do admin: listar, ver itens e mudar status) + resumo do dashboard | ✅ |
-| Venda (automática na entrega) | ✅ |
-| Nota fiscal | ⏳ |
+| Venda (automática na entrega + listagem) | ✅ |
+| Nota fiscal (status, link do Emitte, cancelar) | ✅ |
 
 </td>
 <td width="50%" valign="top">
@@ -931,7 +973,7 @@ Legenda: ✅ pronto · 🚧 em andamento · ⏳ a fazer
 | Meus Pedidos do cliente | ✅ |
 | Painel do admin: menu, dashboard de pedidos e perfil | ✅ |
 | Tabelas do administrador: pedidos e usuários | ✅ |
-| Tabelas do administrador: movimentações, vendas e notas | ⏳ |
+| Tabelas do administrador: movimentações, vendas e notas | ✅ |
 
 </td>
 </tr>
