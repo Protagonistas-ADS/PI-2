@@ -2,6 +2,7 @@ import NotaRoutes from "./routes/nota.routes";
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import "./configs/zod";
 
 import UsuarioRoutes from "./routes/usuario.routes";
 import ProdutoRoutes from "./routes/produto.routes";
