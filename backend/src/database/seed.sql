@@ -29,29 +29,11 @@ INSERT INTO produto (id, nome, descricao, preco_unitario, quantidade_estoque, at
 (3, 'Palete reforçado', 'Palete de madeira reforçado', 75.00, 100, TRUE, '/uploads/protagonistasLogo.jpg'),
 (4, 'Palete plástico', 'Palete plástico industrial', 120.00, 45, TRUE, '/uploads/protagonistasLogo.jpg');
 
--- COTAÇÕES
-INSERT INTO cotacao (id, cliente_id, validade, status) VALUES
-(1, 1, NULL, 'pendente'),
-(2, 1, '2026-11-23 23:59:59', 'respondida'),
-(3, 1, '2026-11-13 23:59:59', 'expirada'),
-(4, 1, NULL, 'convertida');
-
--- ITENS DAS COTAÇÕES
-INSERT INTO cotacao_item (cotacao_id, produto_id, quantidade, preco_unitario, subtotal) VALUES
-(1, 1, 20, NULL, NULL),
-(1, 2, 10, NULL, NULL),
-(2, 3, 15, 70.00, 1050.00),
-(2, 2, 30, 23.00, 690.00),
-(3, 1, 50, 43.00, 2150.00),
-(3, 3, 20, 72.00, 1440.00),
-(4, 1, 10, 45.00, 450.00),
-(4, 4, 5, 120.00, 600.00);
-
 -- PEDIDOS
-INSERT INTO pedido (id, cliente_id, cotacao_id, status, previsao_busca) VALUES
-(1, 1, NULL, 'pendente', NULL),
-(2, 1, NULL, 'respondido', '2026-11-21 10:00:00'),
-(3, 1, 4, 'entregue', '2026-11-10 14:00:00');
+INSERT INTO pedido (id, cliente_id, status, previsao_busca) VALUES
+(1, 1, 'pendente', NULL),
+(2, 1, 'respondido', '2026-11-21 10:00:00'),
+(3, 1, 'entregue', '2026-11-10 14:00:00');
 
 -- ITENS DOS PEDIDOS
 INSERT INTO pedido_item (pedido_id, produto_id, quantidade, preco_unitario, subtotal) VALUES
