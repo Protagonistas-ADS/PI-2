@@ -4,7 +4,7 @@
 
 # 🪵 PI-2 · Catálogo e Venda de Paletes
 
-### Divulgue, cote, venda e controle o estoque de paletes de madeira em um só lugar
+### Divulgue, venda e controle o estoque de paletes de madeira em um só lugar
 
 Projeto Integrador · FATEC · Análise e Desenvolvimento de Sistemas
 
@@ -70,7 +70,7 @@ O **PI-2** é uma aplicação web desenvolvida para a **S Ferraretto**, empresa 
 | | |
 |---|---|
 | 🌐 **Divulgação** | Landing page voltada para contato e catálogo de produtos com carrinho |
-| 🔄 **Fluxo comercial** | Cotação → pedido → venda → nota fiscal |
+| 🔄 **Fluxo comercial** | Pedido → venda → nota fiscal |
 | 📦 **Estoque** | Saldo por produto e histórico de entradas e saídas |
 
 > [!NOTE]
@@ -88,7 +88,7 @@ Na entrevista com o cliente, identificamos três dores principais:
 |:-:|----------|----------------------|
 | 1️⃣ | **Falta de divulgação** | Landing page e catálogo online, acessíveis a qualquer cliente |
 | 2️⃣ | **Falta de gerenciamento de estoque** | Saldo por produto e histórico de movimentações (entrada e saída) |
-| 3️⃣ | **Falta de canal de vendas** | Clientes pedem cotações e pedidos direto pelo site |
+| 3️⃣ | **Falta de canal de vendas** | Clientes fazem pedidos direto pelo site |
 
 <div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
 
@@ -104,9 +104,9 @@ Na entrevista com o cliente, identificamos três dores principais:
 
 - 🔑 Cadastro, login e edição de perfil
 - 🛍️ Catálogo de paletes e carrinho de compras
-- 📝 Solicitação de **cotações** e **pedidos**
-- 🔎 Acompanhamento do status de cotações e pedidos
-- ❌ Cancelamento de cotações e pedidos
+- 📝 Realização de **pedidos** a partir do carrinho
+- 🔎 Acompanhamento do status dos pedidos
+- ❌ Cancelamento de pedidos
 
 </td>
 <td width="50%" valign="top">
@@ -114,7 +114,7 @@ Na entrevista com o cliente, identificamos três dores principais:
 ### 🛠️ Administrador
 
 - 📦 Gerenciamento de produtos
-- 📋 Gerenciamento de pedidos e cotações
+- 📋 Gerenciamento de pedidos
 - 🧾 Histórico de vendas, notas fiscais e movimentações
 - 📊 Controle de estoque (entradas e saídas)
 
@@ -127,14 +127,11 @@ Na entrevista com o cliente, identificamos três dores principais:
 ```mermaid
 flowchart LR
     A(["👤 Cliente"]) --> B["🛍️ Catálogo<br/>e carrinho"]
-    B --> C["📝 Cotação"]
     B --> D["📦 Pedido"]
-    C -- "convertida" --> D
     D --> E["💰 Venda"]
     E --> F["🧾 Nota fiscal"]
-    F -.-> G["📊 Movimentação<br/>de estoque"]
-    H(["🛠️ Administrador"]) -. "responde e gerencia" .-> C
-    H -.-> D
+    E -. "baixa no estoque" .-> G["📊 Movimentação<br/>de estoque"]
+    H(["🛠️ Administrador"]) -. "gerencia" .-> D
     H -.-> G
 
     style A fill:#dbeafe,stroke:#2563eb,color:#111
@@ -142,28 +139,6 @@ flowchart LR
     style E fill:#dcfce7,stroke:#16a34a,color:#111
     style F fill:#dcfce7,stroke:#16a34a,color:#111
 ```
-
-<details>
-<summary><b>🔁 Ciclo de vida de uma cotação</b></summary>
-
-<br>
-
-```mermaid
-stateDiagram-v2
-    [*] --> pendente
-    pendente --> respondida : admin responde
-    pendente --> cancelada : cliente cancela
-    respondida --> convertida : cliente converte em pedido
-    respondida --> recusada : cliente recusa
-    respondida --> cancelada : cliente cancela
-    respondida --> expirada : passou da validade
-    convertida --> [*]
-    recusada --> [*]
-    cancelada --> [*]
-    expirada --> [*]
-```
-
-</details>
 
 <details>
 <summary><b>🔁 Ciclo de vida de um pedido</b></summary>
@@ -313,15 +288,11 @@ O banco se chama `PI2`. O script completo está em [`backend/src/database/schema
 
 ```mermaid
 erDiagram
-    USUARIO ||--o{ COTACAO : solicita
     USUARIO ||--o{ PEDIDO : faz
-    COTACAO ||--|{ COTACAO_ITEM : contem
-    COTACAO ||--o| PEDIDO : "converte em"
     PEDIDO ||--|{ PEDIDO_ITEM : contem
     PEDIDO ||--o| VENDA : gera
     VENDA ||--o| NOTA : emite
     NOTA ||--|{ NOTA_ITEM : contem
-    PRODUTO ||--o{ COTACAO_ITEM : "aparece em"
     PRODUTO ||--o{ PEDIDO_ITEM : "aparece em"
     PRODUTO ||--o{ NOTA_ITEM : "aparece em"
     PRODUTO ||--o{ MOVIMENTACAO_ESTOQUE : movimenta
@@ -337,7 +308,6 @@ erDiagram
 |--------|-----------|
 | `usuario` | Clientes e administradores (`perfil`) |
 | `produto` | Paletes do catálogo, com preço e saldo em estoque |
-| `cotacao` / `cotacao_item` | Cotações e seus itens. Status: pendente, respondida, convertida, recusada, cancelada, expirada |
 | `pedido` / `pedido_item` | Pedidos e seus itens. Status: pendente, respondido, entregue, cancelado |
 | `venda` | Venda gerada a partir de um pedido |
 | `nota` / `nota_item` | Nota fiscal da venda e seus itens |
@@ -390,20 +360,8 @@ Rotas marcadas com 🔒 exigem o header `Authorization: Bearer <token>`.
 |:------:|------|-----------|:----:|
 | 🟢 `GET` | `/pedidos/cliente` | Pedidos do cliente logado | 🔒 |
 | 🟢 `GET` | `/pedidos/itens/:id` | Itens de um pedido | 🔒 |
+| 🔵 `POST` | `/pedidos` | Criar pedido (`{ "itens": [{ "produtoId": 1, "quantidade": 10 }] }`) | 🔒 |
 | 🟠 `PATCH` | `/pedidos/cancelar/:id` | Cancelar pedido | 🔒 |
-
-</details>
-
-<details open>
-<summary><b>📝 Cotações</b></summary>
-
-<br>
-
-| Método | Rota | Descrição | Auth |
-|:------:|------|-----------|:----:|
-| 🟢 `GET` | `/cotacoes/cliente` | Cotações do cliente logado | 🔒 |
-| 🟢 `GET` | `/cotacoes/itens/:id` | Itens e total de uma cotação | 🔒 |
-| 🟠 `PATCH` | `/cotacoes/cancelar/:id` | Cancelar cotação | 🔒 |
 
 </details>
 
@@ -453,7 +411,7 @@ Erros seguem o formato `{ "erro": "mensagem" }`. Erros de validação (Zod) reto
 | `/login` | Login | 🌐 Pública |
 | `/catalogo` | Catálogo de produtos e carrinho | 🔒 Logado |
 | `/perfil` | Perfil do usuário | 🔒 Logado |
-| `/clientePedidos` | Acompanhamento de pedidos e cotações | 🔒 Logado |
+| `/clientePedidos` | Meus Pedidos (acompanhamento dos pedidos) | 🔒 Logado |
 
 <div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
 
@@ -474,7 +432,7 @@ Erros seguem o formato `{ "erro": "mensagem" }`. Erros de validação (Zod) reto
 | 💉 **Injeção de SQL** | Todas as consultas usam *prepared statements* (`?`) do mysql2 |
 | 🧹 **Validação de entrada** | Todo corpo de requisição passa por esquemas **Zod** antes de chegar ao controller |
 | 👥 **Cadastro seguro** | O perfil de quem se cadastra é sempre `cliente`, definido no servidor e não pelo cliente da API |
-| 🧱 **Isolamento de dados** | Pedidos e cotações são sempre filtrados pelo `cliente_id` do token, então um cliente não acessa dados de outro |
+| 🧱 **Isolamento de dados** | Pedidos são sempre filtrados pelo `cliente_id` do token, então um cliente não acessa dados de outro |
 | 🚪 **Login** | Mensagem genérica ("e-mail ou senha inválidos"), sem revelar qual dos dois está errado |
 | 🙈 **Respostas** | O hash da senha nunca é devolvido pela API; erros inesperados retornam mensagem genérica (`500`) |
 | 🗝️ **Segredos** | Credenciais ficam no `.env`, que está no `.gitignore`; o repositório traz apenas o `.env.example` |
@@ -557,7 +515,8 @@ Os scripts ficam em `backend/src/database/`:
 | Arquivo | O que faz | Obrigatório |
 |---------|-----------|:-----------:|
 | `schema.sql` | Cria o banco `PI2` e todas as tabelas | ✅ |
-| `seed.sql` | Insere dados de teste (usuário, produtos, cotações, pedidos, venda e nota) | Opcional |
+| `seed.sql` | Insere dados de teste (usuários, produtos, pedidos, venda e nota) | Opcional |
+| `migracao-remover-cotacao.sql` | Só para quem já tinha o banco antigo: remove as tabelas de cotação sem mexer no resto | Só se o banco é antigo |
 
 <details open>
 <summary><b>Opção A: MySQL Workbench</b></summary>
@@ -843,10 +802,10 @@ Legenda: ✅ pronto · 🚧 em andamento · ⏳ a fazer
 |--------|:------:|
 | Usuário (cadastro, login, perfil) | ✅ |
 | Middlewares (token, perfil admin, validação, erros) | ✅ |
-| Pedido e cotação (visão do cliente) | ✅ |
+| Pedido (visão do cliente) | ✅ |
 | Produto | 🚧 |
 | Estoque e movimentações | ⏳ |
-| Pedido e cotação (criar e visão do admin) | ⏳ |
+| Pedido (visão do admin) | ⏳ |
 | Venda e nota fiscal | ⏳ |
 
 </td>
@@ -859,7 +818,7 @@ Legenda: ✅ pronto · 🚧 em andamento · ⏳ a fazer
 | Tela inicial, cadastro e login | ✅ |
 | Catálogo e carrinho | ✅ |
 | Perfil do usuário | ✅ |
-| Pedidos e cotações do cliente | ✅ |
+| Meus Pedidos do cliente | ✅ |
 | Dashboard e tabelas do administrador | ⏳ |
 
 </td>

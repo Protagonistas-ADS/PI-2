@@ -33,7 +33,6 @@ interface ModalCarrinhoProps {
     aoFechar: () => void;
     titulo?: string;
     aoFazerPedido?: () => void;
-    aoFazerCotacao?: () => void;
     aoAumentar?: (id: number) => void;
     aoDiminuir?: (id: number) => void;
     aoRemover?: (id: number) => void;
@@ -45,7 +44,6 @@ function ModalCarrinho({
     titulo = "Meu Carrinho",
     aoFechar,
     aoFazerPedido,
-    aoFazerCotacao,
     aoAumentar,
     aoDiminuir,
     aoRemover
@@ -136,7 +134,7 @@ function ModalCarrinho({
                 <strong>Valor total: {formatarPreco(valorTotal)}</strong>
 
 
-                {itens.length > 0 && aoFazerPedido && aoFazerCotacao && (
+                {itens.length > 0 && aoFazerPedido && (
                     <AcoesCarrinho>
                         <button
                             className="acao-pedido"
@@ -144,14 +142,6 @@ function ModalCarrinho({
                             onClick={aoFazerPedido}
                         >
                             Fazer Pedido
-                        </button>
-
-                        <button
-                            className="acao-cotacao"
-                            type="button"
-                            onClick={aoFazerCotacao}
-                        >
-                            Solicitar Cotação
                         </button>
                     </AcoesCarrinho>
                 )}

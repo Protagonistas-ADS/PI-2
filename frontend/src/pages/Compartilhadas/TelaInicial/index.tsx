@@ -9,7 +9,7 @@ import {
     Conteudo,
     Hero,
     ConteudoHero,
-    BotaoOrcamento,
+    BotaoPrincipal,
     SufixoMarca,
     Sobre,
     ConteudoSobre,
@@ -43,9 +43,9 @@ function TelaInicial() {
                             com qualidade e confiança para sua empresa.
                         </p>
 
-                        <BotaoOrcamento href="/cadastro">
+                        <BotaoPrincipal href="/cadastro">
                             Fazer Cadastro
-                        </BotaoOrcamento>
+                        </BotaoPrincipal>
                     </ConteudoHero>
                 </Hero>
 

@@ -49,46 +49,17 @@ CREATE TABLE IF NOT EXISTS produto (
     ativo BOOLEAN DEFAULT true
 );
 
--- ====================== COTAÇÃO ======================
-CREATE TABLE IF NOT EXISTS cotacao (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    cliente_id INT NOT NULL,
-    validade DATETIME,
-    status ENUM('pendente','respondida','convertida','recusada','cancelada', 'expirada') NOT NULL DEFAULT 'pendente',
-    -- validade DATE,
-    criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
-    lida_em DATETIME DEFAULT null,
-    CONSTRAINT fk_cotacao_cliente
-    FOREIGN KEY (cliente_id) REFERENCES usuario(id)
-);
-
-CREATE TABLE IF NOT EXISTS cotacao_item (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    cotacao_id INT NOT NULL,
-    produto_id INT NOT NULL,
-    quantidade INT NOT NULL,
-    preco_unitario DECIMAL(10,2),
-    subtotal DECIMAL(10, 2),
-    CONSTRAINT fk_cotacao_item_cotacao
-    FOREIGN KEY (cotacao_id) REFERENCES cotacao(id) ON DELETE CASCADE,
-    CONSTRAINT fk_cotacao_item_produto
-    FOREIGN KEY (produto_id) REFERENCES produto(id)
-);
-
 -- ====================== PEDIDO ======================
 CREATE TABLE IF NOT EXISTS pedido (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cliente_id INT NOT NULL,
-    cotacao_id INT UNIQUE DEFAULT NULL,
     -- endereco_id INT DEFAULT NULL,
     status ENUM('pendente','respondido','entregue','cancelado') NOT NULL DEFAULT 'pendente',
     previsao_busca DATETIME,
     -- observacoes_entrega VARCHAR(255),
     criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_pedido_cliente
-    FOREIGN KEY (cliente_id) REFERENCES usuario(id),
-    CONSTRAINT fk_pedido_cotacao
-    FOREIGN KEY (cotacao_id) REFERENCES cotacao(id)
+    FOREIGN KEY (cliente_id) REFERENCES usuario(id)
     -- CONSTRAINT fk_pedido_endereco
     -- FOREIGN KEY (endereco_id) REFERENCES endereco(id)
 );

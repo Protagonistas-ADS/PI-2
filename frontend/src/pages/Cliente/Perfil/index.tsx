@@ -65,7 +65,7 @@ function Perfil() {
 
     const linksNavegacao = [
         { id: 2, texto: "Catálogo", href: "/catalogo", ativo: false },
-        { id: 2, texto: "Pedidos/Cotações", href: "/clientePedidos", ativo: false },
+        { id: 2, texto: "Meus Pedidos", href: "/clientePedidos", ativo: false },
         { id: 1, texto: "Perfil", href: "/perfil", ativo: false },
         { id: 4, texto: "Sair", href: "/login", ativo: false, aoClicar: handleLogout },
     ];
