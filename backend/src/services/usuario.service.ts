@@ -20,7 +20,7 @@ const UsuarioService = {
         const usuarioExistente = await UsuarioRepository.BuscarPorEmail(email);
 
         if (usuarioExistente) {
-            throw criarErro("Credenciais já cadastradas", 409);
+            throw criarErro("Este e-mail já está cadastrado. Faça login ou use outro e-mail.", 409);
         }
 
         const senhaHash = await bcrypt.hash(senha, 10);

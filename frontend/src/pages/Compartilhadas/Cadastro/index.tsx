@@ -34,7 +34,11 @@ function Cadastro() {
         event.preventDefault();
 
         try {
-            await cadastrarUsuario({ nome, email, senha });
+            await cadastrarUsuario({
+                nome: nome.trim(),
+                email: email.trim().toLowerCase(),
+                senha
+            });
             toastSucesso("Cadastrado com sucesso.");
             navigate('/login');
         } catch (error) {
@@ -69,7 +73,8 @@ function Cadastro() {
 
                 <InputGeral
                     type="email"
-                    placeholder="seuEmail@gmail.com"
+                    placeholder="seu@email.com"
+                    autoComplete="email"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     required
