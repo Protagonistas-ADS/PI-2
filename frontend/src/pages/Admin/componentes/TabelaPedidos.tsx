@@ -1,5 +1,6 @@
 import { NOME_STATUS_PEDIDO, type PedidoComCliente, type NovoStatusPedido } from "../../../types/pedido";
-import { PROXIMO_PASSO, emAndamento, formatarData, ehHoje } from "../../../utils/pedidoAdmin";
+import { PROXIMO_PASSO, emAndamento, ehHoje } from "../../../utils/pedidoAdmin";
+import { formatarData } from "../../../utils/filtrosAdmin";
 import { formatarPreco } from "../../../utils/produto";
 
 import { RolagemTabela, TabelaAdmin } from "../style";

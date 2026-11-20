@@ -4,7 +4,7 @@ import { FiRefreshCw, FiX } from "react-icons/fi";
 import { listarUsuarios } from "../../../services/adminApi";
 import type { PerfilUsuario, UsuarioAdmin } from "../../../types/admin";
 
-import { formatarData, normalizarBusca } from "../../../utils/pedidoAdmin";
+import { formatarData, normalizarBusca } from "../../../utils/filtrosAdmin";
 import { obterMensagemErro } from "../../../utils/obterMensagemErro";
 import { formatarPreco } from "../../../utils/produto";
 

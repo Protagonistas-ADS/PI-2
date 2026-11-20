@@ -12,7 +12,10 @@ import Dashboard from "../pages/Admin/Dashboard";
 import PerfilAdmin from "../pages/Admin/Perfil";
 import PedidosAdmin from "../pages/Admin/Pedidos";
 import UsuariosAdmin from "../pages/Admin/Usuarios";
-import EmBreve from "../pages/Admin/EmBreve";
+import MovimentacoesAdmin from "../pages/Admin/Movimentacoes";
+import VendasAdmin from "../pages/Admin/Vendas";
+import NotasAdmin from "../pages/Admin/Notas";
+import NaoEncontradaAdmin from "../pages/Admin/NaoEncontrada";
 
 import RotaProtegida from "../components/RotaProtegida";
 import RotaPublica from "../components/RotaPublica";
@@ -79,13 +82,13 @@ function Rotas() {
             >
                 <Route index element={<Dashboard />} />
                 <Route path="perfil" element={<PerfilAdmin />} />
-                {/* Tabelas (Etapa 9); as que ainda não chegaram mostram "em construção" */}
+                {/* Tabelas do administrador (Etapa 9) */}
                 <Route path="pedidos" element={<PedidosAdmin />} />
                 <Route path="usuarios" element={<UsuariosAdmin />} />
-                <Route path="movimentacoes" element={<EmBreve titulo="Movimentações de estoque" />} />
-                <Route path="vendas" element={<EmBreve titulo="Vendas" />} />
-                <Route path="notas" element={<EmBreve titulo="Notas fiscais" />} />
-                <Route path="*" element={<EmBreve titulo="Página não encontrada" />} />
+                <Route path="movimentacoes" element={<MovimentacoesAdmin />} />
+                <Route path="vendas" element={<VendasAdmin />} />
+                <Route path="notas" element={<NotasAdmin />} />
+                <Route path="*" element={<NaoEncontradaAdmin />} />
             </Route>
         </Routes>
     );

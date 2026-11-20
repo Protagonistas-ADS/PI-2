@@ -15,9 +15,9 @@ export const FundoModal = styled.div`
     backdrop-filter: blur(6px);
 `;
 
-export const ConteudoModal = styled.div`
+export const ConteudoModal = styled.div<{ $larguraMaxima: number }>`
     width: 100%;
-    max-width: 900px;
+    max-width: ${({ $larguraMaxima }) => $larguraMaxima}px;
     max-height: 90vh;
     overflow-y: auto;
     padding: 32px;

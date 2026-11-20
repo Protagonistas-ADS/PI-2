@@ -8,7 +8,7 @@ import { listarTodosPedidos } from "../../../services/pedidoApi";
 import { useAcoesPedidoAdmin } from "../../../hooks/useAcoesPedidoAdmin";
 import type { PedidoComCliente, StatusPedido } from "../../../types/pedido";
 
-import { dataLocalAAAAMMDD, normalizarBusca } from "../../../utils/pedidoAdmin";
+import { dentroDoPeriodo, termoDeBusca, contemTermo } from "../../../utils/filtrosAdmin";
 import { obterMensagemErro } from "../../../utils/obterMensagemErro";
 import { formatarPreco } from "../../../utils/produto";
 
@@ -92,20 +92,14 @@ function Pedidos() {
     // Busca e período valem para tudo; o status é aplicado por último
     // (assim os números dos botões de status mostram quantos há em cada um)
     const pedidosBuscados = useMemo(() => {
-        // "nº 12", "n 12" ou "12" procuram o pedido 12 (o "nº" só sai se vier antes de um número)
-        const termo = normalizarBusca(busca.replace(/^\s*n[ºo°.]?\s*(?=\d)/i, ""));
+        // "nº 12", "n 12" ou "12" procuram o pedido 12
+        const termo = termoDeBusca(busca);
 
         return pedidos.filter((pedido) => {
-            const dia = dataLocalAAAAMMDD(pedido.criado_em);
-
-            if (dataInicio && dia < dataInicio) return false;
-            if (dataFim && dia > dataFim) return false;
-
+            if (!dentroDoPeriodo(pedido.criado_em, dataInicio, dataFim)) return false;
             if (!termo) return true;
 
-            return String(pedido.id) === termo
-                || normalizarBusca(pedido.cliente_nome).includes(termo)
-                || normalizarBusca(pedido.cliente_email).includes(termo);
+            return String(pedido.id) === termo || contemTermo(termo, pedido.cliente_nome, pedido.cliente_email);
         });
     }, [pedidos, busca, dataInicio, dataFim]);
 
