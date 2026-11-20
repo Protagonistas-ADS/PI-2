@@ -12,6 +12,17 @@ const AdminController = {
         } catch (error) {
             next(error);
         }
+    },
+
+    async ListarUsuarios(req: Request, res: Response, next: NextFunction) {
+        try {
+            const usuarios = await AdminService.ListarUsuarios();
+
+            res.status(200).json({ usuarios });
+
+        } catch (error) {
+            next(error);
+        }
     }
 };
 

@@ -25,6 +25,21 @@ const AdminService = {
             })),
             vendas_mes
         };
+    },
+
+    // Tabela de usuários do painel (o MySQL devolve contagens e somas como texto: converte)
+    async ListarUsuarios() {
+        const usuarios = await AdminRepository.ListarUsuarios();
+
+        return usuarios.map((usuario) => ({
+            id: usuario.id,
+            nome: usuario.nome,
+            email: usuario.email,
+            perfil: usuario.perfil,
+            criado_em: usuario.criado_em,
+            total_pedidos: Number(usuario.total_pedidos),
+            total_comprado: Number(usuario.total_comprado)
+        }));
     }
 };
 
