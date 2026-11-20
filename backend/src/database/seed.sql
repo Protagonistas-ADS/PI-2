@@ -24,10 +24,10 @@ INSERT INTO usuario (id, nome, email, senha, perfil) VALUES
 -- produto 3: 100 - 8 = 92 (confirmação do pedido 2)
 -- produto 4: 50 - 5 - 3 = 42 (pedido 3 entregue e confirmação do pedido 2)
 INSERT INTO produto (id, nome, descricao, preco_unitario, quantidade_estoque, ativo, imagem) VALUES
-(1, 'Palete PBR', 'Palete padrão PBR de madeira', 45.00, 190, TRUE, 'protagonistasLogo.png'),
-(2, 'Palete descartável', 'Palete de madeira descartável', 25.00, 350, TRUE, 'protagonistasLogo.png'),
-(3, 'Palete reforçado', 'Palete de madeira reforçado', 75.00, 92, TRUE, 'protagonistasLogo.png'),
-(4, 'Palete plástico', 'Palete plástico industrial', 120.00, 42, TRUE, 'protagonistasLogo.png');
+(1, 'Palete PBR', 'Palete padrão PBR de madeira', 45.00, 190, TRUE, NULL),
+(2, 'Palete descartável', 'Palete de madeira descartável', 25.00, 350, TRUE, NULL),
+(3, 'Palete reforçado', 'Palete de madeira reforçado', 75.00, 92, TRUE, NULL),
+(4, 'Palete plástico', 'Palete plástico industrial', 120.00, 42, TRUE, NULL);
 
 -- PEDIDOS
 -- Fluxo: pendente -> confirmado -> pronto_retirada -> entregue (ou cancelado).

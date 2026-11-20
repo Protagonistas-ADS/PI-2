@@ -561,6 +561,7 @@ Os scripts ficam em `backend/src/database/`:
 | `migracao-remover-cotacao.sql` | Só para quem já tinha o banco antigo: remove as tabelas de cotação sem mexer no resto | Só se o banco é antigo |
 | `migracao-imagens-produto.sql` | Só para quem já tinha o seed antigo: corrige o caminho das imagens dos produtos | Só se o banco é antigo |
 | `migracao-status-pedido.sql` | Só para quem já tinha o banco antigo: novo fluxo de status do pedido (tira o `respondido`) e coluna `observacao` | Só se o banco é antigo |
+| `migracao-imagem-padrao-produto.sql` | Só para quem já tinha o seed antigo: tira o logo da equipe das fotos dos produtos (o site mostra a foto padrão de paletes) | Só se o banco é antigo |
 
 <details open>
 <summary><b>Opção A: MySQL Workbench</b></summary>
