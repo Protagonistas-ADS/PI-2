@@ -90,13 +90,19 @@ CREATE TABLE IF NOT EXISTS venda (
 );
 
 -- ====================== NOTA FISCAL ======================
+-- A nota é emitida no Emitte; aqui o sistema guarda os dados e o link do PDF.
+-- Uma venda pode ter só UMA nota 'emitida' (regra conferida no backend);
+-- se ela for cancelada, dá para registrar outra para a mesma venda.
 CREATE TABLE IF NOT EXISTS nota (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    venda_id INT NOT NULL UNIQUE,
+    venda_id INT NOT NULL,
     numero VARCHAR(30) NOT NULL UNIQUE,
     natureza_operacao VARCHAR(100) DEFAULT 'Venda de mercadoria',
     valor_total DECIMAL(10,2) NOT NULL,
+    status ENUM('emitida','cancelada') NOT NULL DEFAULT 'emitida',
+    link_pdf VARCHAR(500) DEFAULT NULL, -- endereço da nota no Emitte (http/https)
     data_emissao DATETIME DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_nota_venda (venda_id),
     CONSTRAINT fk_nota_venda
     FOREIGN KEY (venda_id) REFERENCES venda(id)
 );
@@ -113,15 +119,22 @@ CREATE TABLE IF NOT EXISTS nota_item (
 );
 
 -- ====================== MOVIMENTAÇÃO DE ESTOQUE ======================
+-- Histórico de tudo que entrou e saiu do estoque: quem fez, por quê e de qual pedido.
+-- Confirmar um pedido gera 'saida' (com pedido_id); cancelar um confirmado gera 'entrada';
+-- o administrador também registra entradas/saídas manuais (sem pedido, com motivo).
 CREATE TABLE IF NOT EXISTS movimentacao_estoque (
     id INT AUTO_INCREMENT PRIMARY KEY,
     produto_id INT NOT NULL,
-    nota_id INT DEFAULT NULL,
+    pedido_id INT DEFAULT NULL,  -- pedido que causou a movimentação (manual = NULL)
+    usuario_id INT DEFAULT NULL, -- administrador responsável
     tipo ENUM('entrada','saida') NOT NULL,
     quantidade INT NOT NULL,
+    motivo VARCHAR(255) DEFAULT NULL,
     data_mov DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_movimentacao_estoque_produto
     FOREIGN KEY (produto_id) REFERENCES produto(id),
-    CONSTRAINT fk_movimentacao_estoque_nota
-    FOREIGN KEY (nota_id) REFERENCES nota(id)
+    CONSTRAINT fk_movimentacao_estoque_pedido
+    FOREIGN KEY (pedido_id) REFERENCES pedido(id),
+    CONSTRAINT fk_movimentacao_estoque_usuario
+    FOREIGN KEY (usuario_id) REFERENCES usuario(id)
 );
