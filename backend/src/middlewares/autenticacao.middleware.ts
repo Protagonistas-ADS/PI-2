@@ -27,7 +27,18 @@ export async function autenticacaoMiddleware(
             throw new Error("JWT_SECRET não configurada.");
         }
 
-        const dadosUsuario = jwt.verify(token, chaveSecreta);
+        // Token vencido (passou de 8h) ou alterado: pede login de novo (401), em vez de erro 500
+        let dadosUsuario: string | jwt.JwtPayload;
+
+        try {
+            dadosUsuario = jwt.verify(token, chaveSecreta);
+        } catch (erroToken) {
+            if (erroToken instanceof jwt.TokenExpiredError) {
+                throw criarErro("Sua sessão expirou. Faça login novamente.", 401);
+            }
+
+            throw criarErro("Token inválido", 401);
+        }
 
         if (typeof dadosUsuario === "string") {
             throw criarErro("Token inválido", 401);
@@ -45,7 +56,8 @@ export async function autenticacaoMiddleware(
             id: usuario.id,
             nome: usuario.nome,
             email: usuario.email,
-            perfil: usuario.perfil
+            perfil: usuario.perfil,
+            criado_em: usuario.criado_em
         };
 
         next();
