@@ -13,26 +13,25 @@ import {
     AcoesCarrinho,
 } from "./style";
 
-interface Produto {
-    readonly id: number;
-    nome: string;
-    descricao: string;
-    preco_unitario: number;
-    quantidade_estoque: number;
-    imagem: string | null;
-}
+import { formatarPreco } from "../../../utils/produto";
 
-interface ItemCarrinho {
-    produto: Produto;
+// Só o que a janela usa de cada produto (serve para o carrinho e para os itens de um pedido)
+interface ItemJanela {
+    produto: {
+        readonly id: number;
+        nome: string;
+        preco_unitario: number;
+        quantidade_estoque?: number;
+    };
     quantidade: number;
 }
 
-
 interface ModalCarrinhoProps {
-    itens: ItemCarrinho[];
+    itens: ItemJanela[];
     aoFechar: () => void;
     titulo?: string;
-    aoFazerPedido?: () => void;
+    textoAcao?: string;
+    aoAcao?: () => void;
     aoAumentar?: (id: number) => void;
     aoDiminuir?: (id: number) => void;
     aoRemover?: (id: number) => void;
@@ -43,7 +42,8 @@ function ModalCarrinho({
     itens,
     titulo = "Meu Carrinho",
     aoFechar,
-    aoFazerPedido,
+    textoAcao = "Finalizar pedido",
+    aoAcao,
     aoAumentar,
     aoDiminuir,
     aoRemover
@@ -51,13 +51,6 @@ function ModalCarrinho({
     const valorTotal = itens.reduce(
         (total, item) => total + item.produto.preco_unitario * item.quantidade, 0
     );
-
-    function formatarPreco(valor: number) {
-        return valor.toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL"
-        });
-    }
 
     return (
         <ModalBase aoFechar={aoFechar}>
@@ -98,7 +91,7 @@ function ModalCarrinho({
                                         <button
                                             type="button"
                                             onClick={() => aoAumentar(item.produto.id)}
-                                            disabled={item.quantidade >= item.produto.quantidade_estoque}
+                                            disabled={item.quantidade >= (item.produto.quantidade_estoque ?? 0)}
                                             aria-label={`Aumentar quantidade de ${item.produto.nome}`}
                                         >
                                             <FiPlus />
@@ -134,14 +127,14 @@ function ModalCarrinho({
                 <strong>Valor total: {formatarPreco(valorTotal)}</strong>
 
 
-                {itens.length > 0 && aoFazerPedido && (
+                {itens.length > 0 && aoAcao && (
                     <AcoesCarrinho>
                         <button
                             className="acao-pedido"
                             type="button"
-                            onClick={aoFazerPedido}
+                            onClick={aoAcao}
                         >
-                            Fazer Pedido
+                            {textoAcao}
                         </button>
                     </AcoesCarrinho>
                 )}

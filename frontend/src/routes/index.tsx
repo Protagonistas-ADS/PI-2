@@ -6,6 +6,7 @@ import Cadastro from "../pages/Compartilhadas/Cadastro";
 import Login from "../pages/Compartilhadas/Login";
 import Perfil from "../pages/Cliente/Perfil";
 import MeusPedidos from "../pages/Cliente/MeusPedidos";
+import Carrinho from "../pages/Cliente/Carrinho";
 
 import RotaProtegida from "../components/RotaProtegida";
 import RotaPublica from "../components/RotaPublica";
@@ -39,6 +40,8 @@ function Rotas() {
             />
             {/* Catálogo é público: o visitante vê os produtos sem login */}
             <Route path="/catalogo" element={<Catalogo />} />
+            {/* Carrinho também é público; o login é pedido só para enviar o pedido */}
+            <Route path="/carrinho" element={<Carrinho />} />
             <Route
                 path="/perfil"
                 element={
