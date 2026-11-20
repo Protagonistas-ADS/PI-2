@@ -103,7 +103,7 @@ Na entrevista com o cliente, identificamos três dores principais:
 ### 👤 Cliente
 
 - 🔑 Cadastro, login e edição de perfil
-- 🛍️ Catálogo de paletes e carrinho de compras
+- 🛍️ Catálogo de paletes aberto (sem login), com quantidade e carrinho direto no card
 - 📝 Realização de **pedidos** a partir do carrinho
 - 🔎 Acompanhamento do status dos pedidos
 - ❌ Cancelamento de pedidos
@@ -323,7 +323,7 @@ erDiagram
 
 Rotas marcadas com 🔒 exigem o header `Authorization: Bearer <token>`.
 
-**Legenda:** 🟢 `GET` · 🔵 `POST` · 🟠 `PATCH`
+**Legenda:** 🟢 `GET` · 🔵 `POST` · 🟣 `PUT` · 🟠 `PATCH`
 
 <details open>
 <summary><b>👤 Usuários</b></summary>
@@ -346,8 +346,14 @@ Rotas marcadas com 🔒 exigem o header `Authorization: Bearer <token>`.
 
 | Método | Rota | Descrição | Auth |
 |:------:|------|-----------|:----:|
-| 🟢 `GET` | `/produtos` | Listar produtos | 🔒 |
-| 🔵 `POST` | `/produtos` | Cadastrar produto | 🔒 |
+| 🟢 `GET` | `/produtos` | Catálogo: lista os produtos **ativos** | 🌐 |
+| 🟢 `GET` | `/produtos/:id` | Detalhes de um produto ativo (`404` se não existir ou estiver desativado) | 🌐 |
+| 🟢 `GET` | `/produtos/todos` | Lista todos os produtos, inclusive os desativados | 🔒 admin |
+| 🔵 `POST` | `/produtos` | Cadastrar produto `{ nome, descricao, preco, quantidade, imagem? }` → `201 { id }` | 🔒 admin |
+| 🟣 `PUT` | `/produtos/:id` | Editar produto (mesmo corpo do cadastro) → `204` | 🔒 admin |
+| 🟠 `PATCH` | `/produtos/:id/ativo` | Ativar/desativar `{ "ativo": false }` → `204` | 🔒 admin |
+
+Produtos não são apagados: desativar tira o produto do catálogo, mas preserva pedidos, vendas e notas antigos. O campo `imagem` guarda só o nome do arquivo da pasta `backend/uploads` (servida em `/uploads/<arquivo>`).
 
 </details>
 
@@ -409,7 +415,7 @@ Erros seguem o formato `{ "erro": "mensagem" }`. Erros de validação (Zod) reto
 | `/` | Tela inicial (landing page com contatos) | 🌐 Pública |
 | `/cadastro` | Cadastro de usuário | 🌐 Pública |
 | `/login` | Login | 🌐 Pública |
-| `/catalogo` | Catálogo de produtos e carrinho | 🔒 Logado |
+| `/catalogo` | Catálogo de produtos e carrinho (login só para finalizar o pedido) | 🌐 Pública |
 | `/perfil` | Perfil do usuário | 🔒 Logado |
 | `/clientePedidos` | Meus Pedidos (acompanhamento dos pedidos) | 🔒 Logado |
 
@@ -447,7 +453,7 @@ Erros seguem o formato `{ "erro": "mensagem" }`. Erros de validação (Zod) reto
 
 - [ ] Restringir o **CORS** ao domínio do front-end em produção
 - [ ] Adicionar **rate limiting** no login e cabeçalhos de segurança com **Helmet**
-- [ ] Aplicar o middleware de administrador nas rotas de gestão (produtos, estoque, notas e vendas)
+- [x] Aplicar o middleware de administrador nas rotas de gestão (produtos, estoque, notas e vendas)
 - [ ] Fortalecer a política de senhas (tamanho mínimo e complexidade)
 - [ ] Servir tudo por **HTTPS** e usar um `JWT_SECRET` longo e aleatório
 - [ ] Avaliar o armazenamento do token (hoje em `localStorage`) e criar um usuário de banco com privilégios mínimos
@@ -517,6 +523,7 @@ Os scripts ficam em `backend/src/database/`:
 | `schema.sql` | Cria o banco `PI2` e todas as tabelas | ✅ |
 | `seed.sql` | Insere dados de teste (usuários, produtos, pedidos, venda e nota) | Opcional |
 | `migracao-remover-cotacao.sql` | Só para quem já tinha o banco antigo: remove as tabelas de cotação sem mexer no resto | Só se o banco é antigo |
+| `migracao-imagens-produto.sql` | Só para quem já tinha o seed antigo: corrige o caminho das imagens dos produtos | Só se o banco é antigo |
 
 <details open>
 <summary><b>Opção A: MySQL Workbench</b></summary>
@@ -803,8 +810,8 @@ Legenda: ✅ pronto · 🚧 em andamento · ⏳ a fazer
 | Usuário (cadastro, login, perfil) | ✅ |
 | Middlewares (token, perfil admin, validação, erros) | ✅ |
 | Pedido (visão do cliente) | ✅ |
-| Produto | 🚧 |
-| Estoque e movimentações | ⏳ |
+| Produto (catálogo público, cadastro, edição, ativar/desativar) | ✅ |
+| Estoque e movimentações | 🚧 |
 | Pedido (visão do admin) | ⏳ |
 | Venda e nota fiscal | ⏳ |
 
