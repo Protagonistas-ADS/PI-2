@@ -1,53 +1,30 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { FiClock, FiCalendar, FiAlertTriangle, FiDollarSign, FiRefreshCw } from "react-icons/fi";
+import { Link } from "react-router-dom";
+import { FiClock, FiCalendar, FiAlertTriangle, FiDollarSign, FiRefreshCw, FiList } from "react-icons/fi";
 
 import ModalCarrinho from "../../../components/Modais/ModalCarrinho";
+import TabelaPedidos from "../componentes/TabelaPedidos";
 
 import { buscarResumoDashboard } from "../../../services/adminApi";
-import { listarTodosPedidos, listarItensPedidoAdmin, alterarStatusPedido } from "../../../services/pedidoApi";
+import { listarTodosPedidos } from "../../../services/pedidoApi";
+import { useAcoesPedidoAdmin } from "../../../hooks/useAcoesPedidoAdmin";
 import type { ResumoDashboard } from "../../../types/admin";
-import {
-    NOME_STATUS_PEDIDO,
-    type PedidoComCliente,
-    type StatusPedido,
-    type NovoStatusPedido
-} from "../../../types/pedido";
+import type { PedidoComCliente } from "../../../types/pedido";
 
+import { emAndamento, type StatusEmAndamento } from "../../../utils/pedidoAdmin";
 import { obterMensagemErro } from "../../../utils/obterMensagemErro";
 import { formatarPreco } from "../../../utils/produto";
-import { swalConfirmacao, swalErro, toastSucesso } from "../../../utils/alertas";
 
-import { CabecalhoPagina } from "../style";
 import {
-    GradeIndicadores,
-    CartaoIndicador,
-    SecaoPedidos,
+    CabecalhoPagina,
+    SecaoAdmin,
     TopoSecao,
     Filtros,
     BotaoFiltro,
     BotaoAtualizar,
-    RolagemTabela,
-    TabelaPedidos,
     Mensagem
-} from "./style";
-
-// Pedidos que ainda precisam de alguma ação da loja
-type StatusEmAndamento = "pendente" | "confirmado" | "pronto_retirada";
-const STATUS_EM_ANDAMENTO: StatusEmAndamento[] = ["pendente", "confirmado", "pronto_retirada"];
-
-// Próximo passo de cada status (o mesmo fluxo que o backend aceita)
-const PROXIMO_PASSO: Record<StatusEmAndamento, { status: NovoStatusPedido; texto: string }> = {
-    pendente: { status: "confirmado", texto: "Confirmar" },
-    confirmado: { status: "pronto_retirada", texto: "Marcar pronto" },
-    pronto_retirada: { status: "entregue", texto: "Entregue" }
-};
-
-const MENSAGEM_SUCESSO: Record<NovoStatusPedido, string> = {
-    confirmado: "confirmado (estoque baixado)",
-    pronto_retirada: "marcado como pronto para retirada",
-    entregue: "entregue (venda registrada)",
-    cancelado: "cancelado"
-};
+} from "../style";
+import { GradeIndicadores, CartaoIndicador } from "./style";
 
 type Filtro = "todos" | StatusEmAndamento;
 
@@ -58,32 +35,12 @@ const NOME_FILTRO: Record<Filtro, string> = {
     pronto_retirada: "Prontos"
 };
 
-function emAndamento(status: StatusPedido): status is StatusEmAndamento {
-    return (STATUS_EM_ANDAMENTO as StatusPedido[]).includes(status);
-}
-
-// "2026-11-21T03:00:00.000Z" -> "21/11/2026" (no horário do navegador)
-function formatarData(valor: string | null) {
-    return valor ? new Date(valor).toLocaleDateString("pt-BR") : null;
-}
-
-function ehHoje(valor: string | null) {
-    return valor !== null && formatarData(valor) === new Date().toLocaleDateString("pt-BR");
-}
-
-interface ItemJanela {
-    produto: { id: number; nome: string; preco_unitario: number };
-    quantidade: number;
-}
-
 function Dashboard() {
     const [resumo, setResumo] = useState<ResumoDashboard | null>(null);
     const [pedidos, setPedidos] = useState<PedidoComCliente[]>([]);
     const [carregando, setCarregando] = useState(true);
     const [erroCarregamento, setErroCarregamento] = useState("");
     const [filtro, setFiltro] = useState<Filtro>("todos");
-    const [pedidoOcupado, setPedidoOcupado] = useState<number | null>(null);
-    const [pedidoAberto, setPedidoAberto] = useState<{ id: number; itens: ItemJanela[] } | null>(null);
 
     // Busca os números e a lista juntos
     const carregar = useCallback(async () => {
@@ -103,6 +60,8 @@ function Dashboard() {
         }
     }, []);
 
+    const { pedidoOcupado, mudarStatus, pedidoAberto, abrirItens, fecharItens } = useAcoesPedidoAdmin(carregar);
+
     useEffect(() => {
         carregar();
     }, [carregar]);
@@ -120,63 +79,6 @@ function Dashboard() {
         return filtroEscolhido === "todos"
             ? pedidosEmAndamento.length
             : pedidosEmAndamento.filter((pedido) => pedido.status === filtroEscolhido).length;
-    }
-
-    async function mudarStatus(pedido: PedidoComCliente, novoStatus: NovoStatusPedido) {
-        // Cancelar e entregar pedem confirmação (entregar gera a venda e não volta)
-        if (novoStatus === "cancelado") {
-            const devolveEstoque = pedido.status !== "pendente";
-            const resposta = await swalConfirmacao(
-                `Cancelar o pedido nº ${pedido.id} de ${pedido.cliente_nome}?` +
-                (devolveEstoque ? " Os produtos voltam para o estoque." : "") +
-                " Isso não pode ser desfeito.",
-                "Sim, cancelar pedido",
-                "Voltar"
-            );
-            if (!resposta.isConfirmed) return;
-        }
-
-        if (novoStatus === "entregue") {
-            const resposta = await swalConfirmacao(
-                `Confirmar que o pedido nº ${pedido.id} foi retirado por ${pedido.cliente_nome}? ` +
-                "A venda será registrada e o pedido não poderá mais ser alterado.",
-                "Sim, foi entregue",
-                "Voltar"
-            );
-            if (!resposta.isConfirmed) return;
-        }
-
-        setPedidoOcupado(pedido.id);
-
-        try {
-            await alterarStatusPedido(pedido.id, novoStatus);
-            toastSucesso(`Pedido nº ${pedido.id} ${MENSAGEM_SUCESSO[novoStatus]}.`);
-        } catch (error) {
-            swalErro(obterMensagemErro(error, "Não foi possível alterar o status do pedido."));
-        } finally {
-            // Recarrega sempre: os números e a lista mudam (e outro admin pode ter mexido)
-            await carregar();
-            setPedidoOcupado(null);
-        }
-    }
-
-    async function abrirItens(id: number) {
-        try {
-            const produtos = await listarItensPedidoAdmin(id);
-
-            const itens = produtos.map((produto) => ({
-                produto: {
-                    id: produto.produto_id,
-                    nome: produto.produto_nome,
-                    preco_unitario: produto.preco_unitario
-                },
-                quantidade: produto.quantidade
-            }));
-
-            setPedidoAberto({ id, itens });
-        } catch (error) {
-            swalErro(obterMensagemErro(error, "Não foi possível abrir os itens do pedido."));
-        }
     }
 
     const hoje = new Date().toLocaleDateString("pt-BR", {
@@ -261,15 +163,20 @@ function Dashboard() {
                         </CartaoIndicador>
                     </GradeIndicadores>
 
-                    <SecaoPedidos>
+                    <SecaoAdmin>
                         <TopoSecao>
                             <div>
                                 <h2>Pedidos em andamento</h2>
                                 <p>Fluxo: pendente → confirmado → pronto para retirada → entregue.</p>
                             </div>
-                            <BotaoAtualizar type="button" onClick={carregar} disabled={pedidoOcupado !== null}>
-                                <FiRefreshCw /> Atualizar
-                            </BotaoAtualizar>
+                            <div className="botoes-topo">
+                                <BotaoAtualizar as={Link} to="/admin/pedidos">
+                                    <FiList /> Ver todos os pedidos
+                                </BotaoAtualizar>
+                                <BotaoAtualizar type="button" onClick={carregar} disabled={pedidoOcupado !== null}>
+                                    <FiRefreshCw /> Atualizar
+                                </BotaoAtualizar>
+                            </div>
                         </TopoSecao>
 
                         <Filtros role="group" aria-label="Filtrar pedidos por status">
@@ -293,97 +200,21 @@ function Dashboard() {
                                     : `Nenhum pedido com o status "${NOME_FILTRO[filtro].toLowerCase()}".`}
                             </Mensagem>
                         ) : (
-                            <RolagemTabela>
-                                <TabelaPedidos>
-                                    <thead>
-                                        <tr>
-                                            <th>Pedido</th>
-                                            <th>Cliente</th>
-                                            <th>Retirada</th>
-                                            <th>Itens</th>
-                                            <th>Total</th>
-                                            <th>Status</th>
-                                            <th>Ações</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {pedidosFiltrados.map((pedido) => {
-                                            const status = pedido.status as StatusEmAndamento;
-                                            const proximo = PROXIMO_PASSO[status];
-                                            const ocupado = pedidoOcupado === pedido.id;
-    
-                                            return (
-                                                <tr key={pedido.id}>
-                                                    <td data-rotulo="Pedido">
-                                                        <div>
-                                                            <strong>nº {pedido.id}</strong>
-                                                            <span className="detalhe">feito em {formatarData(pedido.criado_em)}</span>
-                                                        </div>
-                                                    </td>
-                                                    <td data-rotulo="Cliente" className="cliente">
-                                                        <div>
-                                                            <strong>{pedido.cliente_nome}</strong>
-                                                            <span className="detalhe">{pedido.cliente_email}</span>
-                                                            {pedido.observacao && (
-                                                                <span className="observacao">Obs.: {pedido.observacao}</span>
-                                                            )}
-                                                        </div>
-                                                    </td>
-                                                    <td data-rotulo="Retirada">
-                                                        {ehHoje(pedido.previsao_busca)
-                                                            ? <span className="hoje">Hoje</span>
-                                                            : formatarData(pedido.previsao_busca) ?? "A combinar"}
-                                                    </td>
-                                                    <td data-rotulo="Itens">
-                                                        <button
-                                                            type="button"
-                                                            className="botao-itens"
-                                                            onClick={() => abrirItens(pedido.id)}
-                                                        >
-                                                            {pedido.quantidade_total} {pedido.quantidade_total === 1 ? "unidade" : "unidades"}
-                                                        </button>
-                                                    </td>
-                                                    <td data-rotulo="Total">{formatarPreco(pedido.valor_total)}</td>
-                                                    <td data-rotulo="Status">
-                                                        <span className={`status status-${pedido.status}`}>
-                                                            {NOME_STATUS_PEDIDO[pedido.status]}
-                                                        </span>
-                                                    </td>
-                                                    <td data-rotulo="Ações">
-                                                        <div className="acoes">
-                                                            <button
-                                                                type="button"
-                                                                className="acao-avancar"
-                                                                disabled={pedidoOcupado !== null}
-                                                                onClick={() => mudarStatus(pedido, proximo.status)}
-                                                            >
-                                                                {ocupado ? "Salvando..." : proximo.texto}
-                                                            </button>
-                                                            <button
-                                                                type="button"
-                                                                className="acao-cancelar"
-                                                                disabled={pedidoOcupado !== null}
-                                                                onClick={() => mudarStatus(pedido, "cancelado")}
-                                                            >
-                                                                Cancelar
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
-                                    </tbody>
-                                </TabelaPedidos>
-                            </RolagemTabela>
+                            <TabelaPedidos
+                                pedidos={pedidosFiltrados}
+                                pedidoOcupado={pedidoOcupado}
+                                aoMudarStatus={mudarStatus}
+                                aoAbrirItens={abrirItens}
+                            />
                         )}
-                    </SecaoPedidos>
+                    </SecaoAdmin>
                 </>
             )}
 
             {pedidoAberto && (
                 <ModalCarrinho
                     itens={pedidoAberto.itens}
-                    aoFechar={() => setPedidoAberto(null)}
+                    aoFechar={fecharItens}
                     titulo={`Produtos do pedido nº ${pedidoAberto.id}`}
                 />
             )}

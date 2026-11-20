@@ -31,7 +31,7 @@ import {
     AreaConteudo
 } from "./style";
 
-// Itens do menu do painel (as tabelas chegam na Etapa 9).
+// Itens do menu do painel.
 // "Dashboard" (/admin) só fica marcado na própria tela, não nas de dentro (end).
 const ITENS_MENU = [
     { caminho: "/admin", texto: "Dashboard", icone: <FiGrid /> },

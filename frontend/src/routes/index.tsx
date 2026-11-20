@@ -10,6 +10,8 @@ import Carrinho from "../pages/Cliente/Carrinho";
 
 import Dashboard from "../pages/Admin/Dashboard";
 import PerfilAdmin from "../pages/Admin/Perfil";
+import PedidosAdmin from "../pages/Admin/Pedidos";
+import UsuariosAdmin from "../pages/Admin/Usuarios";
 import EmBreve from "../pages/Admin/EmBreve";
 
 import RotaProtegida from "../components/RotaProtegida";
@@ -77,9 +79,9 @@ function Rotas() {
             >
                 <Route index element={<Dashboard />} />
                 <Route path="perfil" element={<PerfilAdmin />} />
-                {/* Tabelas da Etapa 9 */}
-                <Route path="pedidos" element={<EmBreve titulo="Pedidos" />} />
-                <Route path="usuarios" element={<EmBreve titulo="Usuários" />} />
+                {/* Tabelas (Etapa 9); as que ainda não chegaram mostram "em construção" */}
+                <Route path="pedidos" element={<PedidosAdmin />} />
+                <Route path="usuarios" element={<UsuariosAdmin />} />
                 <Route path="movimentacoes" element={<EmBreve titulo="Movimentações de estoque" />} />
                 <Route path="vendas" element={<EmBreve titulo="Vendas" />} />
                 <Route path="notas" element={<EmBreve titulo="Notas fiscais" />} />

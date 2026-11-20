@@ -16,3 +16,16 @@ export interface ResumoDashboard {
         valor_total: number;
     };
 }
+
+// GET /admin/usuarios: usuário sem a senha, com o resumo das compras
+export type PerfilUsuario = "cliente" | "administrador";
+
+export interface UsuarioAdmin {
+    readonly id: number;
+    nome: string;
+    email: string;
+    perfil: PerfilUsuario;
+    criado_em: string;
+    total_pedidos: number;
+    total_comprado: number; // soma das vendas (pedidos entregues)
+}
