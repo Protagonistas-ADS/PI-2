@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export const Rodape = styled.footer`
     width: 100%;
-    padding: 2.5rem 1rem 1rem 0;
+    padding: 2.5rem 1rem 1rem;
 
     background-color: #2a4a3c;
     color: #ffffff;
@@ -53,6 +53,10 @@ export const ItemContato = styled.li`
 
     color: #ffffffb2;
 
+    svg {
+        flex-shrink: 0;
+        margin-top: 0.25rem;
+    }
 `;
 
 export const LinkContato = styled.a`
@@ -61,48 +65,43 @@ export const LinkContato = styled.a`
     text-decoration: none;
     font-weight: bold;
     color: #ffffffb2;
+    overflow-wrap: anywhere;
 
     &:hover {
         color: #e8912a;
     }
 `;
 
-export const AreaRedesSociais = styled.section`
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+export const TextoContato = styled.p`
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: bold;
+    color: #ffffffb2;
 `;
 
-export const ListaRedesSociais = styled.ul`
-    display: flex;
+export const BotaoWhatsapp = styled.a`
+    display: inline-flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.6rem;
+    align-self: flex-start;
 
-    list-style: none;
-`;
+    padding: 0.7rem 1.2rem;
+    border-radius: 0.4rem;
 
-export const LinkRedeSocial = styled.a`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 2.5rem;
-    height: 2.5rem;
-
-    border: 1px solid #ffffffb2;
-    border-radius: 0.3rem;
-
+    background-color: #25d366;
     color: #ffffff;
-    font-size: 1.5rem;
-    text-deoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    text-decoration: none;
 
-    transition:
-        background-color: 150ms ease,
-        color: 150ms ease;
+    transition: background-color 150ms ease;
+
+    svg {
+        font-size: 1.3rem;
+    }
 
     &:hover {
-        background-color: #e8912a;
-        color: #2a4a3c;
+        background-color: #1ebe5a;
     }
 `;
 
@@ -125,11 +124,11 @@ export const Logo = styled(Link)`
     align-items: center;
     gap: 0.6rem;
 
-    
     text-decoration: none;
 
     img {
         width: 300px;
+        max-width: 100%;
         height: auto;
         object-fit: contain;
     }
