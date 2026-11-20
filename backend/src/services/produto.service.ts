@@ -26,8 +26,31 @@ const ProdutoService = {
 
     async Listar() {
         return ProdutoRepository.Listar();
-    }
+    },
 
+    async Buscar(id: number) {
+        if (!id) {
+            throw criarErro("ID do produto não fornecido.", 400);
+        }
+
+        return ProdutoRepository.Buscar(id);
+    },
+
+    async Deletar(id: number) {
+        if (!id) {
+            throw criarErro("ID do produto não fornecido.", 400);
+        }
+
+        return ProdutoRepository.Deletar(id);
+    },
+
+    async Editar(id: number, nome: string, descricao: string, preco: number, quantidade: number, imagem: string) {
+        if (!id || !nome || !descricao || !preco || !quantidade || !imagem) {
+            throw criarErro("Preencha todos os campos obrigatórios.", 400);
+        }
+
+        return ProdutoRepository.Editar(id, nome, descricao, preco, quantidade, imagem);
+    }
 };
 
 export default ProdutoService;

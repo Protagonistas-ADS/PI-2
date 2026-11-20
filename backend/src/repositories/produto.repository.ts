@@ -37,6 +37,35 @@ const ProdutoRepository = {
         return resultado;
     },
 
+    async Buscar(id: number): Promise<Produto | null> {
+        const [resultado] = await db.execute<Produto[]>(
+            `SELECT
+                nome,
+                descricao,
+                preco_unitario,
+                quantidade_estoque,
+                imagem,
+                ativo
+            FROM produto
+            WHERE id = ?;`, 
+            [id]);
+
+        return resultado.length > 0 ? resultado[0] : null;
+    },
+
+    async Deletar(id: number): Promise<void> {
+        await db.execute(
+            `DELETE FROM produto WHERE id = ?;`, 
+            [id]);
+    },
+
+    async Editar(id: number, nome: string, descricao: string, preco: number, quantidade: number, imagem: string): Promise<void> {
+        await db.execute(
+            `UPDATE produto
+            SET nome = ?, descricao = ?, preco_unitario = ?, quantidade_estoque = ?, imagem = ?
+            WHERE id = ?;`, 
+            [nome, descricao, preco, quantidade, imagem, id]);
+    }
 };
 
 export default ProdutoRepository;
