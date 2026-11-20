@@ -1,19 +1,27 @@
 // Dados oficiais da empresa em um só lugar.
-// Se algo mudar (telefone, e-mail, endereço), basta alterar aqui.
+// Se algo mudar (telefone, e-mail, endereço, horário), basta alterar aqui.
 
 const enderecoCompleto = "R. José de Alencar, 7 - Vila Progresso, Salto - SP";
+// Texto usado para localizar a loja no Google Maps (link e mapa da landing).
+const enderecoMapa = "R. José de Alencar, 7, Vila Progresso, Salto-SP";
 
 export const dadosEmpresa = {
     nomeFantasia: "S FERRARETTO",
+    nomeExibicao: "S Ferraretto", // para usar no meio de frases
+
     razaoSocial: "Ferraretto Comércio e Consultoria Empresarial LTDA",
     cnpj: "30.669.871/0001-63",
     email: "ferrarettoconsultoria@gmail.com",
+    horario: "Segunda a sexta, das 7h às 18h",
     whatsapp: {
         exibicao: "(11) 96499-2626",
         link: "https://wa.me/5511964992626",
     },
     endereco: {
         exibicao: enderecoCompleto,
-        linkMapa: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(enderecoCompleto)}`,
+        cidade: "Salto-SP",
+        linkMapa: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(enderecoMapa)}`,
+        // Mapa embutido (sem chave de API). Só carrega quando a pessoa rola até ele.
+        mapaEmbutido: `https://www.google.com/maps?q=${encodeURIComponent(enderecoMapa)}&output=embed`,
     },
 };

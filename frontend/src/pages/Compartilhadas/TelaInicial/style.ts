@@ -1,5 +1,19 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
+
+import fotoPaletes from "../../../assets/PaleteBackground.jpg";
+
+// Cores da marca (as mesmas do menu, do rodapé e do catálogo).
+const cores = {
+    verde: "#2a4a3c",
+    verdeEscuro: "#21352b",
+    laranja: "#d97713",
+    laranjaEscuro: "#b56510",
+    creme: "#f0e6d6",
+    cremeClaro: "#faf6ef",
+    texto: "#26332c",
+    textoSuave: "#5b6b63",
+};
 
 export const ContainerPagina = styled.div`
     min-height: 100vh;
@@ -9,167 +23,454 @@ export const ContainerPagina = styled.div`
 
 export const Conteudo = styled.main`
     flex: 1;
+    color: ${cores.texto};
 `;
 
+/* ---------- Topo ---------- */
+
 export const Hero = styled.section`
-    min-height: 500px;
     display: flex;
     align-items: center;
-    padding: 60px;
+    min-height: 560px;
+    padding: 80px 8%;
 
-    background-color: #F0E6D6;
+    background:
+        linear-gradient(90deg, rgba(20, 36, 28, 0.92) 0%, rgba(20, 36, 28, 0.75) 50%, rgba(20, 36, 28, 0.35) 100%),
+        url(${fotoPaletes}) center / cover no-repeat;
+    color: #ffffff;
 
-    color: #2a4a3c;
+    @media (max-width: 768px) {
+        min-height: auto;
+        padding: 56px 16px;
+        background:
+            linear-gradient(rgba(20, 36, 28, 0.85), rgba(20, 36, 28, 0.85)),
+            url(${fotoPaletes}) center / cover no-repeat;
+    }
 `;
 
 export const ConteudoHero = styled.div`
-    max-width: 650px;
+    max-width: 640px;
 
     h1 {
-        font-size: clamp(2rem, 5vw, 3.5rem);
-        margin-bottom: 20px;
+        font-size: clamp(2rem, 4.5vw, 3.2rem);
+        line-height: 1.15;
+        margin: 18px 0;
     }
 
-    p {
-        font-size: 1.5rem;
-        line-height: 1.6;
-        letter-spacing: 1px;
-        margin-bottom: 30px;
-        font-weight: bold;
+    > p {
+        font-size: 1.15rem;
+        line-height: 1.7;
+        color: #e8e2d6;
+        margin-bottom: 32px;
     }
 `;
 
-export const BotaoPrincipal = styled.a`
-    display: inline-block;
-    padding: 14px 24px;
-    background-color: #d97713;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.2rem;
-    border-radius: 5px;
-    cursor: pointer;
+export const Selo = styled.span`
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
 
-    color: #F0E6D6;
+    background-color: rgba(217, 119, 19, 0.18);
+    border: 1px solid rgba(217, 119, 19, 0.6);
+    border-radius: 999px;
+    color: #ffd2a1;
+    font-size: 0.9rem;
+`;
+
+export const Botoes = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+
+    @media (max-width: 480px) {
+        flex-direction: column;
+    }
+`;
+
+const estiloBotao = css`
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 26px;
+
+    border-radius: 8px;
+    font-size: 1.05rem;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+`;
+
+export const BotaoPrincipal = styled(Link)`
+    ${estiloBotao}
+    background-color: ${cores.laranja};
+    color: #ffffff;
 
     &:hover {
-        background-color: #b56510;
+        background-color: ${cores.laranjaEscuro};
     }
 `;
 
-export const SufixoMarca = styled.span`
-    color: #d97713;
-`;
+export const BotaoSecundario = styled.a`
+    ${estiloBotao}
+    border: 2px solid #ffffff;
+    color: #ffffff;
 
-
-export const Sobre = styled.section`
-    padding: 70px 8%;
-    background-color: #2a4a3c;
-    color: #f0e6d5;
-`;
-
-export const ConteudoSobre = styled.div`
-    max-width: 1100px;
-    margin: 0 auto;
-    text-align: center;
-
-    h2 {
-        font-size: 2rem;
-        margin-bottom: 20px;
-    }
-
-    p {
-        max-width: 750px;
-        margin: 0 auto 16px;
-        line-height: 1.8;
-        font-weight: bold;
+    &:hover {
+        background-color: #ffffff;
+        color: ${cores.verde};
     }
 `;
 
-export const Cards = styled.div`
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    margin-top: 40px;
+export const ListaConfianca = styled.ul`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 24px;
+    margin-top: 32px;
+    list-style: none;
+
+    li {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #e8e2d6;
+        font-size: 0.95rem;
+    }
+
+    svg {
+        color: ${cores.laranja};
+        flex-shrink: 0;
+    }
+`;
+
+/* ---------- Seções ---------- */
+
+interface SecaoProps {
+    $fundo?: "claro" | "escuro";
+}
+
+export const Secao = styled.section<SecaoProps>`
+    padding: 80px 8%;
+    scroll-margin-top: 90px; /* o menu fica fixo no topo */
+
+    background-color: ${({ $fundo }) =>
+        $fundo === "claro" ? cores.cremeClaro : $fundo === "escuro" ? cores.verde : "#ffffff"};
+    color: ${({ $fundo }) => ($fundo === "escuro" ? cores.creme : cores.texto)};
 
     @media (max-width: 768px) {
-        grid-template-columns: 1fr;
-        gap: 20px;
+        padding: 56px 16px;
     }
 `;
 
-export const Card = styled.div`
-    padding: 30px 24px;
-    background-color: #f0e6d5;
-    color: #2a4a3c;
-    border-radius: 8px;
-
-    h3 {
-        font-size: 1.15rem;
-        margin-bottom: 12px;
-    }
-
-    p {
-        color: #5b6b63;
-        line-height: 1.6;
-        margin: 0;
-    }
-`;
-
-export const CTA = styled.section`
-    background-color: #21352B;
-    color: #ffffff;
-    min-height: 500px;
-
-    display: flex;
-    align-items: center;
-    padding: 60px 8%;
-`;
-
-export const ConteudoCTA = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
+export const ConteudoSecao = styled.div`
     max-width: 1100px;
-    width: 100%;
     margin: 0 auto;
+`;
+
+export const CabecalhoSecao = styled.div`
+    text-align: center;
+    margin-bottom: 40px;
 
     h2 {
-        font-size: 2.5rem;
-        margin-bottom: 20px;
+        font-size: clamp(1.6rem, 3vw, 2.1rem);
+        color: ${cores.verde};
+        margin-bottom: 10px;
     }
 
     p {
-        max-width: 750px;
-        margin: 0 auto 16px;
-        line-height: 1.8;
-        font-weight: bold;
-        color: #f0e6d5;
-        font-size: 1.4rem;
+        color: ${cores.textoSuave};
+        line-height: 1.6;
     }
 `;
 
-export const BotaoCTA = styled(Link)`
+/* ---------- Produtos ---------- */
+
+export const GradeProdutos = styled.div`
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+
+    @media (max-width: 900px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 520px) {
+        grid-template-columns: 1fr;
+    }
+`;
+
+export const CardProduto = styled(Link)`
     display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
+    flex-direction: column;
+    overflow: hidden;
 
-    padding: 14px 24px;
-    margin-top: 24px;
-    
-    background-color: #d97713;
-    border-radius: 8px;
-    cursor: pointer;
+    background-color: #ffffff;
+    border: 1px solid #e6dfd2;
+    border-radius: 10px;
+    color: inherit;
     text-decoration: none;
-    color: #F0E6D6;
-
-    font-size: 1.3rem;
-    font-weight: bold;
+    transition: transform 0.2s, box-shadow 0.2s;
 
     &:hover {
-        background-color: #b56510;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
     }
+
+    img {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+        background-color: ${cores.creme};
+    }
+
+    div {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        gap: 8px;
+        padding: 18px;
+    }
+
+    h3 {
+        font-size: 1.1rem;
+        color: ${cores.verde};
+    }
+
+    p {
+        flex: 1;
+        color: ${cores.textoSuave};
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    strong {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        column-gap: 4px;
+        color: ${cores.laranja};
+        font-size: 1.2rem;
+        white-space: nowrap;
+    }
+
+    span {
+        color: ${cores.textoSuave};
+        font-size: 0.85rem;
+        font-weight: normal;
+    }
+`;
+
+export const AvisoProdutos = styled.p`
+    padding: 24px;
+    text-align: center;
+    color: ${cores.textoSuave};
+    background-color: ${cores.cremeClaro};
+    border-radius: 10px;
+`;
+
+export const LinkCentral = styled(Link)`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: fit-content;
+    margin: 36px auto 0;
+
+    color: ${cores.laranja};
+    font-weight: bold;
+    text-decoration: none;
+
+    &:hover {
+        color: ${cores.laranjaEscuro};
+        text-decoration: underline;
+    }
+`;
+
+/* ---------- Como funciona ---------- */
+
+export const Passos = styled.ol`
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    list-style: none;
+
+    @media (max-width: 900px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 560px) {
+        grid-template-columns: 1fr;
+    }
+`;
+
+export const Passo = styled.li`
+    position: relative;
+    padding: 28px 22px;
+
+    background-color: #ffffff;
+    border: 1px solid #e6dfd2;
+    border-radius: 10px;
+
+    > svg {
+        font-size: 1.8rem;
+        color: ${cores.verde};
+        margin-bottom: 14px;
+    }
+
+    h3 {
+        font-size: 1.05rem;
+        color: ${cores.verde};
+        margin-bottom: 8px;
+    }
+
+    p {
+        color: ${cores.textoSuave};
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+`;
+
+export const NumeroPasso = styled.span`
+    position: absolute;
+    top: 18px;
+    right: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+
+    background-color: ${cores.laranja};
+    border-radius: 50%;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 0.9rem;
+`;
+
+/* ---------- Sobre ---------- */
+
+export const GradeSobre = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+
+    @media (max-width: 860px) {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+`;
+
+export const TextoSobre = styled.div`
+    h2 {
+        font-size: clamp(1.6rem, 3vw, 2.1rem);
+        margin-bottom: 18px;
+        color: #ffffff;
+    }
+
+    p {
+        line-height: 1.8;
+        margin-bottom: 14px;
+        color: ${cores.creme};
+    }
+`;
+
+export const Diferenciais = styled.ul`
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    list-style: none;
+`;
+
+export const Diferencial = styled.li`
+    display: flex;
+    gap: 16px;
+    padding: 20px;
+
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(240, 230, 214, 0.15);
+    border-radius: 10px;
+
+    > svg {
+        font-size: 1.6rem;
+        color: ${cores.laranja};
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    h3 {
+        font-size: 1.05rem;
+        color: #ffffff;
+        margin-bottom: 6px;
+    }
+
+    p {
+        color: #d8d0c2;
+        line-height: 1.6;
+        font-size: 0.95rem;
+    }
+`;
+
+/* ---------- Onde estamos ---------- */
+
+export const GradeContato = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 32px;
+    align-items: stretch;
+
+    @media (max-width: 860px) {
+        grid-template-columns: 1fr;
+    }
+`;
+
+export const ListaContato = styled.ul`
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    list-style: none;
+
+    li {
+        display: flex;
+        gap: 14px;
+    }
+
+    li > svg {
+        font-size: 1.3rem;
+        color: ${cores.laranja};
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    div {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 0;
+    }
+
+    strong {
+        color: ${cores.verde};
+    }
+
+    a,
+    span {
+        color: ${cores.textoSuave};
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+    a:hover {
+        color: ${cores.laranja};
+    }
+`;
+
+export const Mapa = styled.iframe`
+    width: 100%;
+    min-height: 340px;
+    border: 0;
+    border-radius: 10px;
+    background-color: ${cores.creme};
 `;
