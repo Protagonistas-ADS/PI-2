@@ -1,15 +1,14 @@
 import ProdutoService from "../services/produto.service";
 import { Request, Response, NextFunction } from "express";
-import { criarErro } from "../utils/criarErro";
 
 const ProdutoController = {
     async Criar(req: Request, res: Response, next: NextFunction) {
         try {
             const { nome, descricao, preco, quantidade, imagem } = req.body;
 
-            await ProdutoService.Criar(nome, descricao, preco, quantidade, imagem);
+            const id = await ProdutoService.Criar(nome, descricao, preco, quantidade, imagem ?? null);
 
-            res.sendStatus(201);
+            res.status(201).json({ id });
 
         } catch (error) {
             next(error);
@@ -18,7 +17,18 @@ const ProdutoController = {
 
     async Listar(req: Request, res: Response, next: NextFunction) {
         try {
-            const produtos = await ProdutoService.Listar();
+            const produtos = await ProdutoService.ListarAtivos();
+
+            res.status(200).json({ produtos });
+
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    async ListarTodos(req: Request, res: Response, next: NextFunction) {
+        try {
+            const produtos = await ProdutoService.ListarTodos();
 
             res.status(200).json({ produtos });
 
@@ -29,13 +39,8 @@ const ProdutoController = {
 
     async Buscar(req: Request, res: Response, next: NextFunction) {
         try {
-            const { id } = req.params;
-
-            const produto = await ProdutoService.Buscar(parseInt(id));
-
-            if (!produto) {
-                throw criarErro("Produto não encontrado.", 404);
-            }
+            // O :id já foi conferido pelo Zod (IdParamSchema).
+            const produto = await ProdutoService.Buscar(Number(req.params.id));
 
             res.status(200).json({ produto });
 
@@ -44,11 +49,11 @@ const ProdutoController = {
         }
     },
 
-    async Deletar(req: Request, res: Response, next: NextFunction) {
+    async Editar(req: Request, res: Response, next: NextFunction) {
         try {
-            const { id } = req.params;
+            const { nome, descricao, preco, quantidade, imagem } = req.body;
 
-            await ProdutoService.Deletar(parseInt(id));
+            await ProdutoService.Editar(Number(req.params.id), nome, descricao, preco, quantidade, imagem ?? null);
 
             res.sendStatus(204);
 
@@ -57,12 +62,9 @@ const ProdutoController = {
         }
     },
 
-    async Editar(req: Request, res: Response, next: NextFunction) {
+    async AlterarAtivo(req: Request, res: Response, next: NextFunction) {
         try {
-            const { id } = req.params;
-            const { nome, descricao, preco, quantidade, imagem } = req.body;
-
-            await ProdutoService.Editar(parseInt(id), nome, descricao, preco, quantidade, imagem);
+            await ProdutoService.AlterarAtivo(Number(req.params.id), req.body.ativo);
 
             res.sendStatus(204);
 

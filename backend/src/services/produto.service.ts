@@ -1,55 +1,52 @@
-
 import ProdutoRepository from "../repositories/produto.repository";
 import { criarErro } from "../utils/criarErro";
 
+// Os campos já chegam validados pelo Zod (ProdutoSchema), então aqui ficam só as regras de negócio.
 const ProdutoService = {
 
-    async Criar(
-        nome: string,
-        descricao: string,
-        preco: number,
-        quantidade: number,
-        imagem: string | null = null
-    ) {
-        if (!nome || !descricao || !preco || !quantidade) {
-            throw criarErro("Preencha todos os campos obrigatórios.", 400);
-        }
-
-        await ProdutoRepository.Criar(
-            nome,
-            descricao,
-            preco,
-            quantidade,
-            imagem
-        );
+    async Criar(nome: string, descricao: string, preco: number, quantidade: number, imagem: string | null = null) {
+        return ProdutoRepository.Criar(nome, descricao, preco, quantidade, imagem);
     },
 
-    async Listar() {
-        return ProdutoRepository.Listar();
+    // Catálogo público: só produtos ativos.
+    async ListarAtivos() {
+        return ProdutoRepository.Listar(true);
     },
 
+    // Administrador: todos, inclusive os desativados.
+    async ListarTodos() {
+        return ProdutoRepository.Listar(false);
+    },
+
+    // Público: um produto desativado responde como "não encontrado".
     async Buscar(id: number) {
-        if (!id) {
-            throw criarErro("ID do produto não fornecido.", 400);
+        const produto = await ProdutoRepository.Buscar(id, true);
+
+        if (!produto) {
+            throw criarErro("Produto não encontrado.", 404);
         }
 
-        return ProdutoRepository.Buscar(id);
+        return produto;
     },
 
-    async Deletar(id: number) {
-        if (!id) {
-            throw criarErro("ID do produto não fornecido.", 400);
-        }
+    async Editar(id: number, nome: string, descricao: string, preco: number, quantidade: number, imagem: string | null = null) {
+        await ProdutoService.GarantirExistencia(id);
 
-        return ProdutoRepository.Deletar(id);
+        await ProdutoRepository.Editar(id, nome, descricao, preco, quantidade, imagem);
     },
 
-    async Editar(id: number, nome: string, descricao: string, preco: number, quantidade: number, imagem: string) {
-        if (!id || !nome || !descricao || !preco || !quantidade || !imagem) {
-            throw criarErro("Preencha todos os campos obrigatórios.", 400);
-        }
+    async AlterarAtivo(id: number, ativo: boolean) {
+        await ProdutoService.GarantirExistencia(id);
 
-        return ProdutoRepository.Editar(id, nome, descricao, preco, quantidade, imagem);
+        await ProdutoRepository.AlterarAtivo(id, ativo);
+    },
+
+    async GarantirExistencia(id: number) {
+        const produto = await ProdutoRepository.Buscar(id, false);
+
+        if (!produto) {
+            throw criarErro("Produto não encontrado.", 404);
+        }
     }
 };
 

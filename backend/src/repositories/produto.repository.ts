@@ -1,7 +1,7 @@
 import db from "../configs/db";
 import { RowDataPacket, ResultSetHeader } from "mysql2";
 
-export interface Produto extends RowDataPacket {
+export interface Produto {
     id: number;
     nome: string;
     descricao: string;
@@ -11,60 +11,72 @@ export interface Produto extends RowDataPacket {
     ativo: boolean;
 }
 
+type LinhaProduto = Produto & RowDataPacket;
+
+// O MySQL devolve DECIMAL como texto ("45.00") e BOOLEAN como 0/1.
+// Aqui convertemos para número e true/false, para o frontend receber os tipos certos.
+function formatarProduto(linha: LinhaProduto): Produto {
+    return {
+        id: linha.id,
+        nome: linha.nome,
+        descricao: linha.descricao,
+        preco_unitario: Number(linha.preco_unitario),
+        quantidade_estoque: linha.quantidade_estoque,
+        imagem: linha.imagem,
+        ativo: Boolean(linha.ativo)
+    };
+}
+
+const CAMPOS = `id, nome, descricao, preco_unitario, quantidade_estoque, imagem, ativo`;
+
 const ProdutoRepository = {
 
-    async Criar(nome: string, descricao: string, preco: number, quantidade: number, imagem: string | null): Promise<ResultSetHeader> {
+    async Criar(nome: string, descricao: string, preco: number, quantidade: number, imagem: string | null): Promise<number> {
         const [resultado] = await db.execute<ResultSetHeader>(`
             INSERT INTO produto (nome, descricao, preco_unitario, quantidade_estoque, imagem)
             VALUES (?, ?, ?, ?, ?);
         `, [nome, descricao, preco, quantidade, imagem]);
 
-        return resultado;
+        return resultado.insertId;
     },
 
-    async Listar(): Promise<Produto[]> {
-        const [resultado] = await db.execute<Produto[]>(`
-            SELECT
-                nome,
-                descricao,
-                preco_unitario,
-                quantidade_estoque,
-                imagem,
-                ativo
-            FROM produto;
+    // apenasAtivos = true: catálogo público. false: lista completa para o administrador.
+    async Listar(apenasAtivos: boolean): Promise<Produto[]> {
+        const [resultado] = await db.execute<LinhaProduto[]>(`
+            SELECT ${CAMPOS}
+            FROM produto
+            ${apenasAtivos ? "WHERE ativo = 1" : ""}
+            ORDER BY nome;
         `);
 
-        return resultado;
+        return resultado.map(formatarProduto);
     },
 
-    async Buscar(id: number): Promise<Produto | null> {
-        const [resultado] = await db.execute<Produto[]>(
-            `SELECT
-                nome,
-                descricao,
-                preco_unitario,
-                quantidade_estoque,
-                imagem,
-                ativo
+    async Buscar(id: number, apenasAtivos: boolean): Promise<Produto | null> {
+        const [resultado] = await db.execute<LinhaProduto[]>(`
+            SELECT ${CAMPOS}
             FROM produto
-            WHERE id = ?;`, 
-            [id]);
+            WHERE id = ? ${apenasAtivos ? "AND ativo = 1" : ""};
+        `, [id]);
 
-        return resultado.length > 0 ? resultado[0] : null;
+        const linha = resultado[0];
+
+        return linha ? formatarProduto(linha) : null;
     },
 
-    async Deletar(id: number): Promise<void> {
-        await db.execute(
-            `DELETE FROM produto WHERE id = ?;`, 
-            [id]);
-    },
-
-    async Editar(id: number, nome: string, descricao: string, preco: number, quantidade: number, imagem: string): Promise<void> {
-        await db.execute(
-            `UPDATE produto
+    async Editar(id: number, nome: string, descricao: string, preco: number, quantidade: number, imagem: string | null): Promise<void> {
+        await db.execute(`
+            UPDATE produto
             SET nome = ?, descricao = ?, preco_unitario = ?, quantidade_estoque = ?, imagem = ?
-            WHERE id = ?;`, 
-            [nome, descricao, preco, quantidade, imagem, id]);
+            WHERE id = ?;
+        `, [nome, descricao, preco, quantidade, imagem, id]);
+    },
+
+    // Em vez de apagar (o que quebraria pedidos e notas antigos), só liga/desliga o produto.
+    async AlterarAtivo(id: number, ativo: boolean): Promise<void> {
+        await db.execute(`
+            UPDATE produto SET ativo = ? WHERE id = ?;
+        `, [ativo, id]);
     }
 };
 
