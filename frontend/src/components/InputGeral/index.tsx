@@ -9,6 +9,7 @@ interface InputGeralProps {
     onChange: (event: ChangeEvent<HTMLInputElement>) => void;
     required?: boolean;
     minLength?: number;
+    autoComplete?: string;
 }
 
 function InputGeral({
@@ -18,7 +19,8 @@ function InputGeral({
     value,
     onChange,
     required = false,
-    minLength
+    minLength,
+    autoComplete
 }: InputGeralProps) {
     return (
         <div>
@@ -31,6 +33,7 @@ function InputGeral({
                 onChange={onChange}
                 required={required}
                 minLength={minLength}
+                autoComplete={autoComplete}
             />
         </div>
     );
