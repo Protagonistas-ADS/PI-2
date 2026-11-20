@@ -31,7 +31,7 @@ function Login() {
             event.preventDefault();
             
             try {
-                const data = await autenticarLogin({ email, senha });
+                const data = await autenticarLogin({ email: email.trim().toLowerCase(), senha });
                 
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("payload", JSON.stringify(data.payload));
@@ -60,7 +60,8 @@ function Login() {
             >
                 <InputGeral
                     type="email"
-                    placeholder="seuEmail@gmail.com"
+                    placeholder="seu@email.com"
+                    autoComplete="email"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     required
