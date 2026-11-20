@@ -104,9 +104,10 @@ Na entrevista com o cliente, identificamos três dores principais:
 
 - 🔑 Cadastro, login e edição de perfil
 - 🛍️ Catálogo de paletes aberto (sem login), com quantidade e carrinho direto no card
-- 📝 Realização de **pedidos** a partir do carrinho
-- 🔎 Acompanhamento do status dos pedidos
-- ❌ Cancelamento de pedidos
+- 🛒 Página do carrinho (`/carrinho`) com data de retirada e observação
+- 📝 Realização de **pedidos** a partir do carrinho (estoque conferido na hora)
+- 🔎 Acompanhamento do status dos pedidos (histórico completo)
+- ❌ Cancelamento de pedidos enquanto aguardam confirmação
 
 </td>
 <td width="50%" valign="top">
@@ -128,9 +129,9 @@ Na entrevista com o cliente, identificamos três dores principais:
 flowchart LR
     A(["👤 Cliente"]) --> B["🛍️ Catálogo<br/>e carrinho"]
     B --> D["📦 Pedido"]
-    D --> E["💰 Venda"]
+    D -- "entregue" --> E["💰 Venda"]
     E --> F["🧾 Nota fiscal"]
-    E -. "baixa no estoque" .-> G["📊 Movimentação<br/>de estoque"]
+    D -. "confirmado: baixa no estoque" .-> G["📊 Movimentação<br/>de estoque"]
     H(["🛠️ Administrador"]) -. "gerencia" .-> D
     H -.-> G
 
@@ -147,14 +148,18 @@ flowchart LR
 
 ```mermaid
 stateDiagram-v2
-    [*] --> pendente
-    pendente --> respondido : admin responde
-    pendente --> cancelado : cliente cancela
-    respondido --> entregue : pedido retirado
-    respondido --> cancelado : cliente cancela
+    [*] --> pendente : cliente envia o pedido
+    pendente --> confirmado : admin confirma (baixa o estoque)
+    pendente --> cancelado : cliente ou admin cancela
+    confirmado --> pronto_retirada : admin separa
+    confirmado --> cancelado : admin cancela (devolve o estoque)
+    pronto_retirada --> entregue : cliente retira (gera a venda)
+    pronto_retirada --> cancelado : admin cancela (devolve o estoque)
     entregue --> [*]
     cancelado --> [*]
 ```
+
+O cliente só cancela pelo site enquanto o pedido está **pendente**. Depois de confirmado, só o administrador cancela.
 
 </details>
 
@@ -308,7 +313,7 @@ erDiagram
 |--------|-----------|
 | `usuario` | Clientes e administradores (`perfil`) |
 | `produto` | Paletes do catálogo, com preço e saldo em estoque |
-| `pedido` / `pedido_item` | Pedidos e seus itens. Status: pendente, respondido, entregue, cancelado |
+| `pedido` / `pedido_item` | Pedidos e seus itens, com data prevista de retirada e observação. Status: pendente, confirmado, pronto_retirada, entregue, cancelado |
 | `venda` | Venda gerada a partir de um pedido |
 | `nota` / `nota_item` | Nota fiscal da venda e seus itens |
 | `movimentacao_estoque` | Histórico de entradas e saídas por produto |
@@ -364,10 +369,40 @@ Produtos não são apagados: desativar tira o produto do catálogo, mas preserva
 
 | Método | Rota | Descrição | Auth |
 |:------:|------|-----------|:----:|
-| 🟢 `GET` | `/pedidos/cliente` | Pedidos do cliente logado | 🔒 |
-| 🟢 `GET` | `/pedidos/itens/:id` | Itens de um pedido | 🔒 |
-| 🔵 `POST` | `/pedidos` | Criar pedido (`{ "itens": [{ "produtoId": 1, "quantidade": 10 }] }`) | 🔒 |
-| 🟠 `PATCH` | `/pedidos/cancelar/:id` | Cancelar pedido | 🔒 |
+| 🔵 `POST` | `/pedidos` | Criar pedido → `201 { pedidoId }` | 🔒 cliente |
+| 🟢 `GET` | `/pedidos/cliente` | Pedidos do cliente logado (todos os status, com `valor_total`) | 🔒 cliente |
+| 🟢 `GET` | `/pedidos/itens/:id` | Itens de um pedido do próprio cliente | 🔒 cliente |
+| 🟠 `PATCH` | `/pedidos/cancelar/:id` | Cancelar pedido (só `pendente`) → `204` | 🔒 cliente |
+| 🟢 `GET` | `/pedidos` | Todos os pedidos, com nome e e-mail do cliente | 🔒 admin |
+| 🟠 `PATCH` | `/pedidos/:id/status` | Mudar status `{ "status": "confirmado" }` → `200 { id, status_anterior, status }` | 🔒 admin |
+
+Corpo de `POST /pedidos`:
+
+```json
+{
+  "itens": [{ "produto_id": 1, "quantidade": 10 }],
+  "previsao_busca": "2026-11-25",
+  "observacao": "Vou buscar com caminhão no fim da tarde."
+}
+```
+
+- `previsao_busca` (opcional): data `AAAA-MM-DD`, de hoje até 60 dias. `observacao` (opcional): até 500 caracteres.
+- Estoque insuficiente ou produto desativado → `409` com o nome do produto. Produto inexistente → `404`.
+- Status: `pendente → confirmado → pronto_retirada → entregue`, ou `cancelado`. Mudança fora dessa ordem → `409`.
+- **Confirmar** baixa o estoque (saída); **cancelar** um pedido confirmado devolve (entrada); **entregar** registra a venda. Tudo na mesma transação.
+
+</details>
+
+<details open>
+<summary><b>💰 Vendas</b> (somente administrador)</summary>
+
+<br>
+
+| Método | Rota | Descrição | Auth |
+|:------:|------|-----------|:----:|
+| 🔵 `POST` | `/vendas` | Registrar a venda de um pedido `entregue` que ficou sem venda `{ "pedido_id": 3 }` | 🔒 admin |
+
+Pedidos marcados como entregues pelo sistema já ganham a venda sozinhos; esta rota serve para pedidos antigos. Não mexe no estoque (ele baixou na confirmação).
 
 </details>
 
@@ -393,7 +428,7 @@ Cada entrada ou saída atualiza o saldo do produto e grava o histórico na mesma
 
 <br>
 
-Erros seguem o formato `{ "erro": "mensagem" }`. Erros de validação (Zod) retornam `400` com os detalhes em `detalhes`.
+Erros seguem o formato `{ "erro": "mensagem" }`, sempre em português. Erros de validação (Zod) retornam `400` com os detalhes em `detalhes`. Os códigos usados: `400` dados inválidos (inclusive JSON mal formado), `401` sem login, `403` sem permissão, `404` não encontrado (inclusive rota inexistente), `409` conflito com a regra de negócio (ex.: estoque insuficiente), `500` erro interno.
 
 ```json
 {
@@ -416,6 +451,7 @@ Erros seguem o formato `{ "erro": "mensagem" }`. Erros de validação (Zod) reto
 | `/cadastro` | Cadastro de usuário | 🌐 Pública |
 | `/login` | Login | 🌐 Pública |
 | `/catalogo` | Catálogo de produtos e carrinho (login só para finalizar o pedido) | 🌐 Pública |
+| `/carrinho` | Carrinho: revisar itens, data de retirada, observação e enviar o pedido | 🌐 Pública (envio exige login de cliente) |
 | `/perfil` | Perfil do usuário | 🔒 Logado |
 | `/clientePedidos` | Meus Pedidos (acompanhamento dos pedidos) | 🔒 Logado |
 
@@ -524,6 +560,7 @@ Os scripts ficam em `backend/src/database/`:
 | `seed.sql` | Insere dados de teste (usuários, produtos, pedidos, venda e nota) | Opcional |
 | `migracao-remover-cotacao.sql` | Só para quem já tinha o banco antigo: remove as tabelas de cotação sem mexer no resto | Só se o banco é antigo |
 | `migracao-imagens-produto.sql` | Só para quem já tinha o seed antigo: corrige o caminho das imagens dos produtos | Só se o banco é antigo |
+| `migracao-status-pedido.sql` | Só para quem já tinha o banco antigo: novo fluxo de status do pedido (tira o `respondido`) e coluna `observacao` | Só se o banco é antigo |
 
 <details open>
 <summary><b>Opção A: MySQL Workbench</b></summary>
@@ -812,8 +849,9 @@ Legenda: ✅ pronto · 🚧 em andamento · ⏳ a fazer
 | Pedido (visão do cliente) | ✅ |
 | Produto (catálogo público, cadastro, edição, ativar/desativar) | ✅ |
 | Estoque e movimentações | 🚧 |
-| Pedido (visão do admin) | ⏳ |
-| Venda e nota fiscal | ⏳ |
+| Pedido (visão do admin: listar e mudar status) | ✅ |
+| Venda (automática na entrega) | ✅ |
+| Nota fiscal | ⏳ |
 
 </td>
 <td width="50%" valign="top">
@@ -824,6 +862,7 @@ Legenda: ✅ pronto · 🚧 em andamento · ⏳ a fazer
 |------|:------:|
 | Tela inicial, cadastro e login | ✅ |
 | Catálogo e carrinho | ✅ |
+| Página do carrinho e envio do pedido | ✅ |
 | Perfil do usuário | ✅ |
 | Meus Pedidos do cliente | ✅ |
 | Dashboard e tabelas do administrador | ⏳ |
