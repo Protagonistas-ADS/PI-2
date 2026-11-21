@@ -7,6 +7,7 @@ import Login from "../pages/Compartilhadas/Login";
 import Perfil from "../pages/Cliente/Perfil";
 import MeusPedidos from "../pages/Cliente/MeusPedidos";
 import Carrinho from "../pages/Cliente/Carrinho";
+import NaoEncontrada from "../pages/Compartilhadas/NaoEncontrada";
 
 import Dashboard from "../pages/Admin/Dashboard";
 import PerfilAdmin from "../pages/Admin/Perfil";
@@ -90,6 +91,9 @@ function Rotas() {
                 <Route path="notas" element={<NotasAdmin />} />
                 <Route path="*" element={<NaoEncontradaAdmin />} />
             </Route>
+
+            {/* Qualquer outro endereço: página 404 do site */}
+            <Route path="*" element={<NaoEncontrada />} />
         </Routes>
     );
 }
