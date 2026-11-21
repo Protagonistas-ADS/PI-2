@@ -24,13 +24,17 @@ import {
 function Login() {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
+    const [entrando, setEntrando] = useState(false);
 
     const navigate = useNavigate();
 
 
     async function handleLogin(event: SyntheticEvent<HTMLFormElement>) {
             event.preventDefault();
-            
+            // Evita o clique duplo (cada tentativa conta no limite de login do servidor)
+            if (entrando) return;
+            setEntrando(true);
+
             try {
                 const data = await autenticarLogin({ email: email.trim().toLowerCase(), senha });
                 
@@ -40,6 +44,7 @@ function Login() {
                 navigate(obterDestinoAposLogin(data.payload.perfil), { replace: true });
             } catch (error) {
                 swalErro(obterMensagemErro(error, "Não foi possível fazer login"));
+                setEntrando(false);
             }
         }
 
@@ -79,10 +84,11 @@ function Login() {
                 />
 
                 <BotaoGeral
-                    texto="Entrar"
+                    texto={entrando ? "Entrando..." : "Entrar"}
                     width="200px"
                     height="60px"
                     type="submit"
+                    desabilitado={entrando}
                 />
 
             </FormularioGeral>

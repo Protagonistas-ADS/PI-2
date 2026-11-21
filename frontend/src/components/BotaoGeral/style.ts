@@ -30,8 +30,13 @@ export const BotaoAcao = styled.button<BotaoProps>`
     cursor: pointer;
     transition: background-color 0.2s ease;
 
-    &:hover {
+    &:hover:not(:disabled) {
         background-color: #b56510;
+    }
+
+    &:disabled {
+        opacity: 0.65;
+        cursor: wait;
     }
 `;
 

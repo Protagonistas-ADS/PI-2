@@ -27,11 +27,14 @@ function Cadastro() {
     const [nome, setNome] = useState("");
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
+    const [enviando, setEnviando] = useState(false);
 
     const navigate = useNavigate();
 
     async function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
         event.preventDefault();
+        if (enviando) return; // evita cadastrar duas vezes com clique duplo
+        setEnviando(true);
 
         try {
             await cadastrarUsuario({
@@ -43,6 +46,7 @@ function Cadastro() {
             navigate('/login');
         } catch (error) {
             swalErro(obterMensagemErro(error, "Não foi possível cadastrar o usuário"));
+            setEnviando(false);
         }
     }
 
@@ -90,10 +94,11 @@ function Cadastro() {
                 />
                 
                 <BotaoGeral
-                    texto="Cadastrar-se"
+                    texto={enviando ? "Cadastrando..." : "Cadastrar-se"}
                     width="200px"
                     height="60px"
                     type="submit"
+                    desabilitado={enviando}
                 />
             </FormularioGeral>
         </ContainerPagina>

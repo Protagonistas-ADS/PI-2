@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa";
-import { FiEye, FiEyeOff } from "react-icons/fi";
+import { FiEye, FiEyeOff, FiRefreshCw } from "react-icons/fi";
 
 import BotaoGeral from "../BotaoGeral";
 
@@ -15,6 +15,7 @@ import {
     PainelPerfil,
     GrupoCampo,
     CampoInformacao,
+    AvisoConta,
 } from "./style";
 
 // "2026-11-20T15:00:00.000Z" -> "20/11/2026"
@@ -26,7 +27,10 @@ function formatarData(valor: string | undefined) {
 // O e-mail não é editável (é o login da conta).
 function PainelConta() {
     const [usuario, setUsuario] = useState<UsuarioLogado | null>(null);
+    const [carregando, setCarregando] = useState(true);
     const [erroCarregamento, setErroCarregamento] = useState("");
+    const [salvandoNome, setSalvandoNome] = useState(false);
+    const [salvandoSenha, setSalvandoSenha] = useState(false);
     const [nome, setNome] = useState("");
     const [senha, setSenha] = useState("");
     const [senhaNova, setSenhaNova] = useState("");
@@ -38,6 +42,7 @@ function PainelConta() {
     const nomeAlterado = usuario !== null && nome !== usuario.nome;
 
     async function carregarUsuario() {
+        setCarregando(true);
         try {
             const dados = await buscarUsuarioLogado();
             setUsuario(dados);
@@ -45,6 +50,8 @@ function PainelConta() {
             setErroCarregamento("");
         } catch (error) {
             setErroCarregamento(obterMensagemErro(error, "Não foi possível carregar os dados da conta."));
+        } finally {
+            setCarregando(false);
         }
     }
 
@@ -68,23 +75,31 @@ function PainelConta() {
     }
 
     async function atualizarNome() {
+        if (salvandoNome) return;
+
         if (nome.trim().length < 2) {
             swalAviso("O nome deve ter ao menos 2 caracteres.");
             return;
         }
 
+        setSalvandoNome(true);
         try {
             await atualizarUsuario({ nome: nome.trim() });
-            await carregarUsuario();
+            const dados = await buscarUsuarioLogado();
+            setUsuario(dados);
+            setNome(dados.nome);
             toastSucesso("Nome atualizado com sucesso!");
         } catch (error) {
             swalErro(obterMensagemErro(error, "Não foi possível alterar o nome"));
+        } finally {
+            setSalvandoNome(false);
         }
     }
 
     async function atualizarSenha() {
-        if (!validarSenha()) return;
+        if (salvandoSenha || !validarSenha()) return;
 
+        setSalvandoSenha(true);
         try {
             await atualizarUsuario({ senhaAtual: senha, senhaNova });
 
@@ -95,6 +110,8 @@ function PainelConta() {
             toastSucesso("Senha alterada com sucesso!");
         } catch (error) {
             swalErro(obterMensagemErro(error, "Não foi possível alterar a senha"));
+        } finally {
+            setSalvandoSenha(false);
         }
     }
 
@@ -102,8 +119,23 @@ function PainelConta() {
         carregarUsuario();
     }, []);
 
-    if (erroCarregamento) {
-        return <p>{erroCarregamento}</p>;
+    if (carregando && !usuario) {
+        return (
+            <AvisoConta role="status">
+                <p>Carregando os dados da conta...</p>
+            </AvisoConta>
+        );
+    }
+
+    if (erroCarregamento || !usuario) {
+        return (
+            <AvisoConta role="alert">
+                <p>{erroCarregamento || "Não foi possível carregar os dados da conta."}</p>
+                <button type="button" onClick={carregarUsuario}>
+                    <FiRefreshCw aria-hidden="true" /> Tentar de novo
+                </button>
+            </AvisoConta>
+        );
     }
 
     return (
@@ -128,7 +160,8 @@ function PainelConta() {
                             onMouseDown={(event) => event.preventDefault()}
                             onClick={atualizarNome}
                             className="button-alterar-nome"
-                            aria-label="Salvar nome"
+                            aria-label={salvandoNome ? "Salvando nome" : "Salvar nome"}
+                            disabled={salvandoNome}
                         >
                             <FaCheck />
                         </button>
@@ -137,17 +170,17 @@ function PainelConta() {
 
                 <GrupoCampo>
                     <label>E-mail:</label>
-                    <p>{usuario?.email ?? ""}</p>
+                    <p>{usuario.email}</p>
                 </GrupoCampo>
 
                 <GrupoCampo>
                     <label>Perfil:</label>
-                    <p>{usuario?.perfil === "administrador" ? "Administrador" : "Cliente"}</p>
+                    <p>{usuario.perfil === "administrador" ? "Administrador" : "Cliente"}</p>
                 </GrupoCampo>
 
                 <GrupoCampo>
                     <label>Conta criada em:</label>
-                    <p>{formatarData(usuario?.criado_em)}</p>
+                    <p>{formatarData(usuario.criado_em)}</p>
                 </GrupoCampo>
             </PainelPerfil>
 
@@ -224,11 +257,12 @@ function PainelConta() {
                 </GrupoCampo>
 
                 <BotaoGeral
-                    texto="Salvar"
+                    texto={salvandoSenha ? "Salvando..." : "Salvar"}
                     width="100%"
                     padding="15px"
                     margin="28px 0"
                     onClick={atualizarSenha}
+                    desabilitado={salvandoSenha}
                 />
             </PainelPerfil>
         </GridPerfil>

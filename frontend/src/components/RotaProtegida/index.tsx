@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import axios from "axios";
 import { Navigate, useLocation } from "react-router-dom";
+import { FiRefreshCw } from "react-icons/fi";
 
 import { buscarUsuarioLogado } from "../../services/usuarioApi";
 import type { PerfilUsuario } from "../../types/usuario";
 import { guardarDestinoAposLogin, paginaInicial, sairDaConta } from "../../utils/destinoAposLogin";
+import { obterMensagemErro } from "../../utils/obterMensagemErro";
 import { toastAviso } from "../../utils/alertas";
+
+import { AvisoRota } from "./style";
 
 interface RotaProtegidaProps {
     children: ReactNode;
@@ -20,6 +24,8 @@ interface RotaProtegidaProps {
 function RotaProtegida({ children, perfil }: RotaProtegidaProps) {
     const [carregamento, setCarregamento] = useState(true);
     const [perfilLogado, setPerfilLogado] = useState<PerfilUsuario | null>(null);
+    const [erroConexao, setErroConexao] = useState("");
+    const [tentativa, setTentativa] = useState(0);
     const location = useLocation();
 
     useEffect(() => {
@@ -29,13 +35,19 @@ function RotaProtegida({ children, perfil }: RotaProtegidaProps) {
                 return;
             }
 
+            setCarregamento(true);
+            setErroConexao("");
+
             try {
                 const usuario = await buscarUsuarioLogado();
                 setPerfilLogado(usuario.perfil);
             } catch (error) {
-                // Token vencido ou inválido: sai da conta
                 if (axios.isAxiosError(error) && error.response?.status === 401) {
+                    // Token vencido ou inválido: sai da conta (vai para o login)
                     sairDaConta();
+                } else {
+                    // Servidor fora do ar ou erro inesperado: a sessão continua; mostra o aviso
+                    setErroConexao(obterMensagemErro(error, "Não foi possível verificar sua conta agora."));
                 }
             } finally {
                 setCarregamento(false);
@@ -43,7 +55,7 @@ function RotaProtegida({ children, perfil }: RotaProtegidaProps) {
         }
 
         verificarUsuario();
-    }, []);
+    }, [tentativa]);
 
     const acessoNegado = perfilLogado !== null && perfil !== undefined && perfilLogado !== perfil;
 
@@ -55,7 +67,22 @@ function RotaProtegida({ children, perfil }: RotaProtegidaProps) {
     }, [acessoNegado, perfil]);
 
     if (carregamento) {
-        return <p style={{ padding: 24 }}>Carregando...</p>;
+        return (
+            <AvisoRota role="status">
+                <p>Carregando...</p>
+            </AvisoRota>
+        );
+    }
+
+    if (erroConexao) {
+        return (
+            <AvisoRota role="alert">
+                <p>{erroConexao}</p>
+                <button type="button" onClick={() => setTentativa((valor) => valor + 1)}>
+                    <FiRefreshCw aria-hidden="true" /> Tentar de novo
+                </button>
+            </AvisoRota>
+        );
     }
 
     if (!perfilLogado) {

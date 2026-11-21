@@ -11,6 +11,7 @@ interface BotaoGeralProps {
     type?: "button" | "submit";
     margin?: string;
     padding?: string;
+    desabilitado?: boolean; // trava o botão (ex.: enquanto envia, para não clicar duas vezes)
 }
 
 function BotaoGeral({
@@ -23,6 +24,7 @@ function BotaoGeral({
     type = "button",
     margin,
     padding,
+    desabilitado = false,
 }: BotaoGeralProps) {
 
     if (destino) {
@@ -44,6 +46,8 @@ function BotaoGeral({
         <BotaoAcao
             type={type}
             onClick={onClick}
+            disabled={desabilitado}
+            aria-busy={desabilitado || undefined}
             width={width}
             height={height}
             $margin={margin}
