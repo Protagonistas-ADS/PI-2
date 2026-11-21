@@ -1,0 +1,25 @@
+{
+  // Configuração do oxlint (analisa os arquivos .ts/.tsx procurando erros e código suspeito).
+  // Rode com: npm run lint
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "oxc"],
+  "env": { "browser": true, "es2024": true },
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "warn",
+    "react/only-export-components": ["warn", { "allowConstantExport": true }],
+    "react/react-in-jsx-scope": "off",
+
+    // As 3 regras abaixo são feitas para projetos que usam o "React Compiler" (este não usa).
+    // Elas reclamam de padrões normais aqui: buscar os dados quando a tela abre (useEffect),
+    // usar a data de hoje na tela (new Date()) e fechar o menu quando a página muda.
+    "react/set-state-in-effect": "off",
+    "react/purity": "off",
+    "react/exhaustive-effect-dependencies": "off"
+  },
+  "ignorePatterns": ["dist"]
+}
