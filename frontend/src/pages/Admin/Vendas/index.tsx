@@ -8,10 +8,12 @@ import ModalNota from "../componentes/ModalNota";
 import { listarVendas } from "../../../services/vendaApi";
 import { listarItensPedidoAdmin } from "../../../services/pedidoApi";
 import type { Venda } from "../../../types/venda";
+import type { ItemJanela } from "../../../types/pedido";
 
 import { formatarData, dentroDoPeriodo, termoDeBusca, contemTermo } from "../../../utils/filtrosAdmin";
 import { obterMensagemErro } from "../../../utils/obterMensagemErro";
 import { formatarPreco } from "../../../utils/produto";
+import { paraItensJanela } from "../../../utils/pedido";
 import { swalErro } from "../../../utils/alertas";
 
 import {
@@ -64,11 +66,6 @@ function temNota(venda: Venda) {
     return venda.nota_id !== null;
 }
 
-interface ItemJanela {
-    produto: { id: number; nome: string; preco_unitario: number };
-    quantidade: number;
-}
-
 // Tabela de vendas: cada pedido entregue vira uma venda (automático).
 // Daqui o admin registra a nota fiscal emitida no Emitte.
 function Vendas() {
@@ -106,10 +103,7 @@ function Vendas() {
 
             setPedidoAberto({
                 id: pedidoId,
-                itens: produtos.map((produto) => ({
-                    produto: { id: produto.produto_id, nome: produto.produto_nome, preco_unitario: produto.preco_unitario },
-                    quantidade: produto.quantidade
-                }))
+                itens: paraItensJanela(produtos)
             });
         } catch (error) {
             swalErro(obterMensagemErro(error, "Não foi possível abrir os itens da venda."));

@@ -29,6 +29,18 @@ export interface ItemPedido {
     subtotal: number;
 }
 
+// Formato da janela de itens (ModalCarrinho): serve para o carrinho e para os itens de um pedido.
+// quantidade_estoque só existe no carrinho (limita o botão +).
+export interface ItemJanela {
+    produto: {
+        readonly id: number;
+        nome: string;
+        preco_unitario: number;
+        quantidade_estoque?: number;
+    };
+    quantidade: number;
+}
+
 // Corpo de POST /pedidos
 export interface NovoPedido {
     itens: { produto_id: number; quantidade: number }[];
