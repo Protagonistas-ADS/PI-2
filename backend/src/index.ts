@@ -1,6 +1,7 @@
 import "dotenv/config";
 import app from "./app.js";
 import db from "./configs/db.js";
+import { origensPermitidas } from "./configs/cors.js";
 
 const port = process.env.PORT || 3000;
 
@@ -14,6 +15,7 @@ async function iniciarServidor() {
 
         app.listen(port, () => {
             console.log(`Servidor rodando em http://localhost:${port}`);
+            console.log(`Site autorizado (CORS): ${origensPermitidas.join(", ")}`);
         });
 
     } catch (erro) {

@@ -281,7 +281,9 @@ sequenceDiagram
 | JSON Web Token | Autenticação |
 | bcrypt | Criptografia de senhas |
 | Zod | Validação de dados |
-| dotenv e cors | Variáveis de ambiente e CORS |
+| dotenv e cors | Variáveis de ambiente e CORS (só o endereço do site) |
+| helmet | Cabeçalhos de segurança em todas as respostas |
+| express-rate-limit | Limite de tentativas de login |
 
 </td>
 </tr>
@@ -344,7 +346,7 @@ Rotas marcadas com 🔒 exigem o header `Authorization: Bearer <token>`.
 | Método | Rota | Descrição | Auth |
 |:------:|------|-----------|:----:|
 | 🔵 `POST` | `/usuarios` | Cadastro de usuário | |
-| 🔵 `POST` | `/usuarios/login` | Login (retorna o token JWT) | |
+| 🔵 `POST` | `/usuarios/login` | Login (retorna o token JWT). Depois de 5 tentativas erradas em 15 min → `429` | |
 | 🟢 `GET` | `/usuarios/logado` | Dados do usuário logado `{ usuario: { id, nome, email, perfil, criado_em } }` | 🔒 |
 | 🟠 `PATCH` | `/usuarios` | Atualizar nome e senha | 🔒 |
 
@@ -582,6 +584,9 @@ Quem decide o acesso é o servidor: o front-end confere o perfil em `GET /usuari
 | 🚪 **Login** | Mensagem genérica ("e-mail ou senha inválidos"), sem revelar qual dos dois está errado |
 | 🙈 **Respostas** | O hash da senha nunca é devolvido pela API; erros inesperados retornam mensagem genérica (`500`) |
 | 🗝️ **Segredos** | Credenciais ficam no `.env`, que está no `.gitignore`; o repositório traz apenas o `.env.example` |
+| 🌐 **CORS** | Só o endereço do site (`CORS_ORIGIN` no `.env`) pode chamar a API pelo navegador; outro site recebe `403` |
+| 🛑 **Força bruta** | Depois de **5 tentativas de login erradas em 15 minutos**, o mesmo IP recebe `429` ("Muitas tentativas de login...") até a janela acabar; logins certos não contam (`express-rate-limit`) |
+| 🪖 **Cabeçalhos** | **Helmet** em todas as respostas (ex.: impede abrir a API dentro de outro site e esconde o `X-Powered-By: Express`); só as fotos de `/uploads` são liberadas para o site |
 | 🔗 **Integridade** | Chaves estrangeiras e restrições `UNIQUE`/`NOT NULL` no banco |
 
 </details>
@@ -591,8 +596,9 @@ Quem decide o acesso é o servidor: o front-end confere o perfil em `GET /usuari
 
 <br>
 
-- [ ] Restringir o **CORS** ao domínio do front-end em produção
-- [ ] Adicionar **rate limiting** no login e cabeçalhos de segurança com **Helmet**
+- [x] Restringir o **CORS** ao endereço do front-end (em produção, colocar o domínio real em `CORS_ORIGIN`)
+- [x] Adicionar **rate limiting** no login e cabeçalhos de segurança com **Helmet**
+- [ ] Ao publicar atrás de um proxy (ex.: Render, Nginx), configurar o `trust proxy` do Express para o limite de login enxergar o IP real
 - [x] Aplicar o middleware de administrador nas rotas de gestão (produtos, estoque, notas e vendas)
 - [ ] Fortalecer a política de senhas (tamanho mínimo e complexidade)
 - [ ] Servir tudo por **HTTPS** e usar um `JWT_SECRET` longo e aleatório
@@ -723,6 +729,7 @@ DB_NAME=PI2
 DB_USER=root
 DB_PASS=sua_senha_do_mysql
 JWT_SECRET=uma_chave_longa_e_aleatoria
+CORS_ORIGIN=http://localhost:5173
 ```
 
 | Variável | Descrição |
@@ -734,6 +741,7 @@ JWT_SECRET=uma_chave_longa_e_aleatoria
 | `DB_USER` | Usuário do MySQL |
 | `DB_PASS` | Senha do MySQL |
 | `JWT_SECRET` | Chave usada para assinar os tokens de login. Use um texto longo e aleatório e **nunca** compartilhe |
+| `CORS_ORIGIN` | Endereço do front-end que pode chamar a API (padrão `http://localhost:5173`). Para mais de um, separe por vírgula. Se o front rodar em outra porta, ajuste aqui |
 
 > [!WARNING]
 > O arquivo `.env` guarda segredos e **não deve ser enviado ao GitHub**. Ele já está no `.gitignore`.
