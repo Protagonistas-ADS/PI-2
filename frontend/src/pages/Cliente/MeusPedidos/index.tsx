@@ -7,7 +7,8 @@ import {
     listarItensPedido,
     cancelarPedido,
 } from "../../../services/pedidoApi";
-import { NOME_STATUS_PEDIDO, type Pedido } from "../../../types/pedido";
+import { NOME_STATUS_PEDIDO, type Pedido, type ItemJanela } from "../../../types/pedido";
+import { paraItensJanela } from "../../../utils/pedido";
 
 import { swalConfirmacao, swalErro, toastSucesso } from "../../../utils/alertas";
 import { obterMensagemErro } from "../../../utils/obterMensagemErro";
@@ -29,11 +30,6 @@ import {
 function formatarData(valor: string | null) {
     if (!valor) return null;
     return new Date(valor).toLocaleDateString("pt-BR");
-}
-
-interface ItemJanela {
-    produto: { id: number; nome: string; preco_unitario: number };
-    quantidade: number;
 }
 
 function MeusPedidos() {
@@ -58,15 +54,7 @@ function MeusPedidos() {
         try {
             const produtos = await listarItensPedido(id);
 
-            // A janela espera { produto: { id, nome, preco_unitario }, quantidade }
-            const itens = produtos.map((produto) => ({
-                produto: {
-                    id: produto.produto_id,
-                    nome: produto.produto_nome,
-                    preco_unitario: produto.preco_unitario
-                },
-                quantidade: produto.quantidade
-            }));
+            const itens = paraItensJanela(produtos);
 
             setPedidoAberto({ id, itens });
         } catch (error) {

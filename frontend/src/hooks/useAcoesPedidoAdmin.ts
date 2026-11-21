@@ -1,16 +1,11 @@
 import { useState } from "react";
 
 import { listarItensPedidoAdmin, alterarStatusPedido } from "../services/pedidoApi";
-import type { PedidoComCliente, NovoStatusPedido } from "../types/pedido";
+import type { PedidoComCliente, NovoStatusPedido, ItemJanela } from "../types/pedido";
 import { MENSAGEM_SUCESSO } from "../utils/pedidoAdmin";
+import { paraItensJanela } from "../utils/pedido";
 import { obterMensagemErro } from "../utils/obterMensagemErro";
 import { swalConfirmacao, swalErro, toastSucesso } from "../utils/alertas";
-
-// Formato que a janela de itens (ModalCarrinho) espera
-interface ItemJanela {
-    produto: { id: number; nome: string; preco_unitario: number };
-    quantidade: number;
-}
 
 // Ações do administrador sobre um pedido (mudar status e ver itens).
 // Usado no Dashboard e na tabela de Pedidos, para as duas telas agirem igual.
@@ -61,14 +56,7 @@ export function useAcoesPedidoAdmin(recarregar: () => Promise<void>) {
         try {
             const produtos = await listarItensPedidoAdmin(id);
 
-            const itens = produtos.map((produto) => ({
-                produto: {
-                    id: produto.produto_id,
-                    nome: produto.produto_nome,
-                    preco_unitario: produto.preco_unitario
-                },
-                quantidade: produto.quantidade
-            }));
+            const itens = paraItensJanela(produtos);
 
             setPedidoAberto({ id, itens });
         } catch (error) {

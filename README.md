@@ -268,6 +268,7 @@ sequenceDiagram
 | Axios | Comunicação com a API |
 | SweetAlert2 e React Toastify | Alertas e notificações |
 | React Icons | Ícones |
+| oxlint | Análise do código `.ts/.tsx` (lint) |
 
 </td>
 <td width="50%" valign="top">
@@ -558,8 +559,9 @@ Erros seguem o formato `{ "erro": "mensagem" }`, sempre em português. Erros de 
 | `/admin/vendas` | Tabela de vendas: busca, período, com/sem nota, total e média, itens e "Emitir nota" | 🔒 Admin |
 | `/admin/notas` | Tabela de notas fiscais: busca, status, período, link do PDF, editar link e cancelar | 🔒 Admin |
 | `/admin/perfil` | Perfil do administrador | 🔒 Admin |
+| qualquer outro endereço | Página 404 "Página não encontrada" com botões para voltar (o painel tem a sua própria em `/admin/...`) | 🌐 Pública |
 
-Quem decide o acesso é o servidor: o front-end confere o perfil em `GET /usuarios/logado` e só ajuda na navegação. Admin que abre tela de cliente vai para `/admin`; cliente que abre `/admin` volta para o catálogo com o aviso "Área restrita"; sem login vai para `/login` e, depois de entrar, volta para a tela que tentou abrir. Mesmo que alguém force o caminho, a API responde `401`/`403`.
+Quem decide o acesso é o servidor: o front-end confere o perfil em `GET /usuarios/logado` e só ajuda na navegação. Admin que abre tela de cliente vai para `/admin`; cliente que abre `/admin` volta para o catálogo com o aviso "Área restrita"; sem login vai para `/login` e, depois de entrar, volta para a tela que tentou abrir. Se o servidor estiver fora do ar, a sessão não é apagada: a tela mostra o aviso com o botão "Tentar de novo". Mesmo que alguém force o caminho, a API responde `401`/`403`.
 
 <div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
 
@@ -823,9 +825,10 @@ UPDATE usuario SET perfil = 'administrador' WHERE email = 'seu-email@exemplo.com
 | `backend` | `npm run dev` | Servidor com recarga automática |
 | `backend` | `npm run build` | Compila o TypeScript para a pasta `dist` |
 | `frontend` | `npm run dev` | Servidor de desenvolvimento |
-| `frontend` | `npm run build` | Gera o build de produção |
+| `frontend` | `npm run build` | Confere os tipos (`tsc --noEmit`) e gera o build de produção; erro de tipo impede o build |
+| `frontend` | `npm run typecheck` | Só confere os tipos, sem gerar arquivos |
 | `frontend` | `npm run preview` | Visualiza o build de produção |
-| `frontend` | `npm run lint` | Verifica o código com ESLint |
+| `frontend` | `npm run lint` | Verifica o código `.ts/.tsx` com o oxlint (regras em `frontend/.oxlintrc.json`) |
 
 </details>
 
