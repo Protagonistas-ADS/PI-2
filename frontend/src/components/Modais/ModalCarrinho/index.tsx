@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import ModalBase from "../ModalBase";
 import {
     FiX,
@@ -14,17 +15,7 @@ import {
 } from "./style";
 
 import { formatarPreco } from "../../../utils/produto";
-
-// Só o que a janela usa de cada produto (serve para o carrinho e para os itens de um pedido)
-interface ItemJanela {
-    produto: {
-        readonly id: number;
-        nome: string;
-        preco_unitario: number;
-        quantidade_estoque?: number;
-    };
-    quantidade: number;
-}
+import type { ItemJanela } from "../../../types/pedido";
 
 interface ModalCarrinhoProps {
     itens: ItemJanela[];
@@ -52,12 +43,22 @@ function ModalCarrinho({
         (total, item) => total + item.produto.preco_unitario * item.quantidade, 0
     );
 
+    // Fecha com a tecla Esc (igual às outras janelas do site)
+    useEffect(() => {
+        function aoApertarTecla(event: KeyboardEvent) {
+            if (event.key === "Escape") aoFechar();
+        }
+
+        window.addEventListener("keydown", aoApertarTecla);
+        return () => window.removeEventListener("keydown", aoApertarTecla);
+    }, [aoFechar]);
+
     return (
         <ModalBase aoFechar={aoFechar}>
             <CabecalhoCarrinho>
                 <h2>{titulo}</h2>
 
-                <button type="button" onClick={aoFechar}>
+                <button type="button" onClick={aoFechar} aria-label="Fechar janela">
                     <FiX size='48px' />
                 </button>
             </CabecalhoCarrinho>

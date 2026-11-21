@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Cabecalho,
     ConteudoCabecalho,
@@ -36,6 +36,18 @@ function Navbar({ linkLogo, links }: NavbarProps) {
         setMenuAberto(false);
     }
 
+    // Menu do celular aberto: a tecla Esc fecha
+    useEffect(() => {
+        if (!menuAberto) return;
+
+        function aoTeclar(evento: KeyboardEvent) {
+            if (evento.key === "Escape") setMenuAberto(false);
+        }
+
+        window.addEventListener("keydown", aoTeclar);
+        return () => window.removeEventListener("keydown", aoTeclar);
+    }, [menuAberto]);
+
     return (
         <Cabecalho>
             <ConteudoCabecalho>
@@ -46,6 +58,9 @@ function Navbar({ linkLogo, links }: NavbarProps) {
                 <BotaoMenu
                     type="button"
                     onClick={alternarMenu}
+                    aria-label={menuAberto ? "Fechar menu" : "Abrir menu"}
+                    aria-expanded={menuAberto}
+                    aria-controls="navegacao-principal"
                 >
                     {menuAberto ? <FiX color="white" size={24} /> : <FiMenu color="white" size={24} />}
                 </BotaoMenu>
