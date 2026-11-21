@@ -669,7 +669,7 @@ Os scripts ficam em `backend/src/database/`:
 | Arquivo | O que faz | Obrigatório |
 |---------|-----------|:-----------:|
 | `schema.sql` | Cria o banco `PI2` e todas as tabelas | ✅ |
-| `seed.sql` | Insere dados de teste (usuários, produtos, pedidos, venda e nota) | Opcional |
+| `seed.sql` | Insere os dados de demonstração: 8 usuários, 4 produtos, 15 pedidos em todos os status, 6 vendas, 5 notas e 24 movimentações (datas relativas ao dia em que roda; estoque = entradas − saídas) | Recomendado |
 | `migracao-remover-cotacao.sql` | Só para quem já tinha o banco antigo: remove as tabelas de cotação sem mexer no resto | Só se o banco é antigo |
 | `migracao-imagens-produto.sql` | Só para quem já tinha o seed antigo: corrige o caminho das imagens dos produtos | Só se o banco é antigo |
 | `migracao-status-pedido.sql` | Só para quem já tinha o banco antigo: novo fluxo de status do pedido (tira o `respondido`) e coluna `observacao` | Só se o banco é antigo |
@@ -684,7 +684,9 @@ Os scripts ficam em `backend/src/database/`:
 1. Abra uma conexão com o seu servidor MySQL.
 2. Menu **File → Open SQL Script** e escolha o `schema.sql`.
 3. Clique no raio ⚡ para executar.
-4. Repita com o `seed.sql` (se quiser os dados de teste).
+4. Repita com o `seed.sql` (dados de demonstração). Pelo Workbench os acentos saem certos.
+
+> Para começar do zero com os dados de demonstração, apague o banco antes (`DROP DATABASE PI2;`) e rode os dois scripts de novo. Isso apaga tudo o que estava no banco.
 
 </details>
 
@@ -799,7 +801,16 @@ Abra no navegador o endereço que o Vite mostrar no terminal (normalmente **http
 | 🖥️ Front-end | http://localhost:5173 |
 | ⚙️ Back-end (API) | http://localhost:3000 |
 
-Para testar, crie uma conta pela tela de **Cadastro**. Todo cadastro novo entra com o perfil `cliente`.
+Com o `seed.sql` rodado, já existem estas contas de teste:
+
+| Perfil | E-mail | Senha |
+|--------|--------|-------|
+| 👑 Administrador | `admin@teste.com` | `Admin@123456` |
+| 🛒 Cliente | `usuario@gmail.com` | `Cliente@123456` |
+
+Os outros clientes do seed (empresas e pessoas fictícias, como `compras@rotasul.com.br` e `anapaula.ribeiro@outlook.com`) usam a mesma senha `Cliente@123456`. São contas só para teste: não use essas senhas em um servidor público.
+
+Também dá para criar uma conta pela tela de **Cadastro**. Todo cadastro novo entra com o perfil `cliente`.
 
 <details>
 <summary><b>👑 Criando um administrador (ambiente de desenvolvimento)</b></summary>
