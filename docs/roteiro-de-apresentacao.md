@@ -26,7 +26,7 @@ Tudo usa os dados de demonstração do [`seed.sql`](../backend/src/database/seed
 - [ ] Deixar **duas janelas** abertas:
   - **Janela normal**: catálogo, como visitante (sem login).
   - **Janela anônima**: login do admin (`admin@teste.com` / `Admin@123456`) já feito, no Dashboard.
-- [ ] Testar a tela no **projetor**. Se a resolução for 1366 × 768, use o zoom do navegador em **90%** (Ctrl + −) para os cartões do Dashboard não quebrarem linha.
+- [ ] Testar a tela no **projetor** (o painel se ajusta a 1366 × 768: os cartões do Dashboard ficam 2 por linha). Se o texto ficar pequeno para quem está no fundo da sala, use o zoom do navegador (Ctrl + +).
 - [ ] Deixar o README do GitHub aberto em outra aba (prints e diagramas) como **plano B**, caso algo trave.
 - [ ] Fechar notificações (WhatsApp, e-mail) e aumentar o zoom do terminal, se for mostrar código.
 - [ ] Combinar quem passa o mouse em cada bloco. Quem fala não precisa ser quem clica.
