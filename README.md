@@ -2,159 +2,277 @@
 
 <div align="center">
 
-# 🪵 PI-2 · Catálogo e Venda de Paletes
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:451a03,50:92400e,100:f59e0b&height=230&section=header&text=S%20Ferraretto%20%C2%B7%20PI-2&fontSize=54&fontColor=ffffff&animation=fadeIn&fontAlignY=36&desc=Cat%C3%A1logo%2C%20pedidos%20e%20estoque%20de%20paletes%20em%20um%20s%C3%B3%20lugar&descAlignY=58&descSize=18" alt="S Ferraretto · PI-2" width="100%">
 
-### Divulgue, venda e controle o estoque de paletes de madeira em um só lugar
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=20&duration=3200&pause=900&color=D97706&center=true&vCenter=true&width=760&height=45&lines=%F0%9F%AA%B5+Vitrine+online+para+uma+empresa+real+de+Salto-SP;%F0%9F%9B%92+Cat%C3%A1logo+aberto%2C+carrinho+e+pedido+pelo+site;%F0%9F%93%A6+Estoque+que+baixa+sozinho+ao+confirmar+o+pedido;%F0%9F%A7%BE+Pedido+%E2%86%92+venda+%E2%86%92+nota+fiscal%2C+tudo+rastreado;%F0%9F%94%90+JWT%2C+bcrypt%2C+Zod%2C+Helmet+e+limite+de+login" alt="O que o sistema faz">
 
-Projeto Integrador · FATEC · Análise e Desenvolvimento de Sistemas
+**Projeto Integrador II · FATEC · Análise e Desenvolvimento de Sistemas**
 
 <br>
 
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=node.js&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-7-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-Express_5-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8+-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 
-![Status](https://img.shields.io/badge/status-concluído-brightgreen)
-![Entrega](https://img.shields.io/badge/entrega-24%2F11-blue)
-![Licença](https://img.shields.io/badge/licença-MIT-green)
+![Status](https://img.shields.io/badge/status-conclu%C3%ADdo-brightgreen?style=flat-square)
+![Versão](https://img.shields.io/badge/vers%C3%A3o-v1.0.1--entrega-blue?style=flat-square)
+![Entrega](https://img.shields.io/badge/entrega-24%2F11%2F2026-orange?style=flat-square)
+![Rotas](https://img.shields.io/badge/rotas_da_API-30-informational?style=flat-square)
+![Telas](https://img.shields.io/badge/telas-15-informational?style=flat-square)
+![PRs](https://img.shields.io/badge/pull_requests-53-8957e5?style=flat-square)
+![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-green?style=flat-square)
 
 <br>
 
-[**🎯 Sobre**](#-sobre-o-projeto) ·
-[**✨ Funcionalidades**](#-funcionalidades) ·
-[**🏗️ Arquitetura**](#️-arquitetura) ·
-[**🔌 API**](#-api-back-end) ·
-[**📸 Telas**](#️-telas-front-end) ·
-[**🔐 Segurança**](#-segurança-da-informação) ·
-[**🚀 Como rodar**](#-como-rodar-o-projeto) ·
-[**📐 Diagramas**](docs/diagramas.md) ·
-[**🧪 Roteiros**](docs/roteiro-de-teste.md) ·
-[**🔭 Melhorias futuras**](#-melhorias-futuras) ·
-[**👥 Equipe**](#-equipe)
+[🎯 Sobre](#sobre) ·
+[✨ Funcionalidades](#funcionalidades) ·
+[🔄 Fluxos](#fluxos) ·
+[🏗️ Arquitetura](#arquitetura) ·
+[🛠️ Tecnologias](#tecnologias) ·
+[🗄️ Banco](#banco) ·
+[🔌 API](#api) ·
+[🖥️ Telas](#telas) ·
+[🔐 Segurança](#seguranca) ·
+[🚀 Como rodar](#como-rodar) ·
+[👥 Equipe](#equipe)
 
 </div>
 
+<br>
+
+> [!TIP]
+> **Quer ver funcionando em 1 minuto?** Vá direto para [🚀 Como rodar](#como-rodar), entre como administrador (`admin@teste.com` / `Admin@123456`) e confirme um pedido: o estoque baixa, a movimentação aparece no histórico e, ao entregar, a venda nasce sozinha.
+
 ---
+
+<a id="sumario"></a>
 
 ## 📑 Sumário
 
 <details>
-<summary><b>Clique para expandir o sumário</b></summary>
+<summary><b>Clique para abrir o sumário completo</b></summary>
 
 <br>
 
-- [Sobre o projeto](#-sobre-o-projeto)
-- [O problema que resolvemos](#-o-problema-que-resolvemos)
-- [Funcionalidades](#-funcionalidades)
-- [Arquitetura](#️-arquitetura)
-- [Tecnologias](#️-tecnologias)
-- [Banco de dados](#️-banco-de-dados)
-- [API (back-end)](#-api-back-end)
-- [Telas (front-end)](#️-telas-front-end)
-- [Segurança da informação](#-segurança-da-informação)
-- [Engenharia de requisitos e diagramas](#-engenharia-de-requisitos-e-diagramas)
-- [Como rodar o projeto](#-como-rodar-o-projeto)
-- [Estrutura de pastas](#-estrutura-de-pastas)
-- [Fluxo de trabalho da equipe](#-fluxo-de-trabalho-da-equipe)
-- [Status e roadmap](#-status-e-roadmap)
-- [Melhorias futuras](#-melhorias-futuras)
-- [Equipe](#-equipe)
-- [Licença](#-licença)
+| Conhecer o projeto | Por dentro do sistema | Como foi feito | Usar e evoluir |
+|---|---|---|---|
+| [🎯 Sobre o projeto](#sobre) | [🏗️ Arquitetura](#arquitetura) | [🧭 O que mudou na reforma](#reforma) | [🚀 Como rodar o projeto](#como-rodar) |
+| [🥅 Objetivo](#objetivo) | [🔑 Como funciona o login](#login) | [⚖️ Decisões: porquês, vantagens e desvantagens](#decisoes) | [📋 Pré-requisitos](#pre-requisitos) |
+| [🧩 O problema que resolvemos](#problema) | [🛠️ Tecnologias](#tecnologias) | [🧗 Desafios, problemas e dificuldades](#desafios) | [📂 Estrutura de pastas](#pastas) |
+| [📊 O projeto em números](#numeros) | [🗄️ Banco de dados](#banco) | [🔍 Pontos que podem melhorar](#pontos-melhorar) | [🤝 Fluxo de trabalho da equipe](#fluxo-trabalho) |
+| [✨ Funcionalidades](#funcionalidades) | [🔌 API (back-end)](#api) | [📋 Engenharia de requisitos e diagramas](#requisitos) | [📈 Status e roadmap](#status) |
+| [🔄 Fluxo comercial e administrativo](#fluxos) | [🖥️ Telas (front-end) e prints](#telas) | [✅ Qualidade e desempenho](#qualidade) | [🗓️ Cronograma](#cronograma) |
+| [🔁 Ciclo de vida de um pedido](#ciclo) | [🔐 Segurança da informação](#seguranca) | | [🔭 Melhorias futuras](#melhorias-futuras) |
+| | | | [👥 Equipe](#equipe) · [📄 Licença](#licenca) |
 
 </details>
 
 ---
 
+<a id="sobre"></a>
+
 ## 🎯 Sobre o projeto
 
-O **PI-2** é uma aplicação web desenvolvida para a **S Ferraretto**, empresa de Salto-SP que comercializa paletes de madeira. O sistema reúne em um só lugar:
-
-| | |
-|---|---|
-| 🌐 **Divulgação** | Landing page voltada para contato e catálogo de produtos com carrinho |
-| 🔄 **Fluxo comercial** | Pedido → venda → nota fiscal |
-| 📦 **Estoque** | Saldo por produto e histórico de entradas e saídas |
-
-> [!NOTE]
-> O projeto nasceu de uma entrevista com o cliente e de uma visita ao armazém, para entender na prática como a operação funciona hoje.
-
-<div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
-
----
-
-## 🧩 O problema que resolvemos
-
-Na entrevista com o cliente, identificamos três dores principais:
-
-| # | Problema | Como o sistema ajuda |
-|:-:|----------|----------------------|
-| 1️⃣ | **Falta de divulgação** | Landing page e catálogo online, acessíveis a qualquer cliente |
-| 2️⃣ | **Falta de gerenciamento de estoque** | Saldo por produto e histórico de movimentações (entrada e saída) |
-| 3️⃣ | **Falta de canal de vendas** | Clientes fazem pedidos direto pelo site |
-
-<div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
-
----
-
-## ✨ Funcionalidades
+O **PI-2** é uma aplicação web completa feita para um **cliente real**: a **S Ferraretto**, empresa de Salto-SP que vende paletes de madeira e de plástico, principalmente para outras empresas (B2B), com retirada na loja.
 
 <table>
 <tr>
-<td width="50%" valign="top">
+<td width="62%" valign="top">
 
-### 👤 Cliente
-
-- 🔑 Cadastro, login e edição de perfil
-- 🛍️ Catálogo de paletes aberto (sem login), com quantidade e carrinho direto no card
-- 🛒 Página do carrinho (`/carrinho`) com data de retirada e observação
-- 📝 Realização de **pedidos** a partir do carrinho (estoque conferido na hora, sem mostrar a quantidade: o cliente vê só "Disponível" ou "Esgotado")
-- 🔎 Acompanhamento do status dos pedidos (histórico completo)
-- ❌ Cancelamento de pedidos enquanto aguardam confirmação
+| 🏢 Cliente | |
+|---|---|
+| **Razão social** | Ferraretto Comércio e Consultoria Empresarial LTDA |
+| **Nome fantasia** | S FERRARETTO |
+| **CNPJ** | 30.669.871/0001-63 |
+| **Endereço** | R. José de Alencar, 7, Vila Progresso, Salto-SP |
+| **Ramo (CNAE)** | 4744-0/02 · Comércio varejista de madeira e artefatos |
+| **Atendimento** | Segunda a sexta, das 7h às 18h · WhatsApp (11) 96499-2626 |
 
 </td>
-<td width="50%" valign="top">
+<td width="38%" valign="top">
 
-### 🛠️ Administrador
+**O sistema reúne em um só lugar:**
 
-- 🧭 Painel próprio (`/admin`) com menu lateral — o admin cai nele ao fazer login
-- 📊 Dashboard: pedidos pendentes, a retirar hoje, estoque baixo e vendas do mês
-- 📋 Gerenciamento de pedidos: confirmar, marcar pronto, entregar ou cancelar (no dashboard e na tabela de pedidos)
-- 🔎 Tabela de pedidos completa: busca por nº/cliente/e-mail, filtro por status e período, ordenação e soma dos valores
-- 👥 Tabela de usuários: busca, filtro por perfil, nº de pedidos e total comprado de cada cliente
-- 📦 Movimentações de estoque: histórico com responsável, motivo e pedido de origem + entrada/saída manual com motivo obrigatório
-- 💰 Tabela de vendas: total do período, média por venda, itens e botão "Emitir nota" para vendas sem nota
-- 🧾 Tabela de notas fiscais: número, status (emitida/cancelada), link do PDF no Emitte, editar link e cancelar
-- 👤 Perfil do administrador (nome e senha)
-- 📦 Gerenciamento de produtos pela API: cadastrar, editar e ativar/desativar (a tela própria está nas [melhorias futuras](#-melhorias-futuras))
+🌐 **Divulgação**<br>
+Landing page confiável e catálogo aberto a qualquer pessoa
+
+🛒 **Canal de vendas**<br>
+Carrinho e pedido pelo site, com data de retirada
+
+📦 **Gestão**<br>
+Painel com pedidos, estoque, vendas, notas fiscais e usuários
 
 </td>
 </tr>
 </table>
 
-### 🔄 Fluxo comercial
+> [!NOTE]
+> O projeto nasceu de uma **entrevista com o proprietário** e de uma **visita ao armazém**, para entender na prática como a operação funciona hoje: pedidos chegam pelo WhatsApp, o estoque é controlado "de cabeça" e a nota fiscal é emitida no site **Emitte**.
+
+<a id="objetivo"></a>
+
+### 🥅 Objetivo
+
+Entregar um sistema **profissional, confiável e fácil de usar** que:
+
+1. **Divulgue** a empresa e os produtos na internet, com os dados oficiais (CNPJ, endereço, WhatsApp, horário);
+2. **Receba pedidos** sem depender de mensagens soltas no WhatsApp;
+3. **Controle o estoque** com histórico de cada entrada e saída (quem fez, quando, por quê e de qual pedido);
+4. **Organize o ciclo comercial** inteiro: pedido → venda → nota fiscal;
+5. Seja **seguro** desde a base: senhas criptografadas, permissões conferidas no servidor e validação de todos os dados.
+
+<a id="problema"></a>
+
+### 🧩 O problema que resolvemos
+
+| # | Dor do cliente | Como era | Como o sistema resolve |
+|:-:|----------------|----------|------------------------|
+| 1️⃣ | **Falta de divulgação** | Sem site; clientes só conheciam a loja por indicação | Landing page com produtos, "como funciona", mapa, CNPJ e WhatsApp + catálogo aberto, sem login |
+| 2️⃣ | **Falta de gerenciamento de estoque** | Saldo controlado de memória ou em papel | Estoque baixa sozinho ao confirmar o pedido; cada movimento fica no histórico com responsável e motivo; alerta de estoque baixo |
+| 3️⃣ | **Falta de canal de vendas** | Pedidos espalhados no WhatsApp | Carrinho, envio do pedido com data de retirada e recado, acompanhamento do status pelo cliente |
+
+<a id="numeros"></a>
+
+### 📊 O projeto em números
+
+<div align="center">
+
+| 🔌 Rotas da API | 🖥️ Telas | 🗄️ Tabelas | 🔀 Pull Requests | 🧾 Commits | 🪜 Etapas da reforma | 🧪 Passos no roteiro de teste |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **30** | **15** | **8** | **53** | **222** | **12** | **~60** |
+
+</div>
+
+```mermaid
+pie showData
+    title Linhas de código por área
+    "Front-end (TS/TSX)" : 9178
+    "Back-end (TS)" : 2897
+    "Banco (SQL)" : 492
+```
+
+<div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
+
+---
+
+<a id="funcionalidades"></a>
+
+## ✨ Funcionalidades
+
+<table>
+<tr>
+<td width="33%" valign="top">
+
+### 🌐 Visitante (sem login)
+
+- 🏠 Landing page com produtos, "Como funciona o pedido", "Sobre" e mapa
+- 🛍️ **Catálogo aberto**, com preço e "Disponível" / "Esgotado"
+- 🔎 "Saber mais": janela só com os detalhes do produto
+- ➕ Escolher a quantidade e **adicionar ao carrinho** direto no card
+- 🛒 Página do carrinho (o carrinho fica guardado no navegador)
+- 💬 Botões de WhatsApp com mensagem pronta
+- 📝 Cadastro com qualquer tipo de e-mail
+
+</td>
+<td width="33%" valign="top">
+
+### 👤 Cliente
+
+- 🔑 Login e edição de perfil (nome e senha)
+- 📦 **Enviar o pedido** do carrinho, com data de retirada (até 60 dias) e observação (até 500 caracteres)
+- ↩️ Depois do login, volta direto para o carrinho, com os itens
+- 🔎 **Meus Pedidos**: histórico completo com status colorido e itens
+- ❌ Cancelar o pedido enquanto ele está **pendente**
+- 🙈 Não vê a quantidade em estoque (sigilo comercial da loja)
+
+</td>
+<td width="33%" valign="top">
+
+### 🛠️ Administrador
+
+- 🧭 Painel próprio (`/admin`) com menu lateral (gaveta no celular)
+- 📊 **Dashboard**: pendentes, a retirar hoje, estoque baixo e vendas do mês
+- 📋 Mudar status: confirmar → pronto → entregue, ou cancelar
+- 🔎 Tabela de **pedidos** com busca, status, período, ordenação e soma
+- 📦 **Movimentações**: histórico + entrada/saída manual com motivo
+- 💰 **Vendas**: total, média e "Emitir nota"
+- 🧾 **Notas fiscais**: status, link do PDF, editar link e cancelar
+- 👥 **Usuários**: perfil, nº de pedidos e total comprado
+- 👤 Perfil do administrador
+
+</td>
+</tr>
+</table>
+
+<details>
+<summary><b>🔎 Ver os detalhes de cada funcionalidade do administrador</b></summary>
+
+<br>
+
+| Tela | O que dá para fazer |
+|------|---------------------|
+| **Dashboard** | 4 cartões (pendentes · a retirar hoje · estoque baixo ≤ 10 un. · vendas do mês) + lista de pedidos em andamento com filtros (Todos/Pendentes/Confirmados/Prontos), cliente, observação, data de retirada ("Hoje" destacado), itens em janela e botões de status com confirmação antes de cancelar e de entregar |
+| **Pedidos** | Todos os status; busca por nº ("12" ou "nº 12"), nome ou e-mail, sem diferenciar acento; período "Feito de / Até"; chips de status com contagem; ordenação por data ou valor; "Mostrando X de Y · soma" |
+| **Usuários** | Busca por nome/e-mail; filtro Clientes/Administradores; ordenação por cadastro, nome, mais pedidos ou maior valor comprado. A senha nunca sai do banco |
+| **Movimentações** | Formulário de entrada/saída com saldo atual, prévia "Estoque fica em X", aviso de estoque insuficiente e confirmação antes da saída; histórico com busca, produto, período e chips Todas/Entradas/Saídas/Manuais |
+| **Vendas** | Busca por venda/pedido/cliente/nota; período; Com/Sem nota; total e média; itens em janela; "Emitir nota" para vendas sem nota |
+| **Notas fiscais** | Emitidas/Canceladas; soma das emitidas; "Abrir PDF" (nova aba, com `noopener`); adicionar/editar link; cancelar com confirmação (a venda volta a aceitar uma nota nova) |
+| **Perfil** | Trocar nome e senha (pede a senha atual); mostra a data de criação da conta |
+
+</details>
+
+<div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
+
+---
+
+<a id="fluxos"></a>
+
+## 🔄 Fluxo comercial e fluxo administrativo
+
+### 🛒 Fluxo comercial (visão geral)
 
 ```mermaid
 flowchart LR
-    A(["👤 Cliente"]) --> B["🛍️ Catálogo<br/>e carrinho"]
-    B --> D["📦 Pedido"]
-    D -- "entregue" --> E["💰 Venda"]
-    E --> F["🧾 Nota fiscal"]
-    D -. "confirmado: baixa no estoque" .-> G["📊 Movimentação<br/>de estoque"]
-    H(["🛠️ Administrador"]) -. "gerencia" .-> D
-    H -.-> G
+    V(["🌐 Visitante"]) --> L["🏠 Landing"] --> C["🛍️ Catálogo"] --> K["🛒 Carrinho"]
+    K -- "login de cliente" --> P["📦 Pedido<br/>pendente"]
+    P -- "admin confirma" --> E["📉 Estoque baixa<br/>+ movimentação"]
+    E --> R["📍 Pronto para<br/>retirada"] -- "cliente retira" --> VD["💰 Venda<br/>(automática)"]
+    VD --> NF["🧾 Nota fiscal<br/>(Emitte + link)"]
 
-    style A fill:#dbeafe,stroke:#2563eb,color:#111
-    style H fill:#fef3c7,stroke:#d97706,color:#111
-    style E fill:#dcfce7,stroke:#16a34a,color:#111
-    style F fill:#dcfce7,stroke:#16a34a,color:#111
+    style V fill:#e0f2fe,stroke:#0284c7,color:#111
+    style P fill:#fef3c7,stroke:#d97706,color:#111
+    style E fill:#fee2e2,stroke:#dc2626,color:#111
+    style VD fill:#dcfce7,stroke:#16a34a,color:#111
+    style NF fill:#dcfce7,stroke:#16a34a,color:#111
 ```
 
-<details>
-<summary><b>🔁 Ciclo de vida de um pedido</b></summary>
+### 🛠️ Fluxo administrativo (o dia a dia da loja)
 
-<br>
+```mermaid
+flowchart TD
+    A(["👑 Admin entra"]) --> D["📊 Dashboard:<br/>o que precisa de atenção hoje?"]
+    D --> P1{"Pedido<br/>pendente?"}
+    P1 -- "sim" --> C1["✅ Confirmar<br/>(estoque baixa)"]
+    P1 -- "não dá para atender" --> X["❌ Cancelar"]
+    C1 --> S["📦 Separar → Marcar pronto"]
+    S --> ENT["🤝 Cliente retirou → Entregue"]
+    ENT --> V["💰 Venda criada sozinha"]
+    V --> EM["🧾 Emitir a NF no Emitte"]
+    EM --> REG["🔗 Registrar número e link do PDF"]
+    D --> EB{"Estoque<br/>baixo?"}
+    EB -- "sim" --> LOTE["📥 Entrada manual:<br/>'Chegada de lote do fornecedor'"]
+    D --> AV["📤 Saída manual:<br/>avaria, ajuste de inventário"]
+
+    style A fill:#fef3c7,stroke:#d97706,color:#111
+    style V fill:#dcfce7,stroke:#16a34a,color:#111
+    style X fill:#fee2e2,stroke:#dc2626,color:#111
+```
+
+<a id="ciclo"></a>
+
+### 🔁 Ciclo de vida de um pedido
 
 ```mermaid
 stateDiagram-v2
@@ -169,50 +287,112 @@ stateDiagram-v2
     cancelado --> [*]
 ```
 
-O cliente só cancela pelo site enquanto o pedido está **pendente**. Depois de confirmado, só o administrador cancela.
+| Mudança | O que acontece no banco (tudo na mesma **transação**) |
+|---------|-------------------------------------------------------|
+| Cliente envia | Confere se cada produto existe, está ativo e tem estoque; grava `pedido` + `pedido_item` com o preço do momento. **O estoque ainda não muda** |
+| Admin **confirma** | Confere o estoque de novo e grava uma **saída** por item ("Confirmação do pedido nº X"), com o admin como responsável |
+| Admin **cancela** um confirmado/pronto | Grava uma **entrada** por item ("Cancelamento do pedido nº X (estoque devolvido)") |
+| Admin marca **entregue** | Cria a **venda** com o valor total do pedido |
+| Fora da ordem (ex.: pendente → entregue) | Recusado com `409` e mensagem em português |
 
-</details>
-
-> [!NOTE]
-> O andamento de cada item está na seção [Status e roadmap](#-status-e-roadmap).
+> [!IMPORTANT]
+> O cliente só cancela pelo site enquanto o pedido está **pendente**. Depois de confirmado, o estoque já foi separado e só o administrador pode cancelar (o site orienta a falar com a loja pelo WhatsApp).
 
 <div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
 
 ---
 
+<a id="arquitetura"></a>
+
 ## 🏗️ Arquitetura
+
+O sistema tem **três partes independentes** que conversam entre si: o site (front-end), a API (back-end) e o banco de dados.
 
 ```mermaid
 flowchart LR
-    U([👤 Usuário]) --> F["🖥️ Front-end<br/>React + Vite"]
-    F -- "HTTP · JSON<br/>Axios + JWT" --> B["⚙️ Back-end<br/>Node + Express"]
-    B --> DB[("🗄️ MySQL")]
+    U(["👤 Navegador"]) --> F["🖥️ Front-end<br/>React + Vite<br/>:5173"]
+    F -- "HTTP + JSON<br/>Axios + token JWT" --> B["⚙️ Back-end (API)<br/>Node + Express<br/>:3000"]
+    B -- "SQL com parâmetros<br/>mysql2 (pool)" --> DB[("🗄️ MySQL<br/>banco PI2")]
+    B -. "fotos" .-> UP["🖼️ /uploads"]
 
     style F fill:#dbeafe,stroke:#2563eb,color:#111
     style B fill:#dcfce7,stroke:#16a34a,color:#111
     style DB fill:#fef3c7,stroke:#d97706,color:#111
 ```
 
-O back-end segue uma arquitetura em camadas, em que cada camada tem uma única responsabilidade:
+> **Analogia:** o front-end é o **balcão** da loja (o que o cliente vê), o back-end é o **gerente** (confere regras e permissões) e o banco é o **arquivo** onde tudo fica guardado. O cliente nunca mexe no arquivo direto: sempre passa pelo gerente.
+
+### 🧱 Camadas do back-end
+
+Cada camada tem **uma única responsabilidade**. Uma requisição passa por todas, nesta ordem:
 
 ```mermaid
 flowchart LR
-    R["🛣️ routes"] --> M["🛡️ middlewares<br/>auth · schema"] --> C["🎮 controllers"] --> S["🧠 services<br/>regras de negócio"] --> RP["🗃️ repositories<br/>SQL"] --> DB[("🗄️ MySQL")]
+    R["🛣️ routes<br/>qual endereço"] --> M1["🛡️ autenticação<br/>tem login?"] --> M2["👮 perfil<br/>cliente ou admin?"] --> Z["🧹 Zod<br/>dados válidos?"] --> C["🎮 controller<br/>recebe e responde"] --> S["🧠 service<br/>regras de negócio"] --> RP["🗃️ repository<br/>SQL"] --> DB[("🗄️ MySQL")]
+    S -. "erro com status" .-> E["⚠️ middleware de erro<br/>{ erro: '...' }"]
 ```
 
-| Camada | Responsabilidade |
-|--------|------------------|
-| `routes` | Define os endpoints e quais middlewares cada um usa |
-| `middlewares` | Autenticação (JWT), autorização por perfil, validação (Zod) e tratamento de erros |
-| `controllers` | Recebe a requisição e devolve a resposta HTTP |
-| `services` | Regras de negócio e validações |
-| `repositories` | Consultas SQL ao banco |
-| `schemas` | Esquemas de validação dos dados de entrada (Zod) |
+| Camada | Pasta | Responsabilidade | Exemplo real |
+|--------|-------|------------------|--------------|
+| Rotas | `routes/` | Define o endereço e a fila de middlewares | `PATCH /pedidos/:id/status` → só admin |
+| Middlewares | `middlewares/` | Login (JWT), perfil, validação, limite de login e erros | `autenticacaoMiddleware`, `autorizarAdministrador` |
+| Schemas | `schemas/` | Regras dos dados de entrada (Zod) | data de retirada de hoje até 60 dias |
+| Controllers | `controllers/` | Lê a requisição e devolve a resposta HTTP | devolve `201 { pedidoId }` |
+| Services | `services/` | Regras de negócio e transações | confirmar baixa o estoque |
+| Repositories | `repositories/` | Consultas SQL com parâmetros `?` | `SELECT ... FOR UPDATE` |
+
+### 🔗 Tudo conversando: da tela até a tabela
+
+Exemplo do administrador confirmando o pedido nº 16:
+
+```text
+Dashboard (botão "Confirmar")
+  → pedidoApi.ts (Axios, com "Authorization: Bearer <token>")
+    → PATCH /pedidos/16/status   { "status": "confirmado" }
+      → autenticacaoMiddleware (token válido? usuário existe?)
+        → autorizarAdministrador (perfil = administrador?)
+          → validarSchema(IdParamSchema + AlterarStatusPedidoSchema)
+            → PedidoController.AlterarStatus
+              → PedidoService.AlterarStatus (transação)
+                → PedidoRepository / EstoqueRepository
+                  → tabelas pedido, produto, movimentacao_estoque
+```
 
 <details>
-<summary><b>🔑 Como funciona o login (sequência)</b></summary>
+<summary><b>⚙️ Sequência da confirmação de um pedido (com transação e trava)</b></summary>
 
 <br>
+
+```mermaid
+sequenceDiagram
+    actor A as Admin
+    participant F as Front-end
+    participant B as Back-end
+    participant D as MySQL
+
+    A->>F: clica em "Confirmar" no pedido 16
+    F->>B: PATCH /pedidos/16/status (Bearer token)
+    B->>B: JWT válido? perfil admin? Zod ok?
+    B->>D: BEGIN (início da transação)
+    B->>D: SELECT pedido 16 ... FOR UPDATE (trava o pedido)
+    D-->>B: status = pendente
+    loop para cada item do pedido
+        B->>D: SELECT produto ... FOR UPDATE (trava o saldo)
+        B->>D: UPDATE produto (saldo - quantidade)
+        B->>D: INSERT movimentacao_estoque (saída, motivo, admin, pedido)
+    end
+    B->>D: UPDATE pedido SET status = confirmado
+    B->>D: COMMIT (grava tudo de uma vez)
+    B-->>F: 200 { id, status_anterior, status }
+    F-->>A: aviso de sucesso e números atualizados
+    Note over B,D: Se qualquer passo falhar: ROLLBACK e nada é gravado
+```
+
+</details>
+
+<a id="login"></a>
+
+### 🔑 Como funciona o login (sequência)
 
 ```mermaid
 sequenceDiagram
@@ -221,41 +401,89 @@ sequenceDiagram
     participant B as Back-end
     participant D as MySQL
 
-    U->>F: e-mail e senha
+    U->>F: digita e-mail e senha
     F->>B: POST /usuarios/login
+    B->>B: limite: mais de 5 erros em 15 min? → 429
+    B->>B: Zod: e-mail sem espaços e em minúsculas
     B->>D: busca o usuário pelo e-mail
-    D-->>B: usuário e hash da senha
-    B->>B: bcrypt compara a senha
-    B-->>F: token JWT (válido por 8h)
-    F->>B: GET /pedidos/cliente (Bearer token)
-    B->>B: valida o token e confere o usuário
-    B-->>F: dados do cliente logado
+    D-->>B: usuário + hash bcrypt da senha
+    B->>B: bcrypt.compare(senha, hash)
+    alt senha errada ou e-mail inexistente
+        B-->>F: 401 "E-mail ou senha inválidos." (não diz qual)
+    else senha certa
+        B-->>F: token JWT { id, perfil } válido por 8h
+        F->>F: guarda o token e vai para /admin ou /catalogo
+        F->>B: GET /usuarios/logado (Bearer token)
+        B->>B: confere assinatura e validade do token
+        B->>D: o usuário ainda existe?
+        B-->>F: { id, nome, email, perfil, criado_em }
+    end
 ```
 
-</details>
+> **Analogia:** o **JWT** é como a pulseira de um evento: o servidor entrega na entrada (login), ela tem a "assinatura" do evento (o `JWT_SECRET`) e vale por 8 horas. Em cada porta (rota), o segurança olha a pulseira, sem precisar perguntar a senha de novo.
 
 <div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
 
 ---
 
+<a id="tecnologias"></a>
+
 ## 🛠️ Tecnologias
+
+<div align="center">
 
 ![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
-![Styled Components](https://img.shields.io/badge/Styled%20Components-DB7093?logo=styledcomponents&logoColor=white)
+![React Router](https://img.shields.io/badge/React_Router-CA4245?logo=reactrouter&logoColor=white)
+![Styled Components](https://img.shields.io/badge/Styled_Components-DB7093?logo=styledcomponents&logoColor=white)
 ![Axios](https://img.shields.io/badge/Axios-5A29E4?logo=axios&logoColor=white)
-![React Router](https://img.shields.io/badge/React%20Router-CA4245?logo=reactrouter&logoColor=white)
+![oxlint](https://img.shields.io/badge/oxlint-1.91-orange)
 <br>
 ![Node.js](https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white)
 ![Express](https://img.shields.io/badge/Express-000000?logo=express&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-000000?logo=jsonwebtokens&logoColor=white)
 ![Zod](https://img.shields.io/badge/Zod-3E67B1?logo=zod&logoColor=white)
+![Helmet](https://img.shields.io/badge/Helmet-8.3-555)
 <br>
-![VS Code](https://img.shields.io/badge/VS%20Code-007ACC?logo=visualstudiocode&logoColor=white)
+![VS Code](https://img.shields.io/badge/VS_Code-007ACC?logo=visualstudiocode&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?logo=git&logoColor=white)
 ![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white)
+![MySQL Workbench](https://img.shields.io/badge/MySQL_Workbench-4479A1?logo=mysql&logoColor=white)
+
+</div>
+
+```mermaid
+mindmap
+  root((PI-2))
+    Front-end
+      React 19
+      TypeScript
+      Vite 8
+      React Router 7
+      Styled Components
+      Axios
+      SweetAlert2 e Toastify
+      oxlint
+    Back-end
+      Node.js
+      Express 5
+      TypeScript
+      Zod 4
+      JWT e bcrypt
+      Helmet
+      express-rate-limit
+    Banco
+      MySQL 8+
+      mysql2
+      Workbench
+      BrModelo
+    Equipe
+      Git e GitHub
+      Pull Requests
+      Conventional Commits
+```
 
 <table>
 <tr>
@@ -263,77 +491,148 @@ sequenceDiagram
 
 **🖥️ Front-end**
 
-| Tecnologia | Uso |
-|------------|-----|
-| React 19 + TypeScript | Interface |
-| Vite | Build e servidor de desenvolvimento |
-| React Router | Rotas públicas e protegidas |
-| Styled Components | Estilização |
-| Axios | Comunicação com a API |
-| SweetAlert2 e React Toastify | Alertas e notificações |
+| Tecnologia | Para que serve |
+|------------|----------------|
+| React 19 + TypeScript | Monta as telas em componentes; o TypeScript avisa erros antes de rodar |
+| Vite 8 | Servidor de desenvolvimento rápido e build de produção |
+| React Router 7 | Endereços das telas e rotas protegidas por perfil |
+| Styled Components 6 | CSS dentro de cada componente |
+| Axios | Chamadas à API (coloca o token em toda requisição) |
+| SweetAlert2 + React Toastify | Janelas de confirmação e avisos rápidos |
 | React Icons | Ícones |
-| oxlint | Análise do código `.ts/.tsx` (lint) |
+| oxlint 1.91 | Procura erros e más práticas no código `.ts/.tsx` |
 
 </td>
 <td width="50%" valign="top">
 
 **⚙️ Back-end**
 
-| Tecnologia | Uso |
-|------------|-----|
+| Tecnologia | Para que serve |
+|------------|----------------|
 | Node.js + Express 5 + TypeScript | Servidor da API |
-| MySQL + mysql2 | Banco de dados |
-| JSON Web Token | Autenticação |
-| bcrypt | Criptografia de senhas |
-| Zod | Validação de dados |
-| dotenv e cors | Variáveis de ambiente e CORS (só o endereço do site) |
-| helmet | Cabeçalhos de segurança em todas as respostas |
-| express-rate-limit | Limite de tentativas de login |
+| mysql2 | Conexão com o MySQL (pool + *prepared statements*) |
+| jsonwebtoken | Gera e confere o token de login (JWT) |
+| bcrypt | Guarda a senha como hash (não dá para "desfazer") |
+| Zod 4 | Valida os dados que chegam, com mensagens em português |
+| dotenv + cors | Configurações no `.env` e só o site pode chamar a API |
+| helmet 8.3 | Cabeçalhos de segurança em todas as respostas |
+| express-rate-limit 8.7 | Bloqueia força bruta no login |
+| tsx | Roda o TypeScript com recarga automática (`npm run dev`) |
 
 </td>
 </tr>
 </table>
 
-**🧰 Ferramentas:** VS Code · MySQL Workbench · BrModelo · Git e GitHub
+**🧰 Ferramentas:** VS Code · MySQL Workbench · BrModelo · Git e GitHub · arquivos `.http` (em `backend/requests/`) para testar a API
 
 <div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
 
 ---
 
+<a id="banco"></a>
+
 ## 🗄️ Banco de dados
 
-O banco se chama `PI2`. O script completo está em [`backend/src/database/schema.sql`](backend/src/database/schema.sql) e há dados de teste em [`seed.sql`](backend/src/database/seed.sql).
+Banco **MySQL** chamado `PI2`, com **8 tabelas** em uso. Script completo em [`schema.sql`](backend/src/database/schema.sql) e dados de demonstração em [`seed.sql`](backend/src/database/seed.sql).
 
 ```mermaid
 erDiagram
-    USUARIO ||--o{ PEDIDO : faz
+    USUARIO ||--o{ PEDIDO : "faz"
     USUARIO ||--o{ MOVIMENTACAO_ESTOQUE : "registra (responsável)"
-    PEDIDO ||--|{ PEDIDO_ITEM : contém
-    PEDIDO ||--o| VENDA : "gera (ao ser entregue)"
-    PEDIDO ||--o{ MOVIMENTACAO_ESTOQUE : origina
+    PEDIDO ||--|{ PEDIDO_ITEM : "contém"
+    PEDIDO ||--o| VENDA : "gera ao ser entregue"
+    PEDIDO ||--o{ MOVIMENTACAO_ESTOQUE : "origina"
     VENDA ||--o{ NOTA : "tem (só 1 emitida)"
-    NOTA ||--|{ NOTA_ITEM : contém
+    NOTA ||--|{ NOTA_ITEM : "contém"
     PRODUTO ||--o{ PEDIDO_ITEM : "aparece em"
     PRODUTO ||--o{ NOTA_ITEM : "aparece em"
-    PRODUTO ||--o{ MOVIMENTACAO_ESTOQUE : movimenta
+    PRODUTO ||--o{ MOVIMENTACAO_ESTOQUE : "movimenta"
+
+    USUARIO {
+        int id PK
+        varchar nome
+        varchar email UK
+        varchar senha "hash bcrypt"
+        enum perfil "cliente | administrador"
+        datetime criado_em
+    }
+    PRODUTO {
+        int id PK
+        varchar nome
+        decimal preco_unitario
+        int quantidade_estoque
+        varchar imagem
+        boolean ativo
+    }
+    PEDIDO {
+        int id PK
+        int cliente_id FK
+        enum status
+        datetime previsao_busca
+        varchar observacao
+        datetime criado_em
+    }
+    VENDA {
+        int id PK
+        int pedido_id FK,UK
+        decimal valor_total
+        datetime data_venda
+    }
+    NOTA {
+        int id PK
+        int venda_id FK
+        varchar numero UK
+        enum status "emitida | cancelada"
+        varchar link_pdf
+    }
+    MOVIMENTACAO_ESTOQUE {
+        int id PK
+        int produto_id FK
+        int pedido_id FK "manual = NULL"
+        int usuario_id FK
+        enum tipo "entrada | saida"
+        int quantidade
+        varchar motivo
+    }
 ```
 
-> O modelo completo, com todas as colunas e tipos, está em [**docs/diagramas.md**](docs/diagramas.md#1-modelo-do-banco-mer--modelo-lógico).
+> O modelo com **todas** as colunas, a lista para refazer o MER no BrModelo e o diagrama de classes estão em [**docs/diagramas.md**](docs/diagramas.md).
 
 <details>
 <summary><b>📚 Dicionário das tabelas</b></summary>
 
 <br>
 
-| Tabela | Descrição |
-|--------|-----------|
-| `usuario` | Clientes e administradores (`perfil`) |
-| `produto` | Paletes do catálogo, com preço e saldo em estoque |
-| `pedido` / `pedido_item` | Pedidos e seus itens, com data prevista de retirada e observação. Status: pendente, confirmado, pronto_retirada, entregue, cancelado |
-| `venda` | Venda gerada a partir de um pedido |
-| `nota` / `nota_item` | Nota fiscal da venda e seus itens, com `status` (emitida/cancelada) e `link_pdf` (PDF no Emitte). Cada venda tem no máximo uma nota emitida; se ela for cancelada, dá para registrar outra |
-| `movimentacao_estoque` | Histórico de entradas e saídas por produto, com `usuario_id` (responsável), `motivo` e `pedido_id` (pedido de origem; manual = vazio) |
-| `telefone` / `endereco` | Reservadas para uma versão futura (telefone e endereço do cliente); ainda não são usadas pelo sistema |
+| Tabela | O que guarda | Regras importantes |
+|--------|--------------|--------------------|
+| `usuario` | Clientes e administradores | `email` único; `senha` só como hash; `perfil` sempre `cliente` no cadastro |
+| `produto` | Paletes do catálogo | Nunca é apagado: `ativo = false` tira do catálogo e preserva o histórico |
+| `pedido` | Pedido do cliente | `status`: pendente, confirmado, pronto_retirada, entregue, cancelado; `previsao_busca` e `observacao` opcionais |
+| `pedido_item` | Itens do pedido | Guarda o **preço do momento** (mudar o preço depois não altera pedidos antigos) |
+| `venda` | Venda de um pedido entregue | `pedido_id` único: um pedido gera no máximo uma venda |
+| `nota` / `nota_item` | Nota fiscal emitida no Emitte | `numero` único (nem cancelada reaproveita); só **uma emitida** por venda; `link_pdf` só `http/https` |
+| `movimentacao_estoque` | Histórico de entradas e saídas | Responsável (`usuario_id`), `motivo` e pedido de origem (`pedido_id`; manual = vazio) |
+
+`telefone` e `endereco` estão **planejadas** (comentadas no `schema.sql`) para a melhoria futura de telefone no cadastro e frete.
+
+</details>
+
+<details>
+<summary><b>🌱 Dados de demonstração (seed.sql)</b></summary>
+
+<br>
+
+| Dado | Quantidade | Detalhe |
+|------|:----------:|---------|
+| Usuários | 8 | 1 admin + 7 clientes fictícios (empresas e pessoas, com e-mails gmail, hotmail, outlook, yahoo e `.com.br`) |
+| Produtos | 4 | Palete PBR (R$ 45), descartável (R$ 25), reforçado (R$ 75) e plástico (R$ 120) — preços de exemplo |
+| Pedidos | 15 | Todos os status: 3 pendentes, 2 confirmados, 2 prontos, 6 entregues, 2 cancelados |
+| Vendas | 6 | 4 com nota e 2 sem nota (para mostrar "Emitir nota") |
+| Notas | 5 | NF-000001 a NF-000005, uma cancelada e reemitida |
+| Movimentações | 24 | Estoque inicial, lotes, avaria, ajuste, saídas de pedidos e devolução |
+
+- As datas são **relativas ao dia em que o seed roda** (`NOW() - INTERVAL 10 DAY`): o painel sempre tem "retirar hoje" e "vendas do mês".
+- O estoque de cada produto é **exatamente** a soma das movimentações (entradas − saídas). O plástico fica com 9 unidades para acender o alerta de estoque baixo.
 
 </details>
 
@@ -341,58 +640,56 @@ erDiagram
 
 ---
 
+<a id="api"></a>
+
 ## 🔌 API (back-end)
 
-Rotas marcadas com 🔒 exigem o header `Authorization: Bearer <token>`.
-
-**Legenda:** 🟢 `GET` · 🔵 `POST` · 🟣 `PUT` · 🟠 `PATCH`
+**30 rotas** em 7 grupos. 🌐 = pública · 🔒 = exige `Authorization: Bearer <token>` · **Legenda:** 🟢 `GET` · 🔵 `POST` · 🟣 `PUT` · 🟠 `PATCH`
 
 <details open>
-<summary><b>👤 Usuários</b></summary>
+<summary><b>👤 Usuários</b> (4)</summary>
 
 <br>
 
-| Método | Rota | Descrição | Auth |
-|:------:|------|-----------|:----:|
-| 🔵 `POST` | `/usuarios` | Cadastro de usuário | |
-| 🔵 `POST` | `/usuarios/login` | Login (retorna o token JWT). Depois de 5 tentativas erradas em 15 min → `429` | |
-| 🟢 `GET` | `/usuarios/logado` | Dados do usuário logado `{ usuario: { id, nome, email, perfil, criado_em } }` | 🔒 |
-| 🟠 `PATCH` | `/usuarios` | Atualizar nome e senha | 🔒 |
+| Método | Rota | Descrição | Acesso |
+|:------:|------|-----------|:------:|
+| 🔵 `POST` | `/usuarios` | Cadastro (sempre como cliente) `{ nome, email, senha }` | 🌐 |
+| 🔵 `POST` | `/usuarios/login` | Login → `{ token, payload }`. 5 erros em 15 min → `429` | 🌐 |
+| 🟢 `GET` | `/usuarios/logado` | `{ usuario: { id, nome, email, perfil, criado_em } }` | 🔒 |
+| 🟠 `PATCH` | `/usuarios` | Atualizar nome e/ou senha (`senhaAtual` + `senhaNova`) | 🔒 |
 
 </details>
 
 <details open>
-<summary><b>📦 Produtos</b></summary>
+<summary><b>📦 Produtos</b> (6)</summary>
 
 <br>
 
-| Método | Rota | Descrição | Auth |
-|:------:|------|-----------|:----:|
-| 🟢 `GET` | `/produtos` | Catálogo: lista os produtos **ativos** com `disponivel: true/false` (sem a quantidade em estoque) | 🌐 |
-| 🟢 `GET` | `/produtos/:id` | Detalhes de um produto ativo, com `disponivel` e sem a quantidade (`404` se não existir ou estiver desativado) | 🌐 |
-| 🟢 `GET` | `/produtos/todos` | Lista todos os produtos, inclusive os desativados, com `quantidade_estoque` | 🔒 admin |
-| 🔵 `POST` | `/produtos` | Cadastrar produto `{ nome, descricao, preco, quantidade, imagem? }` → `201 { id }` | 🔒 admin |
-| 🟣 `PUT` | `/produtos/:id` | Editar produto (mesmo corpo do cadastro) → `204` | 🔒 admin |
+| Método | Rota | Descrição | Acesso |
+|:------:|------|-----------|:------:|
+| 🟢 `GET` | `/produtos` | Catálogo: produtos ativos com `disponivel: true/false` (**sem** a quantidade) | 🌐 |
+| 🟢 `GET` | `/produtos/:id` | Detalhes de um produto ativo (`404` se não existe ou está desativado) | 🌐 |
+| 🟢 `GET` | `/produtos/todos` | Todos, inclusive desativados, com `quantidade_estoque` | 🔒 admin |
+| 🔵 `POST` | `/produtos` | Cadastrar `{ nome, descricao, preco, quantidade, imagem? }` → `201 { id }` | 🔒 admin |
+| 🟣 `PUT` | `/produtos/:id` | Editar (mesmo corpo) → `204` | 🔒 admin |
 | 🟠 `PATCH` | `/produtos/:id/ativo` | Ativar/desativar `{ "ativo": false }` → `204` | 🔒 admin |
 
-A quantidade em estoque é informação só do administrador: as rotas públicas devolvem apenas `disponivel` (estoque maior que zero). Produtos não são apagados: desativar tira o produto do catálogo, mas preserva pedidos, vendas e notas antigos. O campo `imagem` guarda só o nome do arquivo da pasta `backend/uploads` (servida em `/uploads/<arquivo>`).
-
 </details>
 
 <details open>
-<summary><b>🛒 Pedidos</b></summary>
+<summary><b>🛒 Pedidos</b> (7)</summary>
 
 <br>
 
-| Método | Rota | Descrição | Auth |
-|:------:|------|-----------|:----:|
+| Método | Rota | Descrição | Acesso |
+|:------:|------|-----------|:------:|
 | 🔵 `POST` | `/pedidos` | Criar pedido → `201 { pedidoId }` | 🔒 cliente |
-| 🟢 `GET` | `/pedidos/cliente` | Pedidos do cliente logado (todos os status, com `valor_total`) | 🔒 cliente |
-| 🟢 `GET` | `/pedidos/itens/:id` | Itens de um pedido do próprio cliente | 🔒 cliente |
-| 🟠 `PATCH` | `/pedidos/cancelar/:id` | Cancelar pedido (só `pendente`) → `204` | 🔒 cliente |
+| 🟢 `GET` | `/pedidos/cliente` | Pedidos do cliente logado, com `valor_total` | 🔒 cliente |
+| 🟢 `GET` | `/pedidos/itens/:id` | Itens de um pedido **do próprio** cliente | 🔒 cliente |
+| 🟠 `PATCH` | `/pedidos/cancelar/:id` | Cancelar (só `pendente`) → `204` | 🔒 cliente |
 | 🟢 `GET` | `/pedidos` | Todos os pedidos, com nome e e-mail do cliente | 🔒 admin |
-| 🟢 `GET` | `/pedidos/:id/itens` | Itens de qualquer pedido → `{ produtos: [...] }` (`404` se não existir) | 🔒 admin |
-| 🟠 `PATCH` | `/pedidos/:id/status` | Mudar status `{ "status": "confirmado" }` → `200 { id, status_anterior, status }` | 🔒 admin |
+| 🟢 `GET` | `/pedidos/:id/itens` | Itens de qualquer pedido | 🔒 admin |
+| 🟠 `PATCH` | `/pedidos/:id/status` | `{ "status": "confirmado" }` → `200 { id, status_anterior, status }` | 🔒 admin |
 
 Corpo de `POST /pedidos`:
 
@@ -404,144 +701,56 @@ Corpo de `POST /pedidos`:
 }
 ```
 
-- `previsao_busca` (opcional): data `AAAA-MM-DD`, de hoje até 60 dias. `observacao` (opcional): até 500 caracteres.
-- Estoque insuficiente → `409` ("No momento não temos essa quantidade de ..." com o nome do produto, sem informar o saldo). Produto desativado → `409` com o nome do produto. Produto inexistente → `404`.
-- Status: `pendente → confirmado → pronto_retirada → entregue`, ou `cancelado`. Mudança fora dessa ordem → `409`.
-- **Confirmar** baixa o estoque (saída); **cancelar** um pedido confirmado devolve (entrada); **entregar** registra a venda. Tudo na mesma transação.
-
-</details>
-
-<details open>
-<summary><b>🧭 Painel do administrador</b></summary>
-
-<br>
-
-| Método | Rota | Descrição | Auth |
-|:------:|------|-----------|:----:|
-| 🟢 `GET` | `/admin/resumo` | Números do dashboard | 🔒 admin |
-| 🟢 `GET` | `/admin/usuarios` | Todos os usuários (sem senha), do cadastro mais novo ao mais antigo → `{ usuarios: [...] }` | 🔒 admin |
-
-Resposta de `GET /admin/usuarios`:
-
-```json
-{
-  "usuarios": [
-    {
-      "id": 1,
-      "nome": "Cliente Teste",
-      "email": "usuario@gmail.com",
-      "perfil": "cliente",
-      "criado_em": "2026-11-20T13:00:00.000Z",
-      "total_pedidos": 3,
-      "total_comprado": 1050
-    }
-  ]
-}
-```
-
-- `total_pedidos`: todos os pedidos do usuário (qualquer status).
-- `total_comprado`: soma das vendas do usuário (pedidos entregues).
-- A senha nunca sai do banco. Sem token → `401`; cliente → `403`.
-
-Resposta de `GET /admin/resumo`:
-
-```json
-{
-  "pendentes": 1,
-  "retirar_hoje": 1,
-  "limite_estoque_baixo": 10,
-  "estoque_baixo": [{ "id": 4, "nome": "Palete plástico", "quantidade_estoque": 7 }],
-  "vendas_mes": { "quantidade": 2, "valor_total": 5700 }
-}
-```
-
-- `retirar_hoje`: pedidos `pronto_retirada` + pedidos `confirmado` com retirada marcada para hoje.
-- `estoque_baixo`: produtos ativos com `limite_estoque_baixo` (10) unidades ou menos, do menor para o maior.
-- `vendas_mes`: vendas registradas no mês atual (pedidos entregues).
-
-</details>
-
-<details open>
-<summary><b>💰 Vendas</b> (somente administrador)</summary>
-
-<br>
-
-| Método | Rota | Descrição | Auth |
-|:------:|------|-----------|:----:|
-| 🟢 `GET` | `/vendas` | Todas as vendas, da mais nova para a mais antiga → `{ vendas: [...] }` | 🔒 admin |
-| 🔵 `POST` | `/vendas` | Registrar a venda de um pedido `entregue` que ficou sem venda `{ "pedido_id": 3 }` | 🔒 admin |
-
-Pedidos marcados como entregues pelo sistema já ganham a venda sozinhos; o `POST` serve para pedidos antigos. Não mexe no estoque (ele baixou na confirmação).
-
-Cada venda de `GET /vendas` traz: `id`, `pedido_id`, `valor_total`, `data_venda`, `cliente_id`, `cliente_nome`, `cliente_email`, `quantidade_total` e a nota **emitida** (`nota_id`, `nota_numero`; `null` = sem nota).
-
-</details>
-
-<details open>
-<summary><b>🧾 Notas fiscais</b> (somente administrador)</summary>
-
-<br>
-
-A nota é emitida no **Emitte**; o sistema guarda o número, o status e o link do PDF.
-
-| Método | Rota | Descrição | Auth |
-|:------:|------|-----------|:----:|
-| 🟢 `GET` | `/notas` | Todas as notas (com venda, pedido e cliente) → `{ notas: [...] }` | 🔒 admin |
-| 🔵 `POST` | `/notas` | Registrar a nota de uma venda → `201` | 🔒 admin |
-| 🟠 `PATCH` | `/notas/:id/link` | Trocar ou apagar o link do PDF `{ "link_pdf": "https://..." \| null }` | 🔒 admin |
-| 🟠 `PATCH` | `/notas/:id/cancelar` | Cancelar a nota (fica no histórico) | 🔒 admin |
-
-Corpo de `POST /notas`:
-
-```json
-{
-  "venda_id": 2,
-  "numero": "NF-000002",
-  "natureza_operacao": "Venda de mercadoria",
-  "link_pdf": "https://app.emitte.com.br/nfe/NF-000002.pdf"
-}
-```
-
-- `numero`: obrigatório, até 30 caracteres, só letras, números, `.`, `/` e `-`; não pode repetir (nem de nota cancelada) → `409`.
-- `natureza_operacao`: opcional (vazio = "Venda de mercadoria").
-- `link_pdf`: opcional; só aceita `http://` ou `https://` (bloqueia `javascript:` e afins) → `400`.
-- Venda que já tem nota emitida → `409`; venda inexistente → `404`.
-- Cancelar nota já cancelada ou mudar o link de nota cancelada → `409`. Depois de cancelar, a venda volta a ficar "sem nota" e aceita uma nota nova.
-
-</details>
-
-<details open>
-<summary><b>📊 Estoque</b> (somente administrador)</summary>
-
-<br>
-
-| Método | Rota | Descrição | Auth |
-|:------:|------|-----------|:----:|
-| 🟢 `GET` | `/estoque` | Saldo atual de todos os produtos | 🔒 admin |
-| 🟢 `GET` | `/estoque/movimentacoes` | Histórico de entradas e saídas (com responsável, motivo e pedido) | 🔒 admin |
-| 🟢 `GET` | `/estoque/movimentacoes/:id` | Saldo e histórico de um produto (`:id` inválido → `400`, inexistente → `404`) | 🔒 admin |
-| 🔵 `POST` | `/estoque/entrada` | Registrar entrada `{ produto_id, quantidade, motivo }` | 🔒 admin |
-| 🔵 `POST` | `/estoque/saida` | Registrar saída manual `{ produto_id, quantidade, motivo }` | 🔒 admin |
-
-Cada entrada ou saída atualiza o saldo do produto e grava o histórico na mesma transação. O `motivo` é obrigatório (3 a 255 caracteres) e o responsável é o administrador logado (vem do token, não do corpo). Saída maior que o saldo retorna `409`.
-
-Cada movimentação do histórico traz: `id`, `produto_id`, `produto_nome`, `tipo` (`entrada`/`saida`), `quantidade`, `motivo`, `usuario_id`, `responsavel_nome`, `pedido_id` (`null` = manual) e `data_mov`. Confirmar um pedido gera as saídas com o motivo "Confirmação do pedido nº X"; cancelar um pedido confirmado gera as entradas "Cancelamento do pedido nº X (estoque devolvido)".
+- Itens: de 1 a 50, sem repetir produto, quantidade inteira > 0. `previsao_busca`: de hoje até 60 dias, data real. `observacao`: até 500 caracteres.
+- Estoque insuficiente → `409` "No momento não temos essa quantidade de ..." (**sem revelar o saldo**). Produto desativado → `409`. Inexistente → `404`.
 
 </details>
 
 <details>
-<summary><b>⚠️ Formato dos erros</b></summary>
+<summary><b>🧭 Painel, 💰 Vendas, 🧾 Notas e 📊 Estoque</b> (13, todas só para administrador)</summary>
 
 <br>
 
-Erros seguem o formato `{ "erro": "mensagem" }`, sempre em português. Erros de validação (Zod) retornam `400` com os detalhes em `detalhes`. Os códigos usados: `400` dados inválidos (inclusive JSON mal formado), `401` sem login (ou sessão expirada/token inválido), `403` sem permissão, `404` não encontrado (inclusive rota inexistente), `409` conflito com a regra de negócio (ex.: estoque insuficiente), `500` erro interno.
+| Método | Rota | Descrição |
+|:------:|------|-----------|
+| 🟢 `GET` | `/admin/resumo` | `{ pendentes, retirar_hoje, limite_estoque_baixo, estoque_baixo[], vendas_mes }` |
+| 🟢 `GET` | `/admin/usuarios` | Usuários sem senha, com `total_pedidos` e `total_comprado` |
+| 🟢 `GET` | `/vendas` | Vendas com cliente, quantidade e nota emitida (`null` = sem nota) |
+| 🔵 `POST` | `/vendas` | Registrar venda de um pedido `entregue` antigo que ficou sem venda `{ pedido_id }` |
+| 🟢 `GET` | `/notas` | Notas com venda, pedido e cliente |
+| 🔵 `POST` | `/notas` | `{ venda_id, numero, natureza_operacao?, link_pdf? }` → `201` |
+| 🟠 `PATCH` | `/notas/:id/link` | Trocar ou apagar o link do PDF |
+| 🟠 `PATCH` | `/notas/:id/cancelar` | Cancelar a nota (fica no histórico) |
+| 🟢 `GET` | `/estoque` | Saldo de todos os produtos |
+| 🟢 `GET` | `/estoque/movimentacoes` | Histórico com `responsavel_nome`, `motivo` e `pedido_id` |
+| 🟢 `GET` | `/estoque/movimentacoes/:id` | Saldo e histórico de um produto |
+| 🔵 `POST` | `/estoque/entrada` | `{ produto_id, quantidade, motivo }` (motivo de 3 a 255 caracteres) |
+| 🔵 `POST` | `/estoque/saida` | Mesmo corpo; saída maior que o saldo → `409` |
+
+Regras das notas: número até 30 caracteres (letras, números, `.`, `/`, `-`) e nunca repetido → `409`; `link_pdf` só aceita `http://` ou `https://` (bloqueia `javascript:`) → `400`; venda que já tem nota emitida → `409`. O responsável de cada movimentação vem **do token**, nunca do corpo da requisição.
+
+</details>
+
+<details>
+<summary><b>⚠️ Padrão de erros (igual em toda a API)</b></summary>
+
+<br>
 
 ```json
-{
-  "erro": "Dados inválidos",
-  "detalhes": [ ... ]
-}
+{ "erro": "Dados inválidos", "detalhes": [ { "message": "Informe um e-mail válido, como nome@exemplo.com." } ] }
 ```
+
+| Código | Quando | Exemplo de mensagem |
+|:------:|--------|---------------------|
+| `400` | Dados inválidos (Zod) ou JSON mal formado | "A data de retirada não pode ser no passado." |
+| `401` | Sem login, token inválido ou vencido | "Sua sessão expirou. Faça login novamente." |
+| `403` | Sem permissão (perfil errado) ou outro site (CORS) | "Acesso permitido somente para administradores." |
+| `404` | Não encontrado (inclusive rota inexistente) | "Pedido não encontrado." |
+| `409` | Conflito com a regra de negócio | "Não é possível mudar o pedido de "pendente" para "entregue"." |
+| `429` | Muitas tentativas de login | "Muitas tentativas de login. Por segurança, tente novamente em 15 minutos." |
+| `500` | Erro inesperado (detalhe só no terminal) | "Erro interno no servidor" |
+
+O front-end mostra sempre o detalhe em português (função `obterMensagemErro`) e avisa quando o servidor está fora do ar.
 
 </details>
 
@@ -549,29 +758,30 @@ Erros seguem o formato `{ "erro": "mensagem" }`, sempre em português. Erros de 
 
 ---
 
+<a id="telas"></a>
+
 ## 🖥️ Telas (front-end)
 
-| Rota | Tela | Acesso |
-|------|------|:------:|
-| `/` | Tela inicial (landing page com contatos) | 🌐 Pública |
-| `/cadastro` | Cadastro de usuário | 🌐 Pública |
-| `/login` | Login | 🌐 Pública |
-| `/catalogo` | Catálogo de produtos e carrinho (login só para finalizar o pedido) | 🌐 Pública |
-| `/carrinho` | Carrinho: revisar itens, data de retirada, observação e enviar o pedido | 🌐 Pública (envio exige login de cliente) |
+| Rota | Tela | Quem abre |
+|------|------|:---------:|
+| `/` | Tela inicial (landing) | 🌐 Todos |
+| `/catalogo` | Catálogo com quantidade e carrinho no card | 🌐 Todos |
+| `/carrinho` | Carrinho, data de retirada, observação e envio | 🌐 Todos (enviar exige cliente) |
+| `/cadastro` · `/login` | Cadastro e login | 🌐 Visitante |
 | `/perfil` | Perfil do cliente | 🔒 Cliente |
-| `/clientePedidos` | Meus Pedidos (acompanhamento dos pedidos) | 🔒 Cliente |
-| `/admin` | Dashboard: indicadores e pedidos em andamento com botões de status (+ link "Ver todos os pedidos") | 🔒 Admin |
-| `/admin/pedidos` | Tabela de todos os pedidos: busca, status, período, ordenação, itens e botões de status | 🔒 Admin |
-| `/admin/usuarios` | Tabela de usuários: busca, perfil, ordenação, nº de pedidos e total comprado | 🔒 Admin |
-| `/admin/movimentacoes` | Movimentações de estoque: registrar entrada/saída manual e histórico com busca, produto, tipo e período | 🔒 Admin |
-| `/admin/vendas` | Tabela de vendas: busca, período, com/sem nota, total e média, itens e "Emitir nota" | 🔒 Admin |
-| `/admin/notas` | Tabela de notas fiscais: busca, status, período, link do PDF, editar link e cancelar | 🔒 Admin |
+| `/clientePedidos` | Meus Pedidos | 🔒 Cliente |
+| `/admin` | Dashboard | 🔒 Admin |
+| `/admin/pedidos` | Tabela de pedidos | 🔒 Admin |
+| `/admin/usuarios` | Tabela de usuários | 🔒 Admin |
+| `/admin/movimentacoes` | Movimentações de estoque | 🔒 Admin |
+| `/admin/vendas` | Tabela de vendas | 🔒 Admin |
+| `/admin/notas` | Tabela de notas fiscais | 🔒 Admin |
 | `/admin/perfil` | Perfil do administrador | 🔒 Admin |
-| qualquer outro endereço | Página 404 "Página não encontrada" com botões para voltar (o painel tem a sua própria em `/admin/...`) | 🌐 Pública |
+| qualquer outro | Página 404 (o painel tem a sua própria) | 🌐 Todos |
 
 ### 📸 Prints
 
-Capturas feitas com os dados de demonstração do `seed.sql` (todas as imagens estão em [`docs/prints/`](docs/prints)).
+Capturas com os dados do `seed.sql` (todas em [`docs/prints/`](docs/prints)).
 
 <table>
 <tr>
@@ -583,21 +793,21 @@ Capturas feitas com os dados de demonstração do `seed.sql` (todas as imagens e
 <td align="center"><img src="docs/prints/05-meus-pedidos.png" alt="Meus Pedidos"><br><sub><b>Meus Pedidos</b>: histórico com status</sub></td>
 </tr>
 <tr>
-<td align="center"><img src="docs/prints/06-dashboard.png" alt="Dashboard do administrador"><br><sub><b>Dashboard</b>: indicadores e pedidos em andamento</sub></td>
-<td align="center"><img src="docs/prints/07-pedidos-admin.png" alt="Tabela de pedidos"><br><sub><b>Tabela de pedidos</b>: busca, filtros e status</sub></td>
+<td align="center"><img src="docs/prints/06-dashboard.png" alt="Dashboard"><br><sub><b>Dashboard</b>: indicadores e pedidos em andamento</sub></td>
+<td align="center"><img src="docs/prints/07-pedidos-admin.png" alt="Pedidos"><br><sub><b>Pedidos</b>: busca, filtros e status</sub></td>
 </tr>
 <tr>
-<td align="center"><img src="docs/prints/08-movimentacoes.png" alt="Movimentações de estoque"><br><sub><b>Movimentações</b>: quem, quando, por quê e de qual pedido</sub></td>
-<td align="center"><img src="docs/prints/09-vendas.png" alt="Tabela de vendas"><br><sub><b>Vendas</b>: total, média e "Emitir nota"</sub></td>
+<td align="center"><img src="docs/prints/08-movimentacoes.png" alt="Movimentações"><br><sub><b>Movimentações</b>: quem, quando, por quê e de qual pedido</sub></td>
+<td align="center"><img src="docs/prints/09-vendas.png" alt="Vendas"><br><sub><b>Vendas</b>: total, média e "Emitir nota"</sub></td>
 </tr>
 <tr>
 <td align="center"><img src="docs/prints/10-notas.png" alt="Notas fiscais"><br><sub><b>Notas fiscais</b>: status e link do PDF no Emitte</sub></td>
-<td align="center"><img src="docs/prints/11-usuarios.png" alt="Tabela de usuários"><br><sub><b>Usuários</b>: perfil, nº de pedidos e total comprado</sub></td>
+<td align="center"><img src="docs/prints/11-usuarios.png" alt="Usuários"><br><sub><b>Usuários</b>: perfil, nº de pedidos e total comprado</sub></td>
 </tr>
 </table>
 
 <details>
-<summary><b>Mais prints (login e celular)</b></summary>
+<summary><b>📱 Mais prints (login e celular)</b></summary>
 
 <br>
 
@@ -609,37 +819,58 @@ Capturas feitas com os dados de demonstração do `seed.sql` (todas as imagens e
 
 </details>
 
+<a id="acesso-telas"></a>
+
 ### 🔐 Quem pode abrir cada tela
 
-Quem decide o acesso é o servidor: o front-end confere o perfil em `GET /usuarios/logado` e só ajuda na navegação. Admin que abre tela de cliente vai para `/admin`; cliente que abre `/admin` volta para o catálogo com o aviso "Área restrita"; sem login vai para `/login` e, depois de entrar, volta para a tela que tentou abrir. Se o servidor estiver fora do ar, a sessão não é apagada: a tela mostra o aviso com o botão "Tentar de novo". Mesmo que alguém force o caminho, a API responde `401`/`403`.
+```mermaid
+flowchart TD
+    T["Pessoa abre uma tela protegida"] --> L{"Tem token?"}
+    L -- "não" --> LG["Vai para /login<br/>e depois volta para a tela"]
+    L -- "sim" --> S{"GET /usuarios/logado<br/>o servidor confirma?"}
+    S -- "401 token vencido" --> LG
+    S -- "servidor fora do ar" --> TN["Aviso + 'Tentar de novo'<br/>(a sessão não é apagada)"]
+    S -- "ok" --> P{"Perfil certo<br/>para a tela?"}
+    P -- "sim" --> OK["✅ Abre a tela"]
+    P -- "cliente em /admin" --> CAT["Volta ao catálogo<br/>+ 'Área restrita'"]
+    P -- "admin em tela de cliente" --> ADM["Vai para /admin"]
+```
+
+> [!IMPORTANT]
+> Quem decide é o **servidor**. O front-end só ajuda na navegação: mesmo que alguém force o endereço ou altere o navegador, a API responde `401`/`403`.
 
 <div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
 
 ---
 
+<a id="seguranca"></a>
+
 ## 🔐 Segurança da informação
 
 <details open>
-<summary><b>✅ O que já está implementado</b></summary>
+<summary><b>✅ O que está implementado (e contra o que protege)</b></summary>
 
 <br>
 
-| Área | Prática adotada |
-|------|-----------------|
-| 🔑 **Senhas** | Armazenadas apenas como hash **bcrypt** (10 rounds), nunca em texto puro |
-| 🎫 **Autenticação** | **JWT** com expiração de 8 horas, validado a cada requisição; o usuário é conferido no banco, então um usuário removido perde o acesso |
-| 🛂 **Autorização** | Perfis `cliente` e `administrador`, com middleware próprio para rotas de admin |
-| 💉 **Injeção de SQL** | Todas as consultas usam *prepared statements* (`?`) do mysql2 |
-| 🧹 **Validação de entrada** | Todo corpo de requisição passa por esquemas **Zod** antes de chegar ao controller |
-| 👥 **Cadastro seguro** | O perfil de quem se cadastra é sempre `cliente`, definido no servidor e não pelo cliente da API |
-| 🧱 **Isolamento de dados** | Pedidos são sempre filtrados pelo `cliente_id` do token, então um cliente não acessa dados de outro |
-| 🚪 **Login** | Mensagem genérica ("e-mail ou senha inválidos"), sem revelar qual dos dois está errado |
-| 🙈 **Respostas** | O hash da senha nunca é devolvido pela API; a quantidade em estoque só aparece nas rotas de admin (o catálogo recebe só `disponivel`); erros inesperados retornam mensagem genérica (`500`) |
-| 🗝️ **Segredos** | Credenciais ficam no `.env`, que está no `.gitignore`; o repositório traz apenas o `.env.example` |
-| 🌐 **CORS** | Só o endereço do site (`CORS_ORIGIN` no `.env`) pode chamar a API pelo navegador; outro site recebe `403` |
-| 🛑 **Força bruta** | Depois de **5 tentativas de login erradas em 15 minutos**, o mesmo IP recebe `429` ("Muitas tentativas de login...") até a janela acabar; logins certos não contam (`express-rate-limit`) |
-| 🪖 **Cabeçalhos** | **Helmet** em todas as respostas (ex.: impede abrir a API dentro de outro site e esconde o `X-Powered-By: Express`); só as fotos de `/uploads` são liberadas para o site |
-| 🔗 **Integridade** | Chaves estrangeiras e restrições `UNIQUE`/`NOT NULL` no banco |
+| Área | Prática adotada | Protege contra |
+|------|-----------------|----------------|
+| 🔑 **Senhas** | Hash **bcrypt** (custo 10); nunca em texto puro e nunca devolvidas pela API | Vazamento do banco revelar senhas |
+| 🎫 **Autenticação** | **JWT** assinado, válido por **8 h**; a cada requisição o usuário é conferido no banco | Acesso sem login; usuário removido continuar entrando |
+| 🛂 **Autorização** | Middlewares `autorizarCliente` e `autorizarAdministrador` em todas as rotas sensíveis | Cliente usar rotas de admin (`403`) |
+| 🧱 **Isolamento** | Pedidos do cliente sempre filtrados pelo `id` do **token** | Um cliente ver pedidos de outro |
+| 💉 **SQL Injection** | Todas as consultas com *prepared statements* (`?`) | Comandos SQL escondidos em campos |
+| 🧹 **Validação** | **Zod** em todo corpo e em todo `:id`; e-mail com `trim` e minúsculas | Dados malformados, tipos errados, valores absurdos |
+| 👥 **Cadastro** | Perfil sempre `cliente`, definido no servidor | Alguém se cadastrar como administrador |
+| 🚪 **Login** | Mensagem genérica "E-mail ou senha inválidos." | Descobrir quais e-mails estão cadastrados |
+| 🛑 **Força bruta** | **5 tentativas erradas em 15 min** por IP → `429` (`express-rate-limit`); logins certos não contam | Adivinhar senhas por tentativa e erro |
+| 🌐 **CORS** | Só o endereço do site (`CORS_ORIGIN`) chama a API pelo navegador; outro site → `403` | Site malicioso usar a API com a sessão do usuário |
+| 🪖 **Cabeçalhos** | **Helmet** (CSP, `X-Frame-Options`, `nosniff`, HSTS...) e sem `X-Powered-By` | Clickjacking, *sniffing* e exposição da tecnologia |
+| 🔗 **Links** | `link_pdf` só aceita `http/https`; links externos com `noopener noreferrer` | Links `javascript:` (XSS) e *tabnabbing* |
+| 🙈 **Sigilo comercial** | A quantidade em estoque só aparece nas rotas de admin | Concorrente descobrir o estoque pelo catálogo |
+| 🔒 **Concorrência** | Transações com `SELECT ... FOR UPDATE` | Dois admins baixarem o mesmo estoque duas vezes |
+| 🗝️ **Segredos** | `.env` no `.gitignore`; o repositório só traz `.env.example` | Senha do banco e `JWT_SECRET` no GitHub |
+| 🧾 **Erros** | `500` com mensagem genérica (detalhe só no terminal) | Expor detalhes internos do servidor |
+| 🔗 **Integridade** | Chaves estrangeiras, `UNIQUE` e `NOT NULL`; produtos desativados, nunca apagados | Dados órfãos e perda de histórico |
 
 </details>
 
@@ -648,14 +879,14 @@ Quem decide o acesso é o servidor: o front-end confere o perfil em `GET /usuari
 
 <br>
 
-- [x] Restringir o **CORS** ao endereço do front-end (em produção, colocar o domínio real em `CORS_ORIGIN`)
-- [x] Adicionar **rate limiting** no login e cabeçalhos de segurança com **Helmet**
-- [ ] Ao publicar atrás de um proxy (ex.: Render, Nginx), configurar o `trust proxy` do Express para o limite de login enxergar o IP real
-- [x] Aplicar o middleware de administrador nas rotas de gestão (produtos, estoque, notas e vendas)
-- [ ] Fortalecer a política de senhas (tamanho mínimo e complexidade)
-- [ ] Servir tudo por **HTTPS** e usar um `JWT_SECRET` longo e aleatório
-- [ ] Avaliar o armazenamento do token (hoje em `localStorage`) e criar um usuário de banco com privilégios mínimos
-- [ ] Adequação à **LGPD**: coletar apenas os dados necessários e definir regras de retenção
+- [x] CORS restrito ao endereço do site
+- [x] Limite de tentativas de login e cabeçalhos com Helmet
+- [x] Middleware de administrador em todas as rotas de gestão
+- [ ] Ao publicar atrás de proxy (Render, Nginx): `trust proxy` para o limite de login ver o IP real
+- [ ] Política de senha mais forte (hoje: mínimo de 6 caracteres)
+- [ ] **HTTPS** e `JWT_SECRET` longo e aleatório em produção
+- [ ] Token em *cookie* `HttpOnly` em vez de `localStorage`, e usuário do banco com privilégios mínimos
+- [ ] Adequação à **LGPD**: texto de privacidade e regras de retenção de dados
 
 </details>
 
@@ -663,63 +894,256 @@ Quem decide o acesso é o servidor: o front-end confere o perfil em `GET /usuari
 
 ---
 
-## 📋 Engenharia de requisitos e diagramas
+<a id="qualidade"></a>
 
-Antes de codificar, a equipe levantou os requisitos com o cliente:
+## ✅ Qualidade e desempenho
 
-- 🎤 Entrevista com o proprietário e **visita ao armazém** para entender a operação
-- 📄 Relatório de levantamento de requisitos
-- 🧭 Diagrama de casos de uso
-- 🧱 Diagrama de classes
-- 🗄️ Modelagem do banco (MER no BrModelo, depois modelo lógico e físico no MySQL Workbench)
-
-Os diagramas foram refeitos para a versão final (sem cotação) e ficam versionados junto com o código em [**docs/diagramas.md**](docs/diagramas.md):
-
-| Diagrama | O que mostra |
-|----------|--------------|
-| [🗄️ Modelo do banco](docs/diagramas.md#1-modelo-do-banco-mer--modelo-lógico) | As 10 tabelas, colunas, chaves e ligações (e a lista para refazer o MER no BrModelo) |
-| [🧭 Casos de uso](docs/diagramas.md#2-diagrama-de-casos-de-uso) | O que o visitante, o cliente e o administrador podem fazer |
-| [🧱 Classes](docs/diagramas.md#3-diagrama-de-classes) | Classes do domínio, atributos, operações e como viram as camadas do back-end |
-| [🔁 Ciclo do pedido](docs/diagramas.md#4-ciclo-de-vida-do-pedido) | Os status do pedido e o que cada mudança faz no estoque e nas vendas |
-
-Para testar e apresentar o sistema:
-
-| Documento | Para que serve |
-|-----------|----------------|
-| [🧪 Roteiro de teste](docs/roteiro-de-teste.md) | Passo a passo do fluxo completo (visitante, cliente e administrador) com o resultado esperado de cada tela, usando os dados do seed |
-| [🎤 Roteiro de apresentação](docs/roteiro-de-apresentacao.md) | O que mostrar, em que ordem e quem fala na demo, com preparação e perguntas prováveis |
-
-> [!NOTE]
-> Hoje a emissão de notas fiscais é feita pelo site **Emitte**, com clientes, produtos e transportadoras cadastrados. O sistema registra a venda e a nota para manter o estoque e o histórico organizados.
+| Área | O que foi feito |
+|------|-----------------|
+| 🧪 **Tipos** | `npm run build` do front roda `tsc --noEmit` antes: erro de tipo **impede** o build (achou 2 erros que estavam escondidos) |
+| 🔍 **Lint** | **oxlint** com regras de React e TypeScript (`npm run lint` = 0 problemas) |
+| ⏳ **Estados de tela** | "Carregando...", lista vazia e erro com "Tentar de novo" em todas as telas com dados |
+| 🖱️ **Clique duplo** | Botões travam enquanto enviam ("Entrando...", "Salvando...") |
+| 🖼️ **Imagens** | De 3,8 MB para ~270 KB (logo 483 → 48 KB; fundo PNG 2,2 MB → JPG 188 KB) |
+| 📱 **Responsivo** | Testado em 375, 768, 1024, 1366, 1440 e 1920 px, sem rolagem lateral; tabelas viram cartões no celular |
+| ♿ **Acessibilidade** | Janelas e menu fecham com <kbd>Esc</kbd>; botões com `aria-label`/`aria-expanded`; `lang="pt-BR"` |
+| 🔎 **Divulgação (SEO)** | Título da aba, `meta description`, Open Graph e favicon leve |
+| 🧭 **Página 404** | Site e painel têm a sua, com botões para voltar |
+| 📄 **Testes manuais** | [Roteiro de teste](docs/roteiro-de-teste.md) com ~60 passos e resultado esperado, executado inteiro antes da entrega |
 
 <div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
 
 ---
 
-## 🚀 Como rodar o projeto
+<a id="reforma"></a>
 
-O projeto tem duas aplicações independentes, **back-end** (API) e **front-end** (site), que precisam estar rodando ao mesmo tempo. Em resumo:
+## 🧭 O que mudou na reforma final
+
+Na reta final (20 a 22/11), o projeto passou por uma **reforma em 12 etapas** para atender os pedidos do professor e do grupo, sem perder o que já funcionava. Cada etapa teve branch própria, testes e Pull Request.
+
+<table>
+<tr>
+<td width="33%" valign="top">
+
+### ➖ Retirado
+
+| O quê | Por quê |
+|-------|---------|
+| **Cotação** inteira (tabela, rotas, telas, menus, tipos, seed) | Pedido do professor: um fluxo só (pedido) é mais simples para o cliente e para a loja |
+| "Minhas cotações" | Fazia parte da cotação |
+| Redes sociais do rodapé | Não existiam/eram genéricas; o canal real é o WhatsApp |
+| Status `respondido` | Era da cotação; não fazia sentido no pedido |
+| Rota de **apagar** produto | Apagar quebraria pedidos e notas antigos → virou **desativar** |
+| ESLint | Não aceitava o TypeScript 7 → trocado pelo oxlint |
+| Logo da equipe como foto de produto | Parecia amador → foto padrão de paletes |
+
+</td>
+<td width="33%" valign="top">
+
+### 🔁 Alterado
+
+| O quê | Por quê |
+|-------|---------|
+| **Landing page** reescrita | Mais confiável e sem repetição: produtos reais, como funciona, sobre, mapa e CNPJ |
+| **Rodapé** com CNPJ e WhatsApp | Mostra que a empresa é real |
+| **Cadastro** aceita qualquer e-mail | Espaços nas pontas e mensagem genérica recusavam e-mails válidos |
+| **"Saber mais"** só com detalhes | Pedido do professor; comprar fica no card |
+| Fluxo do **status** do pedido | Agora reflete a operação real: confirmar → separar → retirar |
+| Estoque **escondido** do cliente | Sigilo comercial: só "Disponível" / "Esgotado" |
+| Erros com status certo | Estoque insuficiente e token vencido viravam `500` |
+
+</td>
+<td width="33%" valign="top">
+
+### ➕ Implementado
+
+| O quê | Por quê |
+|-------|---------|
+| **Catálogo sem login** | Divulgação: qualquer pessoa vê preços |
+| **Quantidade + carrinho** no card e página `/carrinho` | Canal de vendas de verdade |
+| **Painel do admin** completo (7 telas) | Gestão: dashboard, pedidos, notas, vendas, movimentações, usuários e perfil |
+| Baixa de estoque na **confirmação** | Estoque sempre coerente com os pedidos |
+| Movimentação com **responsável, motivo e pedido** | Rastreabilidade |
+| Nota com **status e link do Emitte** | Integra com o que a loja já usa |
+| **Segurança**: CORS, Helmet, limite de login | Proteção desde a base |
+| Seed rico, prints, diagramas e roteiros | Demonstração e documentação |
+
+</td>
+</tr>
+</table>
+
+<details>
+<summary><b>🪜 As 12 etapas da reforma</b></summary>
+
+<br>
+
+| # | Etapa | PR |
+|:-:|-------|:--:|
+| 0 | Diagnóstico: mapa do projeto e lista de lacunas (L1 a L21) | — |
+| 1 | Remover a cotação de todas as camadas | #37 |
+| 2 | Rodapé com CNPJ e WhatsApp | #38 |
+| 3 | Cadastro aceitando mais e-mails | #39 |
+| 4–5 | Catálogo público, "Saber mais" só detalhes, quantidade e carrinho no card | #40 |
+| 6 | Página do carrinho, envio do pedido e novo fluxo de status | #41 |
+| 7 | Landing page confiável (+ título, favicon e imagens leves) | #42 |
+| 8 | Painel do admin: layout, perfil e dashboard | #43 |
+| 9 | Tabelas do admin: pedidos, usuários, movimentações, vendas e notas | #44, #45 |
+| 10 | Acabamento: segurança, qualidade do front e seed de demonstração | #46, #47, #48 |
+| 11 | Documentação: README, diagramas, prints, roteiros e dashboard em 1366 px | #49, #50, #51 |
+| 12 | Teste do fluxo completo e versão `v1.0-entrega` | #52 |
+| ★ | Pós-entrega: esconder a quantidade em estoque do cliente (`v1.0.1-entrega`) | #53 |
+
+</details>
+
+<div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
+
+---
+
+<a id="decisoes"></a>
+
+## ⚖️ Decisões técnicas: porquês, vantagens e desvantagens
+
+| Decisão | Por quê | ✅ Vantagem | ⚠️ Desvantagem |
+|---------|---------|-------------|----------------|
+| **Back-end em camadas** (rota → controller → service → repository) | Separar responsabilidades | Fácil de achar e mudar cada coisa; regras num lugar só | Mais arquivos para uma função simples |
+| **MySQL** (relacional) | Pedido, venda, nota e estoque se relacionam muito | Chaves estrangeiras, transações e integridade | Estrutura rígida; mudanças exigem migração |
+| **JWT** no login | API sem "sessão" guardada no servidor | Simples e rápido; cada requisição se identifica sozinha | Não dá para "desligar" um token antes de vencer (mitigado: o usuário é conferido no banco) |
+| **Zod** na entrada | Validar tudo antes das regras | Mensagens claras em português e dados já limpos | A validação do front repete parte da do back |
+| Baixar estoque na **confirmação** (não no pedido) | Pedido pode não ser aceito | Não "prende" estoque de pedido que não vai sair | O estoque pode acabar entre pedir e confirmar (o servidor confere de novo) |
+| **Esconder** o estoque do cliente | Sigilo comercial | Concorrente não descobre o estoque | O cliente só sabe que não tem a quantidade ao enviar |
+| **Desativar** em vez de apagar produto | Preservar o histórico | Pedidos e notas antigos continuam certos | A tabela só cresce |
+| Nota no **Emitte** + link | Emitir NF-e exige certificado digital e SEFAZ | Usa o que a loja já usa, sem risco fiscal | Um passo manual para o admin |
+| **Retirada na loja**, sem pagamento online | Venda B2B com retirada e pagamento combinado | Fluxo simples e real | Sem pagamento pelo site |
+| Limite de login **em memória** | Sem servidor extra (Redis) | Zero configuração | Zera ao reiniciar; não serve para vários servidores |
+| Filtros **na tela**, sem paginação | Volume pequeno de dados | Busca instantânea, sem rotas novas | Não escala para milhares de registros |
+| Carrinho no **localStorage** | Funcionar antes do login | Sobrevive a recarregar e ao login | Fica só naquele navegador |
+| **oxlint** em vez de ESLint | Compatível com TypeScript 7 | Muito rápido | Menos plugins que o ESLint |
+| **Styled Components** | Estilo junto do componente | Sem conflito de nomes de CSS | Um pouco mais de JavaScript no navegador |
+
+<div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
+
+---
+
+<a id="desafios"></a>
+
+## 🧗 Desafios, problemas e dificuldades da equipe
+
+| # | Desafio | O que aconteceu | Como resolvemos |
+|:-:|---------|-----------------|-----------------|
+| 1 | ⏰ **Prazo curto** | Muitas mudanças pedidas perto da entrega (24/11) | Plano em 12 etapas, uma por vez, cada uma com "Definição de Pronto" |
+| 2 | 🧹 **Remover a cotação** | Estava espalhada em banco, back, front, tipos, menus e seed | Migração própria + remoção por camada, com teste de regressão |
+| 3 | 🔀 **Conflitos de merge** | Duas pessoas mexeram nas rotas de produto ao mesmo tempo (PR #36) | Incorporamos o trabalho por merge, preservando os commits do colega |
+| 4 | 🏷️ **Nomes diferentes** | `produto_id` em um lugar e `produtoId` em outro quebravam pedidos | Regra "um nome para cada coisa" em banco, back e front |
+| 5 | 🐛 **Bugs escondidos** | Estoque insuficiente e token vencido davam erro `500`; o carrinho misturava produtos sem `id`; 2 erros de tipo passavam no build | Status certos (`401`/`409`), `id` no catálogo e checagem de tipos no build |
+| 6 | 📦 **Estoque coerente** | Quando baixar? E se dois admins confirmarem juntos? | Baixa na confirmação, transação e trava `FOR UPDATE` |
+| 7 | 🔧 **Ferramentas incompatíveis** | O ESLint não aceitava o TypeScript 7 | Troca pelo oxlint |
+| 8 | 🔤 **Acentos no Windows** | O seed pelo terminal gravava acentos errados | Rodar os scripts pelo MySQL Workbench |
+| 9 | 🖥️ **Tela do projetor** | Em 1366 px o dashboard quebrava "R$ 725,0\|0" | Cartões 2 por linha e fonte fluida (`clamp`) |
+| 10 | 📅 **Demonstração realista** | Dados com datas fixas "envelhecem" | Seed com datas relativas ao dia em que roda |
+| 11 | 🤝 **Níveis diferentes na equipe** | Nem todos tinham a mesma experiência com Git e TypeScript | Padrão de commits e PRs, documentação viva e roteiros passo a passo |
+| 12 | 📸 **Dados reais do cliente** | Fotos, preços reais e horário de sábado ainda não chegaram | Foto padrão, preços de exemplo e dados centralizados em `dadosEmpresa.ts` (trocar é rápido) |
+
+<div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
+
+---
+
+<a id="pontos-melhorar"></a>
+
+## 🔍 Pontos que podem melhorar
+
+Somos transparentes sobre os limites atuais do sistema:
+
+- 🧪 **Sem testes automatizados**: os testes foram manuais (roteiro completo); o ideal é Vitest para regras de pedido e estoque.
+- 🧾 **Sem tela de produtos**: cadastrar, editar e ativar produtos é feito pela API (o back-end já está pronto).
+- 🍪 **Token no `localStorage`**: funciona, mas um *cookie* `HttpOnly` protege melhor contra XSS.
+- 🔐 **Senha mínima de 6 caracteres**, sem exigir números ou símbolos.
+- 📄 **Sem paginação** nas tabelas do admin (ok para o volume atual).
+- 📦 **Pacote JavaScript acima de 500 KB**: dividir em partes (*code splitting*) deixaria a primeira abertura mais rápida.
+- 📞 **Sem telefone e endereço** do cliente no cadastro (tabelas planejadas).
+- 🌍 **Roda só localmente**: falta publicar com domínio e HTTPS.
+- 🖼️ **Fotos e preços de exemplo** até o cliente enviar os reais.
+
+<div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
+
+---
+
+<a id="requisitos"></a>
+
+## 📋 Engenharia de requisitos e diagramas
+
+Antes de codificar, a equipe levantou os requisitos com o cliente:
 
 ```mermaid
 flowchart LR
-    A["1️⃣ Clonar"] --> B["2️⃣ Criar<br/>o banco"] --> C["3️⃣ Back-end<br/>.env + npm run dev"] --> D["4️⃣ Front-end<br/>.env + npm run dev"] --> E["5️⃣ Acessar<br/>no navegador"]
+    A["🎤 Entrevista com<br/>o proprietário"] --> B["🏭 Visita<br/>ao armazém"] --> C["📄 Levantamento<br/>de requisitos"] --> D["🧭 Casos de uso<br/>e classes"] --> E["🗄️ MER no BrModelo<br/>→ MySQL Workbench"] --> F["💻 Código"]
+```
+
+| Documento | O que mostra |
+|-----------|--------------|
+| [🗄️ Modelo do banco](docs/diagramas.md#1-modelo-do-banco-mer--modelo-lógico) | Tabelas, colunas, chaves, ligações e a lista para refazer o MER no BrModelo |
+| [🧭 Casos de uso](docs/diagramas.md#2-diagrama-de-casos-de-uso) | O que o visitante, o cliente e o administrador podem fazer |
+| [🧱 Classes](docs/diagramas.md#3-diagrama-de-classes) | Classes do domínio e como viram as camadas do back-end |
+| [🔁 Ciclo do pedido](docs/diagramas.md#4-ciclo-de-vida-do-pedido) | Os status e o que cada mudança faz no estoque e nas vendas |
+| [🧪 Roteiro de teste](docs/roteiro-de-teste.md) | Fluxo completo (visitante, cliente, admin, segurança e celular) com resultado esperado |
+| [🎤 Roteiro de apresentação](docs/roteiro-de-apresentacao.md) | Ordem da demo, quem fala, tempo e perguntas prováveis |
+
+<details>
+<summary><b>📌 Requisitos principais (resumo)</b></summary>
+
+<br>
+
+| Tipo | Requisito |
+|------|-----------|
+| **RF01** | O visitante deve ver o catálogo sem login |
+| **RF02** | O cliente deve montar um carrinho e enviar o pedido com data de retirada e observação |
+| **RF03** | O cliente deve acompanhar e cancelar (se pendente) os próprios pedidos |
+| **RF04** | O administrador deve mudar o status do pedido seguindo o fluxo |
+| **RF05** | O estoque deve baixar ao confirmar e voltar ao cancelar um pedido confirmado |
+| **RF06** | O administrador deve registrar entradas e saídas manuais com motivo |
+| **RF07** | Entregar um pedido deve gerar a venda; a venda pode receber uma nota fiscal |
+| **RF08** | O administrador deve ver tabelas de pedidos, vendas, notas, movimentações e usuários |
+| **RNF01** | Senhas com hash; rotas protegidas por login e perfil no servidor |
+| **RNF02** | Mensagens de erro em português e padrão único de resposta |
+| **RNF03** | Funcionar em celular, tablet e computador |
+| **RNF04** | Quantidade em estoque visível só para o administrador |
+
+</details>
+
+> [!NOTE]
+> A emissão oficial da nota fiscal continua no **Emitte** (que a loja já usa, com clientes, produtos e transportadoras cadastrados). O sistema guarda o número, o status e o link do PDF, ligados à venda.
+
+<div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
+
+---
+
+<a id="como-rodar"></a>
+
+## 🚀 Como rodar o projeto
+
+São **duas aplicações** que rodam ao mesmo tempo, cada uma no seu terminal: o **back-end** (API) e o **front-end** (site).
+
+```mermaid
+flowchart LR
+    A["1️⃣ Clonar"] --> B["2️⃣ Criar<br/>o banco"] --> C["3️⃣ Back-end<br/>.env + npm run dev"] --> D["4️⃣ Front-end<br/>.env + npm run dev"] --> E["5️⃣ Abrir<br/>localhost:5173"]
 
     style A fill:#dbeafe,stroke:#2563eb,color:#111
-    style B fill:#dbeafe,stroke:#2563eb,color:#111
+    style B fill:#fef3c7,stroke:#d97706,color:#111
     style C fill:#dcfce7,stroke:#16a34a,color:#111
     style D fill:#dcfce7,stroke:#16a34a,color:#111
-    style E fill:#fef3c7,stroke:#d97706,color:#111
+    style E fill:#ede9fe,stroke:#7c3aed,color:#111
 ```
+
+<a id="pre-requisitos"></a>
 
 ### 📋 Pré-requisitos
 
 | Ferramenta | Versão | Para que serve | Como conferir |
 |------------|--------|----------------|---------------|
-| [Git](https://git-scm.com) | Qualquer recente | Clonar o repositório | `git --version` |
-| [Node.js](https://nodejs.org) | LTS recente (22 ou superior recomendado) | Rodar back-end e front-end | `node --version` |
-| npm | Já vem com o Node.js | Instalar dependências | `npm --version` |
+| [Git](https://git-scm.com) | Recente | Clonar o repositório | `git --version` |
+| [Node.js](https://nodejs.org) | LTS 22 ou superior | Rodar back-end e front-end | `node --version` |
+| npm | Vem com o Node.js | Instalar as dependências | `npm --version` |
 | [MySQL Server](https://dev.mysql.com/downloads/mysql/) | 8 ou superior | Banco de dados | `mysql --version` |
-| [MySQL Workbench](https://dev.mysql.com/downloads/workbench/) | Opcional | Executar os scripts SQL com interface | |
+| [MySQL Workbench](https://dev.mysql.com/downloads/workbench/) | Recomendado | Rodar os scripts SQL com acentos certos | — |
 
 ### 1️⃣ Clonar o repositório
 
@@ -730,34 +1154,25 @@ cd PI-2
 
 ### 2️⃣ Criar o banco de dados
 
-Os scripts ficam em `backend/src/database/`:
+Scripts em `backend/src/database/`:
 
-| Arquivo | O que faz | Obrigatório |
-|---------|-----------|:-----------:|
-| `schema.sql` | Cria o banco `PI2` e todas as tabelas | ✅ |
-| `seed.sql` | Insere os dados de demonstração: 8 usuários, 4 produtos, 15 pedidos em todos os status, 6 vendas, 5 notas e 24 movimentações (datas relativas ao dia em que roda; estoque = entradas − saídas) | Recomendado |
-| `migracao-remover-cotacao.sql` | Só para quem já tinha o banco antigo: remove as tabelas de cotação sem mexer no resto | Só se o banco é antigo |
-| `migracao-imagens-produto.sql` | Só para quem já tinha o seed antigo: corrige o caminho das imagens dos produtos | Só se o banco é antigo |
-| `migracao-status-pedido.sql` | Só para quem já tinha o banco antigo: novo fluxo de status do pedido (tira o `respondido`) e coluna `observacao` | Só se o banco é antigo |
-| `migracao-imagem-padrao-produto.sql` | Só para quem já tinha o seed antigo: tira o logo da equipe das fotos dos produtos (o site mostra a foto padrão de paletes) | Só se o banco é antigo |
-| `migracao-movimentacao-nota.sql` | Só para quem já tinha o banco antigo: movimentação com responsável, motivo e pedido; nota fiscal com status e link do Emitte | Só se o banco é antigo |
+| Arquivo | O que faz | Quando rodar |
+|---------|-----------|:------------:|
+| `schema.sql` | Cria o banco `PI2` e as tabelas | ✅ Sempre |
+| `seed.sql` | Dados de demonstração (8 usuários, 4 produtos, 15 pedidos, 6 vendas, 5 notas, 24 movimentações) | ✅ Recomendado |
+| `migracao-*.sql` (5 arquivos) | Atualizam bancos **antigos** sem apagar dados (remover cotação, imagens, status do pedido, foto padrão, movimentação/nota) | Só se o banco é antigo |
 
-<details open>
-<summary><b>Opção A: MySQL Workbench</b></summary>
+**Pelo MySQL Workbench (recomendado):**
 
-<br>
+1. Abra a conexão com o seu MySQL.
+2. **File → Open SQL Script** → `schema.sql` → clique no raio ⚡.
+3. Repita com o `seed.sql`.
 
-1. Abra uma conexão com o seu servidor MySQL.
-2. Menu **File → Open SQL Script** e escolha o `schema.sql`.
-3. Clique no raio ⚡ para executar.
-4. Repita com o `seed.sql` (dados de demonstração). Pelo Workbench os acentos saem certos.
-
-> Para começar do zero com os dados de demonstração, apague o banco antes (`DROP DATABASE PI2;`) e rode os dois scripts de novo. Isso apaga tudo o que estava no banco.
-
-</details>
+> [!WARNING]
+> Para começar do zero, apague o banco antes com `DROP DATABASE IF EXISTS PI2;` e rode os dois scripts de novo. **Isso apaga tudo** o que estava no banco: faça um backup se precisar.
 
 <details>
-<summary><b>Opção B: terminal</b></summary>
+<summary><b>Pelo terminal (alternativa)</b></summary>
 
 <br>
 
@@ -766,30 +1181,19 @@ mysql -u SEU_USUARIO -p < backend/src/database/schema.sql
 mysql -u SEU_USUARIO -p < backend/src/database/seed.sql
 ```
 
+No Windows, os acentos podem sair errados pelo terminal: prefira o Workbench.
+
 </details>
-
-Para conferir se deu certo:
-
-```sql
-USE PI2;
-SHOW TABLES;
-```
 
 ### 3️⃣ Configurar e rodar o back-end
 
 ```bash
 cd backend
 npm install
+cp .env.example .env      # no Windows (PowerShell/CMD): copy .env.example .env
 ```
 
-Crie o arquivo `.env` a partir do exemplo:
-
-| Sistema | Comando |
-|---------|---------|
-| 🐧🍎 Linux, macOS e Git Bash | `cp .env.example .env` |
-| 🪟 Windows (PowerShell ou CMD) | `copy .env.example .env` |
-
-Preencha o `.env` com os seus dados:
+Preencha o `backend/.env`:
 
 ```env
 PORT=3000
@@ -804,25 +1208,16 @@ CORS_ORIGIN=http://localhost:5173
 
 | Variável | Descrição |
 |----------|-----------|
-| `PORT` | Porta em que a API vai rodar |
-| `DB_HOST` | Endereço do MySQL (`localhost` na sua máquina) |
-| `DB_PORT` | Porta do MySQL (padrão `3306`) |
-| `DB_NAME` | Nome do banco (`PI2`) |
-| `DB_USER` | Usuário do MySQL |
-| `DB_PASS` | Senha do MySQL |
-| `JWT_SECRET` | Chave usada para assinar os tokens de login. Use um texto longo e aleatório e **nunca** compartilhe |
-| `CORS_ORIGIN` | Endereço do front-end que pode chamar a API (padrão `http://localhost:5173`). Para mais de um, separe por vírgula. Se o front rodar em outra porta, ajuste aqui |
-
-> [!WARNING]
-> O arquivo `.env` guarda segredos e **não deve ser enviado ao GitHub**. Ele já está no `.gitignore`.
-
-Inicie o servidor:
+| `PORT` | Porta da API |
+| `DB_HOST` · `DB_PORT` · `DB_NAME` · `DB_USER` · `DB_PASS` | Conexão com o MySQL |
+| `JWT_SECRET` | Chave que assina os tokens de login: longa, aleatória e **secreta** |
+| `CORS_ORIGIN` | Endereço do site que pode chamar a API (vários: separe por vírgula) |
 
 ```bash
 npm run dev
 ```
 
-Se tudo estiver certo, o terminal mostra:
+O terminal deve mostrar:
 
 ```text
 Conexão com o banco estabelecida.
@@ -832,59 +1227,42 @@ Site autorizado (CORS): http://localhost:5173
 
 ### 4️⃣ Configurar e rodar o front-end
 
-Abra um **segundo terminal** (deixe o back-end rodando no primeiro):
+Em um **segundo terminal** (deixe o back-end rodando):
 
 ```bash
 cd frontend
 npm install
+cp .env.example .env      # no Windows: copy .env.example .env
 ```
-
-Crie o `.env`:
-
-| Sistema | Comando |
-|---------|---------|
-| 🐧🍎 Linux, macOS e Git Bash | `cp .env.example .env` |
-| 🪟 Windows (PowerShell ou CMD) | `copy .env.example .env` |
 
 ```env
 VITE_API_URL=http://localhost:3000
 ```
 
-> [!TIP]
-> A URL precisa ter a mesma porta definida no `PORT` do back-end. Se mudar o `.env` do front, reinicie o `npm run dev`.
-
-Depois:
-
 ```bash
 npm run dev
 ```
 
+> [!TIP]
+> A porta do `VITE_API_URL` precisa ser a mesma do `PORT` do back-end. Mudou o `.env` do front? Reinicie o `npm run dev`.
+
 ### 5️⃣ Acessar o sistema
 
-Abra no navegador o endereço que o Vite mostrar no terminal (normalmente **http://localhost:5173**).
-
-| Serviço | Endereço padrão |
-|---------|-----------------|
-| 🖥️ Front-end | http://localhost:5173 |
-| ⚙️ Back-end (API) | http://localhost:3000 |
-
-Com o `seed.sql` rodado, já existem estas contas de teste:
+Abra **http://localhost:5173** no navegador.
 
 | Perfil | E-mail | Senha |
 |--------|--------|-------|
 | 👑 Administrador | `admin@teste.com` | `Admin@123456` |
 | 🛒 Cliente | `usuario@gmail.com` | `Cliente@123456` |
 
-Os outros clientes do seed (empresas e pessoas fictícias, como `compras@rotasul.com.br` e `anapaula.ribeiro@outlook.com`) usam a mesma senha `Cliente@123456`. São contas só para teste: não use essas senhas em um servidor público.
-
-Também dá para criar uma conta pela tela de **Cadastro**. Todo cadastro novo entra com o perfil `cliente`.
+Os outros clientes do seed (ex.: `compras@rotasul.com.br`) usam a mesma senha. São contas **só para teste**: nunca use essas senhas em um servidor público. Todo cadastro novo pelo site entra como `cliente`.
 
 <details>
-<summary><b>👑 Criando um administrador (ambiente de desenvolvimento)</b></summary>
+<summary><b>👑 Criar um administrador (desenvolvimento)</b></summary>
 
 <br>
 
-Por segurança, não existe cadastro de admin pela API. Crie uma conta normalmente e promova ela direto no banco:
+Por segurança não existe cadastro de admin pela API. Crie a conta pelo site e promova no banco:
 
 ```sql
 USE PI2;
@@ -900,13 +1278,13 @@ UPDATE usuario SET perfil = 'administrador' WHERE email = 'seu-email@exemplo.com
 
 | Pasta | Comando | O que faz |
 |-------|---------|-----------|
-| `backend` | `npm run dev` | Servidor com recarga automática |
-| `backend` | `npm run build` | Compila o TypeScript para a pasta `dist` |
-| `frontend` | `npm run dev` | Servidor de desenvolvimento |
-| `frontend` | `npm run build` | Confere os tipos (`tsc --noEmit`) e gera o build de produção; erro de tipo impede o build |
-| `frontend` | `npm run typecheck` | Só confere os tipos, sem gerar arquivos |
-| `frontend` | `npm run preview` | Visualiza o build de produção |
-| `frontend` | `npm run lint` | Verifica o código `.ts/.tsx` com o oxlint (regras em `frontend/.oxlintrc.json`) |
+| `backend` | `npm run dev` | API com recarga automática |
+| `backend` | `npm run build` | Compila o TypeScript para `dist/` |
+| `frontend` | `npm run dev` | Site em modo desenvolvimento |
+| `frontend` | `npm run build` | Confere os tipos e gera o build de produção |
+| `frontend` | `npm run typecheck` | Só confere os tipos |
+| `frontend` | `npm run lint` | Analisa o código com o oxlint |
+| `frontend` | `npm run preview` | Abre o build de produção |
 
 </details>
 
@@ -915,16 +1293,18 @@ UPDATE usuario SET perfil = 'administrador' WHERE email = 'seu-email@exemplo.com
 
 <br>
 
-| Mensagem ou sintoma | Causa provável | Como resolver |
-|---------------------|----------------|---------------|
-| `Variáveis de ambiente faltando` | `.env` do back-end ausente ou incompleto | Confira se o arquivo existe em `backend/` e se as 5 variáveis `DB_*` estão preenchidas |
-| `JWT_SECRET não configurada` | Falta o `JWT_SECRET` no `.env` | Adicione a variável e reinicie o servidor |
-| `Access denied for user` | Usuário ou senha do MySQL errados | Revise `DB_USER` e `DB_PASS` |
-| `Unknown database 'PI2'` | O `schema.sql` não foi executado | Execute o script do passo 2 |
-| `ECONNREFUSED` ao conectar no banco | MySQL desligado ou porta errada | Inicie o serviço do MySQL e confira `DB_PORT` |
-| `EADDRINUSE` | A porta já está em uso | Troque o `PORT` no `.env` (e o `VITE_API_URL` no front) |
-| Front não carrega dados ou dá `Network Error` | Back-end desligado ou `VITE_API_URL` errada | Confirme que o back está rodando e a URL no `.env` do front; reinicie o `npm run dev` do front após mudar o `.env` |
-| Login funciona, mas volta para a tela de login | Token inválido ou expirado | Faça login de novo (o token dura 8 horas) |
+| Sintoma | Causa provável | Solução |
+|---------|----------------|---------|
+| `Variáveis de ambiente faltando` | `.env` do back ausente ou incompleto | Confira as 5 variáveis `DB_*` |
+| `JWT_SECRET não configurada` | Falta a variável | Adicione e reinicie |
+| `Access denied for user` | Usuário/senha do MySQL errados | Revise `DB_USER` e `DB_PASS` |
+| `Unknown database 'PI2'` | `schema.sql` não rodou | Rode o passo 2 |
+| `ECONNREFUSED` | MySQL desligado | Inicie o serviço do MySQL |
+| `EADDRINUSE` | Porta ocupada | Troque o `PORT` (e o `VITE_API_URL`) |
+| `Network Error` no site | Back-end desligado ou URL errada | Ligue o back e confira o `.env` do front |
+| Site barrado com `403` | Front em outra porta | Ajuste o `CORS_ORIGIN` do back |
+| "Muitas tentativas de login" | 5 senhas erradas em 15 min | Espere 15 min ou reinicie o back-end |
+| Volta sempre para o login | Token vencido (8 h) | Entre de novo |
 
 </details>
 
@@ -932,9 +1312,11 @@ UPDATE usuario SET perfil = 'administrador' WHERE email = 'seu-email@exemplo.com
 
 ---
 
+<a id="pastas"></a>
+
 ## 📂 Estrutura de pastas
 
-<details open>
+<details>
 <summary><b>Ver a árvore do projeto</b></summary>
 
 <br>
@@ -942,37 +1324,36 @@ UPDATE usuario SET perfil = 'administrador' WHERE email = 'seu-email@exemplo.com
 ```text
 PI-2/
 ├── 📁 backend/
+│   ├── requests/            # exemplos de chamadas à API (.http)
+│   ├── uploads/             # fotos dos produtos (servidas em /uploads)
 │   └── src/
-│       ├── configs/        # conexão com o banco
-│       ├── controllers/
-│       ├── database/       # schema.sql, seed.sql e migrações
-│       ├── middlewares/
-│       ├── repositories/
-│       ├── routes/
-│       ├── schemas/        # validações Zod
-│       ├── services/
-│       ├── types/
-│       ├── utils/
-│       ├── app.ts
-│       └── index.ts
-│   ├── requests/           # exemplos de chamadas à API (.http)
-│   └── uploads/            # fotos dos produtos
+│       ├── configs/         # banco (pool), CORS e idioma do Zod
+│       ├── controllers/     # recebem a requisição e respondem
+│       ├── database/        # schema.sql, seed.sql e migrações
+│       ├── middlewares/     # login, perfil, validação, limite e erros
+│       ├── repositories/    # consultas SQL
+│       ├── routes/          # endereços da API
+│       ├── schemas/         # validações Zod
+│       ├── services/        # regras de negócio e transações
+│       ├── types/ · utils/
+│       ├── app.ts           # monta o Express (helmet, cors, rotas)
+│       └── index.ts         # liga o servidor
 ├── 📁 docs/
-│   ├── diagramas.md        # banco, casos de uso, classes e ciclo do pedido
-│   ├── roteiro-de-teste.md # teste do fluxo completo, passo a passo
-│   ├── roteiro-de-apresentacao.md # ordem da demo e quem fala
-│   └── prints/             # capturas das telas
+│   ├── diagramas.md         # banco, casos de uso, classes e ciclo do pedido
+│   ├── roteiro-de-teste.md
+│   ├── roteiro-de-apresentacao.md
+│   └── prints/              # capturas das telas
 ├── 📁 frontend/
 │   └── src/
-│       ├── assets/
-│       ├── components/     # componentes reutilizáveis
-│       ├── hooks/          # carrinho compartilhado
-│       ├── pages/          # Admin/, Cliente/ e Compartilhadas/
-│       ├── routes/
-│       ├── services/       # chamadas à API
-│       ├── types/          # tipos compartilhados
-│       ├── utils/
-│       └── App.tsx
+│       ├── assets/          # logo e foto de fundo
+│       ├── components/      # Navbar, Footer, cards, janelas, rotas protegidas...
+│       ├── hooks/           # carrinho e ações de pedido do admin
+│       ├── pages/           # Admin/, Cliente/ e Compartilhadas/
+│       ├── routes/          # mapa das telas
+│       ├── services/        # chamadas à API (Axios)
+│       ├── types/           # tipos compartilhados
+│       └── utils/           # dados da empresa, alertas, filtros, erros
+├── 📄 LICENSE
 └── 📄 README.md
 ```
 
@@ -982,48 +1363,53 @@ PI-2/
 
 ---
 
+<a id="fluxo-trabalho"></a>
+
 ## 🤝 Fluxo de trabalho da equipe
 
 ```mermaid
 gitGraph
     commit id: "main"
-    branch feat/nomeDaTarefa
-    checkout feat/nomeDaTarefa
-    commit id: "feat: ..."
-    commit id: "fix: ..."
+    branch feat/etapa
+    checkout feat/etapa
+    commit id: "feat(banco): ..."
+    commit id: "feat(api): ..."
+    commit id: "docs(readme): ..."
     checkout main
-    merge feat/nomeDaTarefa id: "Pull Request"
+    merge feat/etapa id: "Pull Request"
+    commit id: "tag v1.0-entrega" type: HIGHLIGHT
 ```
 
-- 🌳 A branch **`main`** é a versão oficial do projeto.
-- 🔀 Cada tarefa é feita em uma branch própria, como `feat/nomeDaTarefa`, e entra na `main` por **Pull Request**.
-- ✍️ Os commits seguem o padrão [Conventional Commits](https://www.conventionalcommits.org/pt-br/):
+- 🌳 A **`main`** é a versão oficial (a que o professor avalia). Ninguém commita direto nela.
+- 🔀 Cada etapa em uma branch (`feat/...`, `fix/...`, `docs/...`) que entra por **Pull Request**.
+- 🔄 Antes do PR: `git merge origin/main`, `npm run build` no back e no front e o checklist de teste.
+- 🏷️ Versões marcadas com *tags*: `v1.0-entrega` (21/11) e `v1.0.1-entrega` (22/11).
 
-| Prefixo | Uso |
-|---------|-----|
-| ✨ `feat:` | Nova funcionalidade |
-| 🐛 `fix:` | Correção de bug |
-| ♻️ `refactor:` | Melhoria de código sem mudar o comportamento |
-| 📝 `docs:` | Documentação |
-| 🔧 `chore:` | Manutenção (dependências, configs) |
+**Commits no padrão [Conventional Commits](https://www.conventionalcommits.org/pt-br/)**: `tipo(escopo): descrição no imperativo`
+
+| Tipo | Uso | Exemplo real |
+|------|-----|--------------|
+| ✨ `feat` | Função nova | `feat(catalogo): catálogo sem login, quantidade e carrinho no card` |
+| 🐛 `fix` | Correção | `fix(auth): responder 401 para sessao expirada` |
+| ♻️ `refactor` | Reorganizar sem mudar comportamento | `refactor(tipos): unificar o tipo dos itens da janela` |
+| 🎨 `style` | Visual | `style(navbar): manter o menu em uma linha no tablet` |
+| ⚡ `perf` | Desempenho | `perf(site): comprimir imagens` |
+| 📝 `docs` | Documentação | `docs(roteiros): adicionar roteiro de teste` |
+| 🔧 `chore` | Manutenção | `chore(frontend): trocar ESLint por oxlint` |
 
 <details>
-<summary><b>💡 Exemplo de ciclo completo</b></summary>
+<summary><b>✅ Definição de Pronto (usada em cada etapa)</b></summary>
 
 <br>
 
-```bash
-git checkout main
-git pull origin main
-git checkout -b feat/rotasEstoque
-
-# ...desenvolve...
-
-git add .
-git commit -m "feat: adiciona rotas de listagem de estoque"
-git push -u origin feat/rotasEstoque
-# abre o Pull Request no GitHub
-```
+- [x] Faz o que foi pedido nos três níveis (banco, back-end, front-end), sem sobras de código antigo
+- [x] Back-end e front-end compilam (`npm run build`) e sobem sem erro
+- [x] Sem erros no console do navegador nem no terminal
+- [x] Caminho feliz e pelo menos um caminho de erro testados
+- [x] Segurança conferida (login/perfil, validação, nada sensível exposto)
+- [x] Fluxos antigos continuam funcionando (regressão)
+- [x] Seed, migração, README e contrato da API atualizados
+- [x] Commits no padrão, branch atualizada com a `main` e PR descrito
 
 </details>
 
@@ -1031,111 +1417,113 @@ git push -u origin feat/rotasEstoque
 
 ---
 
+<a id="status"></a>
+
 ## 📈 Status e roadmap
 
-Legenda: ✅ pronto · 🚧 em andamento · ⏳ a fazer
+| Área | Progresso | Pronto |
+|------|-----------|:------:|
+| 🗄️ Banco de dados | `▰▰▰▰▰▰▰▰▰▰` 100% | 8 de 8 tabelas |
+| ⚙️ Back-end | `▰▰▰▰▰▰▰▰▰▰` 100% | 30 de 30 rotas |
+| 🖥️ Front-end | `▰▰▰▰▰▰▰▰▰▰` 100% | 15 de 15 telas |
+| 📝 Documentação | `▰▰▰▰▰▰▰▰▰▰` 100% | README, diagramas, roteiros e prints |
+| 🔭 Melhorias futuras | `▱▱▱▱▱▱▱▱▱▱` | [ver lista](#melhorias-futuras) |
 
-| Área | Progresso | Módulos prontos |
-|------|-----------|:---------------:|
-| ⚙️ Back-end | `▰▰▰▰▰▰▰▰` | 8 de 8 |
-| 🖥️ Front-end | `▰▰▰▰▰▰▰▰` | 8 de 8 |
-
-<table>
-<tr>
-<td width="50%" valign="top">
-
-### ⚙️ Back-end
-
-| Módulo | Status |
-|--------|:------:|
-| Usuário (cadastro, login, perfil) | ✅ |
-| Middlewares (token, perfil admin, validação, erros) | ✅ |
-| Pedido (visão do cliente) | ✅ |
-| Produto (catálogo público, cadastro, edição, ativar/desativar) | ✅ |
-| Estoque e movimentações (responsável, motivo e pedido) | ✅ |
-| Pedido (visão do admin: listar, ver itens e mudar status) + resumo do dashboard | ✅ |
-| Venda (automática na entrega + listagem) | ✅ |
-| Nota fiscal (status, link do Emitte, cancelar) | ✅ |
-
-</td>
-<td width="50%" valign="top">
-
-### 🖥️ Front-end
-
-| Tela | Status |
-|------|:------:|
-| Tela inicial, cadastro e login | ✅ |
-| Catálogo e carrinho | ✅ |
-| Página do carrinho e envio do pedido | ✅ |
-| Perfil do usuário | ✅ |
-| Meus Pedidos do cliente | ✅ |
-| Painel do admin: menu, dashboard de pedidos e perfil | ✅ |
-| Tabelas do administrador: pedidos e usuários | ✅ |
-| Tabelas do administrador: movimentações, vendas e notas | ✅ |
-
-</td>
-</tr>
-</table>
+<a id="cronograma"></a>
 
 ### 🗓️ Cronograma
 
 ```mermaid
 gantt
-    title Cronograma do projeto
+    title Cronograma do projeto (2026)
     dateFormat YYYY-MM-DD
     axisFormat %d/%m
     section Planejamento
-    Escopo, diagramas, protótipo e MER   :done, plan, 2026-08-27, 2026-10-01
+    Entrevista, escopo, diagramas e MER      :done, plan, 2026-08-27, 2026-10-01
     section Desenvolvimento
-    APIs, login, catálogo e perfil       :done, dev, 2026-10-15, 2026-11-14
-    Dashboard e tabelas do admin         :done, adm, 2026-11-15, 2026-11-20
-    section Finalização
-    Segurança, qualidade e dados de demo :done, qual, 2026-11-21, 1d
-    Documentação, testes e apresentação  :active, doc, 2026-11-21, 2026-11-23
-    Entrega do projeto                   :milestone, ent, 2026-11-24, 0d
+    Telas, APIs, login, catálogo e pedidos   :done, dev, 2026-10-01, 2026-11-19
+    section Reforma final
+    Etapas 0 a 9 (cotação, catálogo, admin)  :done, ref, 2026-11-20, 1d
+    Etapas 10 a 12 (segurança, docs, testes) :done, fin, 2026-11-21, 1d
+    Ajuste pós-entrega e README final        :done, pos, 2026-11-22, 1d
+    section Entrega
+    Apresentação                             :milestone, ent, 2026-11-24, 0d
 ```
 
-| Período | Entrega |
-|---------|---------|
-| 27/08 a 01/10 | Planejamento, escopo, diagramas, protótipo de telas, banco (MER) |
-| 15/10 a 14/11 | Desenvolvimento: APIs, login, catálogo, perfil, pedidos e cotações |
-| 15/11 a 20/11 | Dashboard e tabelas do administrador |
-| 21/11 | Segurança (CORS, limite de login, Helmet), qualidade do código e dados de demonstração |
-| 21/11 a 23/11 | Documentação, diagramas, testes do fluxo completo e ensaio da apresentação |
-| **24/11** | **🏁 Entrega do projeto** |
+| Período | O que foi feito |
+|---------|-----------------|
+| 27/08 a 01/10 | Entrevista, visita ao armazém, escopo, casos de uso, classes, protótipo e MER |
+| 03/09 a 19/11 | Desenvolvimento pela equipe: telas, componentes, rotas de usuário, produto, pedido, cotação, estoque, venda e nota |
+| 20/11 | Reforma: remover cotação, rodapé, cadastro, catálogo público, carrinho, landing, painel e tabelas do admin |
+| 21/11 | Segurança, qualidade, seed, documentação, teste completo e versão `v1.0-entrega` |
+| 22/11 | Estoque escondido do cliente (`v1.0.1-entrega`), e README final |
+| **24/11** | **🏁 Apresentação e entrega** |
 
 <div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
 
 ---
+
+<a id="melhorias-futuras"></a>
 
 ## 🔭 Melhorias futuras
 
-Itens levantados durante o projeto que ficaram **fora do escopo desta entrega**, de propósito, para priorizar o que o cliente e o professor pediram:
+Levantadas durante o projeto e deixadas **de propósito** fora desta entrega, para priorizar o que o cliente e o professor pediram:
 
 | # | Melhoria | Por que importa | Esforço |
 |:-:|----------|-----------------|:-------:|
-| L18 | Telefone do cliente no cadastro + texto de privacidade (**LGPD**) | Facilita o contato da loja e deixa claro como os dados são usados. As tabelas `telefone` e `endereco` já existem no banco | médio |
-| L19 | Tela de produtos no painel, com **upload de imagem** (`multer`) | Hoje produtos são cadastrados e editados pela API; com a tela, o próprio cliente troca fotos e preços | médio |
-| L20 | **Índices extras e regras `CHECK`** no banco (ex.: quantidade > 0) | Consultas mais rápidas com muitos dados e uma segunda barreira contra dados inválidos | baixo |
-| L21 | **Testes automatizados** (Vitest) | Conferem sozinhos, a cada mudança, que as regras de pedido, estoque e nota continuam certas | alto |
-| — | Dividir o pacote do front-end (*code splitting*) | O build avisa que o JavaScript passa de 500 KB; dividir deixa a primeira abertura mais rápida | baixo |
-| — | Publicar na internet (HTTPS, domínio, `trust proxy`, `JWT_SECRET` forte) | Hoje o sistema roda localmente; veja também as [melhorias de segurança previstas](#-segurança-da-informação) | médio |
-| — | Fotos reais dos paletes, preços reais e horário de sábado | Dependem de informações do cliente (hoje: foto padrão, preços de exemplo e "segunda a sexta, das 7h às 18h") | baixo |
+| L18 | Telefone do cliente no cadastro + texto de privacidade (**LGPD**) | Facilita o contato e deixa claro como os dados são usados | médio |
+| L19 | Tela de produtos no painel com **upload de foto** (`multer`) | O próprio dono troca fotos e preços sem mexer na API | médio |
+| L20 | Índices extras e regras `CHECK` no banco | Consultas mais rápidas e uma segunda barreira contra dados inválidos | baixo |
+| L21 | **Testes automatizados** (Vitest) | Conferem sozinhos as regras de pedido, estoque e nota a cada mudança | alto |
+| — | *Code splitting* no front-end | Primeira abertura do site mais rápida | baixo |
+| — | **Publicar** (domínio, HTTPS, `trust proxy`, `JWT_SECRET` forte) | Hoje roda localmente | médio |
+| — | Fotos reais, preços reais e horário de sábado | Dependem do cliente | baixo |
+| — | Avisar o cliente por WhatsApp/e-mail quando o pedido mudar de status | Menos ligações para a loja | médio |
+| — | Gráficos de vendas por mês e produto mais vendido | Ajuda a decidir compras | médio |
 
-**💡 Ideias para versões seguintes:** gerenciamento de compras, perfil de RH para colaboradores, gerenciamento de entregas e frete.
+**💡 Ideias para versões seguintes:** gerenciamento de compras de fornecedores, frete e entregas, perfil de colaborador (RH) e integração direta com o Emitte.
 
 <div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
 
 ---
+
+<a id="equipe"></a>
 
 ## 👥 Equipe
 
 <div align="center">
 
-| 👨‍💻 | 👨‍💻 | 👨‍💻 | 👨‍💻 | 👨‍💻 |
-|:---:|:---:|:---:|:---:|:---:|
-| **Yuri Tavares** | **Antonio Miguel Souza Marques** | **Davi Aurélio de Pontes Lopes** | **Gustavo Henrique Teles** | **Henrique Domingues** |
-| ⚙️ Back-end<br>Rotas de estoque | ⚙️ Back-end<br>Rotas de cotação | 🖥️ Front-end<br>🗄️ Banco de dados<br>👤 Rotas de usuário | 🖥️ Front-end<br>🗄️ Banco de dados<br>🛒 Pedido, venda e nota fiscal | 🗄️ Banco de dados<br>📦 Rotas de produto |
+**Protagonistas ADS** · FATEC · Análise e Desenvolvimento de Sistemas
+
+<table>
+<tr>
+<td align="center" width="20%">
+<img src="https://img.shields.io/badge/-%E2%9A%99%EF%B8%8F-1f2937?style=for-the-badge" alt=""><br>
+<b>Yuri Tavares</b><br>
+<sub>⚙️ Back-end<br>📦 Módulo de estoque<br>🔧 Reforma final: banco, back-end, front-end e documentação</sub>
+</td>
+<td align="center" width="20%">
+<img src="https://img.shields.io/badge/-%F0%9F%9B%A1%EF%B8%8F-1f2937?style=for-the-badge" alt=""><br>
+<b>Antonio Miguel Souza Marques</b><br>
+<sub>⚙️ Back-end<br>📨 Rotas de cotação (versão inicial)<br>🔐 Apresenta back-end e segurança</sub>
+</td>
+<td align="center" width="20%">
+<img src="https://img.shields.io/badge/-%F0%9F%8E%A8-1f2937?style=for-the-badge" alt=""><br>
+<b>Gustavo Henrique Teles</b><br>
+<sub>🖥️ Front-end · 🗄️ Banco<br>🛒 Carrinho, pedido, venda e nota fiscal</sub>
+</td>
+<td align="center" width="20%">
+<img src="https://img.shields.io/badge/-%F0%9F%96%A5%EF%B8%8F-1f2937?style=for-the-badge" alt=""><br>
+<b>Davi Aurélio de Pontes Lopes</b><br>
+<sub>🖥️ Front-end · 🗄️ Banco<br>👤 Rotas de usuário, login e estrutura inicial</sub>
+</td>
+<td align="center" width="20%">
+<img src="https://img.shields.io/badge/-%F0%9F%97%84%EF%B8%8F-1f2937?style=for-the-badge" alt=""><br>
+<b>Henrique Domingues</b><br>
+<sub>🗄️ Banco de dados<br>📦 Rotas de produto</sub>
+</td>
+</tr>
+</table>
 
 </div>
 
@@ -1149,16 +1537,20 @@ Itens levantados durante o projeto que ficaram **fora do escopo desta entrega**,
 
 ---
 
+<a id="licenca"></a>
+
 ## 📄 Licença
 
 Distribuído sob a licença **MIT**. Veja o arquivo [`LICENSE`](LICENSE).
 
----
-
 <div align="center">
 
-Feito com 💛 pela equipe **Protagonistas ADS** · FATEC
+<br>
+
+Feito com 💛 pela equipe **Protagonistas ADS** para a **S Ferraretto** · Salto-SP
 
 ⭐ Se o projeto te interessou, deixe uma estrela no repositório!
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:f59e0b,50:92400e,100:451a03&height=120&section=footer" alt="" width="100%">
 
 </div>
