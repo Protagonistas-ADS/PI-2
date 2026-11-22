@@ -30,6 +30,7 @@ Projeto Integrador · FATEC · Análise e Desenvolvimento de Sistemas
 [**🔐 Segurança**](#-segurança-da-informação) ·
 [**🚀 Como rodar**](#-como-rodar-o-projeto) ·
 [**📐 Diagramas**](docs/diagramas.md) ·
+[**🧪 Roteiros**](docs/roteiro-de-teste.md) ·
 [**🔭 Melhorias futuras**](#-melhorias-futuras) ·
 [**👥 Equipe**](#-equipe)
 
@@ -681,6 +682,13 @@ Os diagramas foram refeitos para a versão final (sem cotação) e ficam version
 | [🧱 Classes](docs/diagramas.md#3-diagrama-de-classes) | Classes do domínio, atributos, operações e como viram as camadas do back-end |
 | [🔁 Ciclo do pedido](docs/diagramas.md#4-ciclo-de-vida-do-pedido) | Os status do pedido e o que cada mudança faz no estoque e nas vendas |
 
+Para testar e apresentar o sistema:
+
+| Documento | Para que serve |
+|-----------|----------------|
+| [🧪 Roteiro de teste](docs/roteiro-de-teste.md) | Passo a passo do fluxo completo (visitante, cliente e administrador) com o resultado esperado de cada tela, usando os dados do seed |
+| [🎤 Roteiro de apresentação](docs/roteiro-de-apresentacao.md) | O que mostrar, em que ordem e quem fala na demo, com preparação e perguntas prováveis |
+
 > [!NOTE]
 > Hoje a emissão de notas fiscais é feita pelo site **Emitte**, com clientes, produtos e transportadoras cadastrados. O sistema registra a venda e a nota para manter o estoque e o histórico organizados.
 
@@ -950,6 +958,8 @@ PI-2/
 │   └── uploads/            # fotos dos produtos
 ├── 📁 docs/
 │   ├── diagramas.md        # banco, casos de uso, classes e ciclo do pedido
+│   ├── roteiro-de-teste.md # teste do fluxo completo, passo a passo
+│   ├── roteiro-de-apresentacao.md # ordem da demo e quem fala
 │   └── prints/             # capturas das telas
 ├── 📁 frontend/
 │   └── src/
