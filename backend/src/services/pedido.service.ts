@@ -121,9 +121,11 @@ const PedidoService = {
                     throw criarErro(`O produto "${produto.nome}" não está mais disponível. Remova-o do carrinho.`, 409);
                 }
 
+                // Não informa o número: a quantidade em estoque é só do administrador.
                 if (item.quantidade > produto.quantidade_estoque) {
                     throw criarErro(
-                        `Estoque insuficiente para "${produto.nome}". Disponível: ${produto.quantidade_estoque}.`,
+                        `No momento não temos essa quantidade de "${produto.nome}". ` +
+                            "Diminua a quantidade ou fale com a loja pelo WhatsApp.",
                         409
                     );
                 }

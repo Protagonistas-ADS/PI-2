@@ -14,7 +14,7 @@ import {
     AcoesCarrinho,
 } from "./style";
 
-import { formatarPreco } from "../../../utils/produto";
+import { formatarPreco, QUANTIDADE_MAXIMA_ITEM } from "../../../utils/produto";
 import type { ItemJanela } from "../../../types/pedido";
 
 interface ModalCarrinhoProps {
@@ -92,7 +92,7 @@ function ModalCarrinho({
                                         <button
                                             type="button"
                                             onClick={() => aoAumentar(item.produto.id)}
-                                            disabled={item.quantidade >= (item.produto.quantidade_estoque ?? 0)}
+                                            disabled={item.quantidade >= QUANTIDADE_MAXIMA_ITEM}
                                             aria-label={`Aumentar quantidade de ${item.produto.nome}`}
                                         >
                                             <FiPlus />

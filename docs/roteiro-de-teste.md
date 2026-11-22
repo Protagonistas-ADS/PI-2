@@ -4,7 +4,7 @@ Passo a passo para conferir o sistema inteiro, do visitante ao administrador, us
 
 Siga **na ordem**: cada parte usa o que a anterior criou. Os valores esperados valem para um banco recém-criado com `schema.sql` + `seed.sql`.
 
-> Este roteiro foi executado de ponta a ponta em 21/11/2026, num banco recém-criado com o seed, e repetido inteiro (partes A a I, inclusive o celular em 390 × 844) no teste final da Etapa 12, também em 21/11/2026. Os resultados abaixo são os que apareceram na tela.
+> Este roteiro foi executado de ponta a ponta em 21/11/2026, num banco recém-criado com o seed, e repetido inteiro (partes A a I, inclusive o celular em 390 × 844) no teste final da Etapa 12, também em 21/11/2026. Em 22/11/2026 o catálogo deixou de mostrar a quantidade em estoque (só o administrador vê o número), e os passos A6–A10 e C2–C4 foram refeitos com essa mudança. Os resultados abaixo são os que apareceram na tela.
 
 ---
 
@@ -39,11 +39,11 @@ Siga **na ordem**: cada parte usa o que a anterior criou. Os valores esperados v
 | A3 | Olhar o rodapé | Telefone, e-mail, endereço, link do WhatsApp, razão social e CNPJ. **Sem** redes sociais | |
 | A4 | Clicar em **Falar no WhatsApp** | Abre o WhatsApp (`wa.me/5511964992626`) em outra aba | |
 | A5 | Ir em **Catálogo** | 4 produtos, **sem pedir login**: descartável R$ 25,00, PBR R$ 45,00, plástico R$ 120,00, reforçado R$ 75,00 | |
-| A6 | Clicar em **Saber mais** no Palete PBR | Janela "Palete PBR" com descrição, preço, "Em estoque: 142 unidades" e "Voltar ao catálogo". Fecha com **Esc** | |
-| A7 | No Palete plástico, digitar **50** na quantidade e sair do campo | O número volta para **9** (não deixa passar do estoque) | |
-| A8 | No Palete PBR, digitar **10** e clicar **Adicionar ao carrinho** | Aviso "10x Palete PBR adicionado ao carrinho." e botão flutuante **Carrinho (10)** | |
-| A9 | Clicar em **Carrinho (10)** | Janela "Meu Carrinho": PBR 10 un., subtotal R$ 450,00, botão **Ir para o carrinho e finalizar** | |
-| A10 | Clicar em **Ir para o carrinho e finalizar** | Página `/carrinho` com o PBR, "142 em estoque", total R$ 450,00, campos de data e observação e o botão **Entrar para finalizar** | |
+| A6 | Clicar em **Saber mais** no Palete PBR | Janela "Palete PBR" com descrição, preço, "Disponível para pedido" (**sem** o número do estoque, que é só do administrador) e "Voltar ao catálogo". Fecha com **Esc** | |
+| A7 | No Palete plástico, digitar **50** na quantidade e clicar **Adicionar ao carrinho** | Aviso "50x Palete plástico adicionado ao carrinho." e botão flutuante **Carrinho (50)**. A tela não mostra nem limita pelo estoque: quem confere é o servidor, ao enviar (passo C3) | |
+| A8 | No Palete PBR, digitar **10** e clicar **Adicionar ao carrinho** | Aviso "10x Palete PBR adicionado ao carrinho." e botão **Carrinho (60)** | |
+| A9 | Clicar em **Carrinho (60)** | Janela "Meu Carrinho": plástico 50 un. (R$ 6.000,00) e PBR 10 un. (R$ 450,00), valor total R$ 6.450,00, botão **Ir para o carrinho e finalizar** | |
+| A10 | Clicar em **Ir para o carrinho e finalizar** | Página `/carrinho` com os dois produtos (sem quantidade em estoque), total R$ 6.450,00, campos de data e observação e o botão **Entrar para finalizar** | |
 | A11 | Clicar em **Entrar para finalizar** | Aviso "Entre na sua conta (ou crie uma) para finalizar o pedido. Seu carrinho fica guardado." → **OK** leva ao login | |
 | A12 | Abrir um endereço que não existe (ex.: `/xyz`) | Página **404** "Página não encontrada" com botão para voltar | |
 
@@ -60,13 +60,14 @@ Siga **na ordem**: cada parte usa o que a anterior criou. Os valores esperados v
 | # | Passo | Resultado esperado | ✓ |
 |:-:|-------|--------------------|:-:|
 | C1 | Entrar com senha errada | Alerta "E-mail ou senha inválidos." | |
-| C2 | Entrar com `Cliente@123456` (vindo do carrinho, passo A11) | Volta **direto para o carrinho**, com o PBR ainda lá | |
-| C3 | Escolher uma data de retirada (ex.: depois de amanhã), escrever "Vou buscar com caminhão no fim da tarde." e clicar **Enviar pedido** | "Pedido nº 16 enviado! A loja vai conferir o estoque e confirmar." → **OK** abre Meus Pedidos | |
-| C4 | Conferir **Meus Pedidos** | "4 registros": nº 16 (R$ 450,00, Aguardando confirmação, com a data escolhida), nº 15 (pendente), nº 12 (Confirmado) e nº 7 (Entregue) | |
-| C5 | Clicar em **Cancelar** no nº 15 → **Confirmar** | O nº 15 vira **Cancelado** e o botão some. Os pedidos confirmados e entregues não têm botão | |
-| C6 | Digitar `/admin` na barra de endereço | Volta para o catálogo com o aviso "Área restrita para administradores." | |
-| C7 | Abrir **Perfil**, trocar o nome para **Cliente Teste da Silva** e clicar no botão **✓** que aparece embaixo do campo | "Nome atualizado com sucesso!" (o botão **Salvar** de baixo é só para trocar a senha; o e-mail não muda por aqui) | |
-| C8 | Clicar em **Sair** | Vai para a tela de login. Abrir `/clientePedidos` depois disso também manda para o login | |
+| C2 | Entrar com `Cliente@123456` (vindo do carrinho, passo A11) | Volta **direto para o carrinho**, com os dois produtos ainda lá | |
+| C3 | Clicar em **Enviar pedido** (com os 50 plásticos) | Erro: *No momento não temos essa quantidade de "Palete plástico". Diminua a quantidade ou fale com a loja pelo WhatsApp.* O número do estoque **não aparece**, e o pedido não é criado | |
+| C4 | Clicar em **Remover** no Palete plástico, escolher uma data de retirada (ex.: depois de amanhã), escrever "Vou buscar com caminhão no fim da tarde." e clicar **Enviar pedido** | "Pedido nº 16 enviado! A loja vai conferir o estoque e confirmar." → **OK** abre Meus Pedidos | |
+| C5 | Conferir **Meus Pedidos** | "4 registros": nº 16 (R$ 450,00, Aguardando confirmação, com a data escolhida), nº 15 (pendente), nº 12 (Confirmado) e nº 7 (Entregue) | |
+| C6 | Clicar em **Cancelar** no nº 15 → **Confirmar** | O nº 15 vira **Cancelado** e o botão some. Os pedidos confirmados e entregues não têm botão | |
+| C7 | Digitar `/admin` na barra de endereço | Volta para o catálogo com o aviso "Área restrita para administradores." | |
+| C8 | Abrir **Perfil**, trocar o nome para **Cliente Teste da Silva** e clicar no botão **✓** que aparece embaixo do campo | "Nome atualizado com sucesso!" (o botão **Salvar** de baixo é só para trocar a senha; o e-mail não muda por aqui) | |
+| C9 | Clicar em **Sair** | Vai para a tela de login. Abrir `/clientePedidos` depois disso também manda para o login | |
 
 ## D. Administrador: pedidos (`admin@teste.com`, janela anônima)
 
@@ -74,7 +75,7 @@ Siga **na ordem**: cada parte usa o que a anterior criou. Os valores esperados v
 |:-:|-------|--------------------|:-:|
 | D1 | Entrar com `Admin@123456` | Cai no **Dashboard** (`/admin`), não no catálogo | |
 | D2 | Conferir os cartões | **Pedidos pendentes 3** (13, 14 e 16) · **A retirar hoje 2** · **Estoque baixo 1** (Palete plástico: 9 un.) · **Vendas de novembro R$ 725,00** (2 pedidos entregues; o cartão mostra o nome do mês atual) | |
-| D3 | Em "Pedidos em andamento", conferir o nº 16 | Cliente Teste da Silva (nome trocado no C7), a observação do cliente, a data de retirada, 10 unidades, R$ 450,00, "Aguardando confirmação" | |
+| D3 | Em "Pedidos em andamento", conferir o nº 16 | Cliente Teste da Silva (nome trocado no C8), a observação do cliente, a data de retirada, 10 unidades, R$ 450,00, "Aguardando confirmação" | |
 | D4 | Clicar em **10 unidades** | Janela "Produtos do pedido nº 16": Palete PBR, quantidade 10, R$ 45,00, valor total R$ 450,00 | |
 | D5 | Clicar em **Confirmar** no nº 16 | Aviso "Pedido nº 16 confirmado (estoque baixado)." · pendentes passa a **2** · status **Confirmado** com botões **Marcar pronto** e **Cancelar** | |
 | D6 | Clicar em **Marcar pronto** | "Pedido nº 16 marcado como pronto para retirada." · botões **Entregue** e **Cancelar** | |
@@ -127,6 +128,7 @@ Pode ser feito pelos arquivos `.http` de [`backend/requests/`](../backend/reques
 | H4 | `POST /usuarios` com e-mail inválido | `400` "Dados inválidos" com os detalhes | |
 | H5 | 6 logins errados seguidos (**faça por último**) | Do 1º ao 5º: `401`. No 6º: `429` "Muitas tentativas de login...". O limite conta **todas** as senhas erradas dos últimos 15 minutos, inclusive a do passo C1: se o C1 foi há menos de 15 minutos, o `429` já aparece na 5ª tentativa. Depois disso, **nenhum login funciona nesse computador por 15 minutos** (ou até reiniciar o back-end) | |
 | H6 | Chamada vinda de outro site (cabeçalho `Origin` diferente do `CORS_ORIGIN`) | `403` "Acesso não permitido a partir deste endereço." | |
+| H7 | `GET /produtos` e `GET /produtos/:id` sem login | Cada produto vem com `disponivel: true/false` e **sem** `quantidade_estoque` (o número só aparece nas rotas de admin, como `/produtos/todos` e `/estoque`) | |
 
 ## I. Celular
 

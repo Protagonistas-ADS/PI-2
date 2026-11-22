@@ -58,9 +58,9 @@ Tudo usa os dados de demonstração do [`seed.sql`](../backend/src/database/seed
 |-------|-------|
 | Rolar a tela inicial até o rodapé | "Landing mais direta: produtos, como funciona o pedido, sobre a empresa e o mapa. No rodapé, o CNPJ e o WhatsApp; tiramos as redes sociais." |
 | Clicar em **Ver catálogo** | "O catálogo **abre sem login**: qualquer pessoa vê os produtos e os preços." |
-| **Saber mais** no Palete PBR → **Esc** | "O 'Saber mais' agora serve só para ver os detalhes: descrição, preço e estoque." |
-| No plástico, digitar **50** | "Não dá para pedir mais do que existe: o campo volta para **9**, que é o estoque." |
-| PBR: quantidade **10** → **Adicionar ao carrinho** → **Carrinho (10)** → **Ir para o carrinho e finalizar** | "Escolho a quantidade e coloco no carrinho direto do card. O carrinho mostra o total." |
+| **Saber mais** no Palete PBR → **Esc** | "O 'Saber mais' agora serve só para ver os detalhes: descrição, preço e se está disponível. A quantidade em estoque o cliente não vê: isso é informação só do dono." |
+| No plástico, digitar **50** e **Adicionar ao carrinho** | "O cliente escolhe a quantidade que quiser. Se pedir mais do que a loja tem, o servidor recusa ao enviar, sem revelar o estoque (vamos ver isso logo depois do login)." |
+| PBR: quantidade **10** → **Adicionar ao carrinho** → **Carrinho (60)** → **Ir para o carrinho e finalizar** | "Escolho a quantidade e coloco no carrinho direto do card. O carrinho mostra o total." |
 
 ### 2b. **Gustavo**: cliente com login (2 min)
 
@@ -68,7 +68,8 @@ Tudo usa os dados de demonstração do [`seed.sql`](../backend/src/database/seed
 |-------|-------|
 | Clicar em **Entrar para finalizar** → **OK** | "Para enviar, o site pede login, e **o carrinho fica guardado**." |
 | Entrar com `usuario@gmail.com` / `Cliente@123456` | "Depois do login, ele volta **direto para o carrinho**." |
-| Escolher a data de retirada (depois de amanhã), escrever "Vou buscar com caminhão no fim da tarde." → **Enviar pedido** | "O cliente diz quando vai retirar e deixa um recado para a loja." |
+| Clicar em **Enviar pedido** (com os 50 plásticos) | "Pedi mais plástico do que a loja tem: o servidor recusa com uma mensagem clara e **não revela o estoque**. Quantidade é informação só do dono." |
+| **Remover** o plástico, escolher a data de retirada (depois de amanhã), escrever "Vou buscar com caminhão no fim da tarde." → **Enviar pedido** | "O cliente diz quando vai retirar e deixa um recado para a loja." |
 | Ler o aviso "Pedido nº 16 enviado!" → **OK** | "O pedido entra como **aguardando confirmação**." |
 | Mostrar **Meus Pedidos** | "Aqui o cliente acompanha tudo: confirmado, pronto, entregue. Ele só cancela enquanto o pedido está pendente." |
 
@@ -139,7 +140,7 @@ Tudo usa os dados de demonstração do [`seed.sql`](../backend/src/database/seed
 | Por que não tem pagamento online? | O cliente vende mais para empresas, com retirada na loja e nota no Emitte. O pedido pelo site organiza a venda; o pagamento segue como a loja já faz hoje. | Yuri |
 | Por que tiraram a cotação? | Foi pedido do professor: um fluxo só (pedido) é mais simples para o cliente e para a loja. | Yuri |
 | Como garantem que o estoque não fica errado? | O estoque só muda junto com uma movimentação registrada, dentro de uma **transação** com trava na linha (`FOR UPDATE`): dois admins confirmando ao mesmo tempo não baixam o estoque duas vezes. | Henrique / Antonio |
-| E se o cliente pedir mais do que tem? | A tela não deixa passar do estoque, e o servidor confere de novo na confirmação (responde 409 com o nome do produto). | Davi / Antonio |
+| E se o cliente pedir mais do que tem? | O servidor confere ao criar o pedido e responde `409` "No momento não temos essa quantidade de ...", **sem dizer o saldo**; confere de novo quando o admin confirma. O catálogo nem recebe o número: a API pública devolve só `disponivel`. | Davi / Antonio |
 | Como um administrador é criado? | Por segurança, não existe cadastro de admin pelo site: todo cadastro entra como cliente, e o admin é definido direto no banco. | Antonio |
 | A nota fiscal é emitida pelo sistema? | Não: a emissão oficial continua no Emitte. O sistema guarda o número, o status e o link do PDF, ligados à venda. | Gustavo |
 | Funciona no celular? | Sim, as telas se adaptam (o menu vira ☰ e as tabelas viram cartões). | Davi |

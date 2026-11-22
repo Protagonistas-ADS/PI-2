@@ -109,7 +109,7 @@ Na entrevista com o cliente, identificamos três dores principais:
 - 🔑 Cadastro, login e edição de perfil
 - 🛍️ Catálogo de paletes aberto (sem login), com quantidade e carrinho direto no card
 - 🛒 Página do carrinho (`/carrinho`) com data de retirada e observação
-- 📝 Realização de **pedidos** a partir do carrinho (estoque conferido na hora)
+- 📝 Realização de **pedidos** a partir do carrinho (estoque conferido na hora, sem mostrar a quantidade: o cliente vê só "Disponível" ou "Esgotado")
 - 🔎 Acompanhamento do status dos pedidos (histórico completo)
 - ❌ Cancelamento de pedidos enquanto aguardam confirmação
 
@@ -368,14 +368,14 @@ Rotas marcadas com 🔒 exigem o header `Authorization: Bearer <token>`.
 
 | Método | Rota | Descrição | Auth |
 |:------:|------|-----------|:----:|
-| 🟢 `GET` | `/produtos` | Catálogo: lista os produtos **ativos** | 🌐 |
-| 🟢 `GET` | `/produtos/:id` | Detalhes de um produto ativo (`404` se não existir ou estiver desativado) | 🌐 |
-| 🟢 `GET` | `/produtos/todos` | Lista todos os produtos, inclusive os desativados | 🔒 admin |
+| 🟢 `GET` | `/produtos` | Catálogo: lista os produtos **ativos** com `disponivel: true/false` (sem a quantidade em estoque) | 🌐 |
+| 🟢 `GET` | `/produtos/:id` | Detalhes de um produto ativo, com `disponivel` e sem a quantidade (`404` se não existir ou estiver desativado) | 🌐 |
+| 🟢 `GET` | `/produtos/todos` | Lista todos os produtos, inclusive os desativados, com `quantidade_estoque` | 🔒 admin |
 | 🔵 `POST` | `/produtos` | Cadastrar produto `{ nome, descricao, preco, quantidade, imagem? }` → `201 { id }` | 🔒 admin |
 | 🟣 `PUT` | `/produtos/:id` | Editar produto (mesmo corpo do cadastro) → `204` | 🔒 admin |
 | 🟠 `PATCH` | `/produtos/:id/ativo` | Ativar/desativar `{ "ativo": false }` → `204` | 🔒 admin |
 
-Produtos não são apagados: desativar tira o produto do catálogo, mas preserva pedidos, vendas e notas antigos. O campo `imagem` guarda só o nome do arquivo da pasta `backend/uploads` (servida em `/uploads/<arquivo>`).
+A quantidade em estoque é informação só do administrador: as rotas públicas devolvem apenas `disponivel` (estoque maior que zero). Produtos não são apagados: desativar tira o produto do catálogo, mas preserva pedidos, vendas e notas antigos. O campo `imagem` guarda só o nome do arquivo da pasta `backend/uploads` (servida em `/uploads/<arquivo>`).
 
 </details>
 
@@ -405,7 +405,7 @@ Corpo de `POST /pedidos`:
 ```
 
 - `previsao_busca` (opcional): data `AAAA-MM-DD`, de hoje até 60 dias. `observacao` (opcional): até 500 caracteres.
-- Estoque insuficiente ou produto desativado → `409` com o nome do produto. Produto inexistente → `404`.
+- Estoque insuficiente → `409` ("No momento não temos essa quantidade de ..." com o nome do produto, sem informar o saldo). Produto desativado → `409` com o nome do produto. Produto inexistente → `404`.
 - Status: `pendente → confirmado → pronto_retirada → entregue`, ou `cancelado`. Mudança fora dessa ordem → `409`.
 - **Confirmar** baixa o estoque (saída); **cancelar** um pedido confirmado devolve (entrada); **entregar** registra a venda. Tudo na mesma transação.
 
@@ -634,7 +634,7 @@ Quem decide o acesso é o servidor: o front-end confere o perfil em `GET /usuari
 | 👥 **Cadastro seguro** | O perfil de quem se cadastra é sempre `cliente`, definido no servidor e não pelo cliente da API |
 | 🧱 **Isolamento de dados** | Pedidos são sempre filtrados pelo `cliente_id` do token, então um cliente não acessa dados de outro |
 | 🚪 **Login** | Mensagem genérica ("e-mail ou senha inválidos"), sem revelar qual dos dois está errado |
-| 🙈 **Respostas** | O hash da senha nunca é devolvido pela API; erros inesperados retornam mensagem genérica (`500`) |
+| 🙈 **Respostas** | O hash da senha nunca é devolvido pela API; a quantidade em estoque só aparece nas rotas de admin (o catálogo recebe só `disponivel`); erros inesperados retornam mensagem genérica (`500`) |
 | 🗝️ **Segredos** | Credenciais ficam no `.env`, que está no `.gitignore`; o repositório traz apenas o `.env.example` |
 | 🌐 **CORS** | Só o endereço do site (`CORS_ORIGIN` no `.env`) pode chamar a API pelo navegador; outro site recebe `403` |
 | 🛑 **Força bruta** | Depois de **5 tentativas de login erradas em 15 minutos**, o mesmo IP recebe `429` ("Muitas tentativas de login...") até a janela acabar; logins certos não contam (`express-rate-limit`) |

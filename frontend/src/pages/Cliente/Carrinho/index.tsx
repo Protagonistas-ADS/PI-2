@@ -6,7 +6,7 @@ import { listar } from "../../../services/produtoApi";
 import { buscarUsuarioLogado } from "../../../services/usuarioApi";
 import { criarPedido } from "../../../services/pedidoApi";
 import { useCarrinho } from "../../../hooks/useCarrinho";
-import { formatarPreco, urlImagemProduto, usarImagemPadrao } from "../../../utils/produto";
+import { formatarPreco, urlImagemProduto, usarImagemPadrao, QUANTIDADE_MAXIMA_ITEM } from "../../../utils/produto";
 import { obterMensagemErro } from "../../../utils/obterMensagemErro";
 import { guardarDestinoAposLogin, sairDaConta } from "../../../utils/destinoAposLogin";
 import { dadosEmpresa } from "../../../utils/dadosEmpresa";
@@ -63,7 +63,7 @@ function Carrinho() {
             .catch(() => localStorage.removeItem("token"));
     }, []);
 
-    // Ao abrir: começa do topo e atualiza preços e estoque com o catálogo de agora
+    // Ao abrir: começa do topo e atualiza preços e disponibilidade com o catálogo de agora
     useEffect(() => {
         window.scrollTo(0, 0);
 
@@ -209,9 +209,6 @@ function Carrinho() {
                                         <span className="preco-unitario">
                                             {formatarPreco(item.produto.preco_unitario)} cada
                                         </span>
-                                        <span className="estoque">
-                                            {item.produto.quantidade_estoque} em estoque
-                                        </span>
                                     </div>
 
                                     <div className="quantidade">
@@ -226,7 +223,7 @@ function Carrinho() {
                                         <button
                                             type="button"
                                             onClick={() => carrinho.aumentar(item.produto.id)}
-                                            disabled={item.quantidade >= item.produto.quantidade_estoque}
+                                            disabled={item.quantidade >= QUANTIDADE_MAXIMA_ITEM}
                                             aria-label={`Aumentar quantidade de ${item.produto.nome}`}
                                         >
                                             <FiPlus />
