@@ -23,7 +23,9 @@ import ModalCarrinho from "../../../components/Modais/ModalCarrinho";
 import {
     PaginaContainer,
     PedidosCabecalho,
-    PedidosConteudo
+    PedidosConteudo,
+    TabelaDesktop,
+    ListaPedidosMobile,
 } from "./style";
 
 // "2026-11-21T03:00:00.000Z" -> "21/11/2026" (no horário do navegador)
@@ -192,12 +194,86 @@ function MeusPedidos() {
                 )}
 
                 {!carregando && !erroCarregamento && pedidos.length > 0 && (
-                    <TabelaGeral
-                        titulo={`Meus Pedidos - ${pedidos.length} ${pedidos.length === 1 ? "registro" : "registros"}`}
-                        colunas={colunasPedidos}
-                        dados={pedidos}
-                    />
-                )}
+    <>
+        {/* Layout para desktop */}
+        <TabelaDesktop>
+            <TabelaGeral
+                titulo={`Meus Pedidos - ${pedidos.length} ${pedidos.length === 1 ? "registro" : "registros"}`}
+                colunas={colunasPedidos}
+                dados={pedidos}
+            />
+        </TabelaDesktop>
+
+        {/* Layout para dispositivos móveis */}
+        <ListaPedidosMobile>
+            <h2>
+                Meus Pedidos - {pedidos.length}{" "}
+                {pedidos.length === 1 ? "registro" : "registros"}
+            </h2>
+
+            {pedidos.map((pedido) => (
+                <article className="card-pedido" key={pedido.id}>
+                    <header className="card-cabecalho">
+                        <h3>Pedido nº {pedido.id}</h3>
+
+                        <span className={`status status-${pedido.status}`}>
+                            {NOME_STATUS_PEDIDO[pedido.status] ?? pedido.status}
+                        </span>
+                    </header>
+
+                    <div className="dados-pedido">
+                        <div className="dado">
+                            <span>Feito em</span>
+                            <strong>
+                                {formatarData(pedido.criado_em) ?? "—"}
+                            </strong>
+                        </div>
+
+                        <div className="dado">
+                            <span>Retirada prevista</span>
+                            <strong>
+                                {formatarData(pedido.previsao_busca) ?? "A combinar"}
+                            </strong>
+                        </div>
+
+                        <div className="dado">
+                            <span>Quantidade</span>
+                            <strong>
+                                {pedido.quantidade_total}{" "}
+                                {pedido.quantidade_total === 1 ? "unidade" : "unidades"}
+                            </strong>
+                        </div>
+
+                        <div className="dado">
+                            <span>Valor total</span>
+                            <strong>{formatarPreco(pedido.valor_total)}</strong>
+                        </div>
+                    </div>
+
+                    <div className="acoes-pedido">
+                        <button
+                            className="botao-quantidade"
+                            type="button"
+                            onClick={() => abrirProdutosPedido(pedido.id)}
+                        >
+                            Ver itens
+                        </button>
+
+                        {pedido.status === "pendente" && (
+                            <button
+                                type="button"
+                                className="acao-cancelar"
+                                onClick={() => handleCancelarPedido(pedido.id)}
+                            >
+                                Cancelar pedido
+                            </button>
+                        )}
+                    </div>
+                </article>
+            ))}
+        </ListaPedidosMobile>
+    </>
+)}
             </PedidosConteudo>
 
             {pedidoAberto && (
