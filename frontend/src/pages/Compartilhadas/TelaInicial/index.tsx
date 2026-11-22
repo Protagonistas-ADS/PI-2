@@ -125,7 +125,7 @@ function TelaInicial() {
                             {dadosEmpresa.endereco.cidade} · Empresas e pessoas físicas
                         </Selo>
 
-                        <h1>Paletes de madeira e plástico para a sua operação</h1>
+                        <h1>Paletes de madeira para a sua operação</h1>
 
                         <p>
                             Consulte os modelos e os preços, faça seu pedido pelo site
@@ -239,11 +239,11 @@ function TelaInicial() {
                         <GradeSobre>
                             <TextoSobre>
                                 <h2>Sobre a {dadosEmpresa.nomeExibicao}</h2>
-                                <p>
-                                    A {dadosEmpresa.nomeExibicao} é uma empresa de {dadosEmpresa.endereco.cidade} que
-                                    fornece paletes de madeira e de plástico para empresas da região e também
-                                    atende pessoas físicas.
-                                </p>
+                                    <p>
+                                        A {dadosEmpresa.nomeExibicao} é uma empresa de {dadosEmpresa.endereco.cidade} que
+                                        fornece paletes de madeira para empresas da região e também
+                                        atende pessoas físicas.
+                                    </p>
                                 <p>
                                     Nosso foco é simples: o palete certo, na quantidade certa, com retirada
                                     combinada e sem burocracia. Pelo site você consulta os modelos, faz o

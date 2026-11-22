@@ -75,7 +75,7 @@
 
 ## 🎯 Sobre o projeto
 
-O **PI-2** é uma aplicação web completa feita para um **cliente real**: a **S Ferraretto**, empresa de Salto-SP que vende paletes de madeira e de plástico, principalmente para outras empresas (B2B), com retirada na loja.
+O **PI-2** é uma aplicação web completa feita para um **cliente real**: a **S Ferraretto**, empresa de Salto-SP que comercializa paletes de madeira, principalmente para outras empresas (B2B), com retirada na loja.
 
 <table>
 <tr>
@@ -625,14 +625,14 @@ erDiagram
 | Dado | Quantidade | Detalhe |
 |------|:----------:|---------|
 | Usuários | 8 | 1 admin + 7 clientes fictícios (empresas e pessoas, com e-mails gmail, hotmail, outlook, yahoo e `.com.br`) |
-| Produtos | 4 | Palete PBR (R$ 45), descartável (R$ 25), reforçado (R$ 75) e plástico (R$ 120) — preços de exemplo |
+| Produtos | 4 registros | 3 ativos no catálogo: Palete PBR (R$ 45), descartável (R$ 25) e reforçado (R$ 75). O quarto registro está inativo e preserva relacionamentos históricos de demonstração. |
 | Pedidos | 15 | Todos os status: 3 pendentes, 2 confirmados, 2 prontos, 6 entregues, 2 cancelados |
 | Vendas | 6 | 4 com nota e 2 sem nota (para mostrar "Emitir nota") |
 | Notas | 5 | NF-000001 a NF-000005, uma cancelada e reemitida |
 | Movimentações | 24 | Estoque inicial, lotes, avaria, ajuste, saídas de pedidos e devolução |
 
 - As datas são **relativas ao dia em que o seed roda** (`NOW() - INTERVAL 10 DAY`): o painel sempre tem "retirar hoje" e "vendas do mês".
-- O estoque de cada produto é **exatamente** a soma das movimentações (entradas − saídas). O plástico fica com 9 unidades para acender o alerta de estoque baixo.
+- O estoque de cada produto é **exatamente** a soma das movimentações (entradas − saídas). Apenas os três produtos ativos aparecem no catálogo e entram no alerta de estoque baixo.
 
 </details>
 
@@ -1159,7 +1159,7 @@ Scripts em `backend/src/database/`:
 | Arquivo | O que faz | Quando rodar |
 |---------|-----------|:------------:|
 | `schema.sql` | Cria o banco `PI2` e as tabelas | ✅ Sempre |
-| `seed.sql` | Dados de demonstração (8 usuários, 4 produtos, 15 pedidos, 6 vendas, 5 notas, 24 movimentações) | ✅ Recomendado |
+| `seed.sql` | Dados de demonstração (8 usuários, 4 registros de produtos — 3 ativos e 1 inativo —, 15 pedidos, 6 vendas, 5 notas, 24 movimentações) | ✅ Recomendado |
 | `migracao-*.sql` (5 arquivos) | Atualizam bancos **antigos** sem apagar dados (remover cotação, imagens, status do pedido, foto padrão, movimentação/nota) | Só se o banco é antigo |
 
 **Pelo MySQL Workbench (recomendado):**

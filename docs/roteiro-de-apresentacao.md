@@ -41,7 +41,7 @@ Tudo usa os dados de demonstração do [`seed.sql`](../backend/src/database/seed
 **Mostrar:** a tela inicial (`/`).
 
 **Falar:**
-- "Nosso cliente é a **S Ferraretto**, de Salto-SP, que vende paletes de madeira e plástico, principalmente para empresas."
+- "Nosso cliente é a **S Ferraretto**, de Salto-SP, que comercializa paletes de madeira, principalmente para empresas."
 - "Na entrevista e na visita ao armazém, encontramos **três problemas**: falta de divulgação, falta de controle de estoque e falta de um canal de vendas."
 - "O sistema resolve os três: uma **vitrine online**, um **canal de pedidos** e um **painel de estoque, vendas e notas**."
 - "Atendemos os pedidos do professor: tiramos a cotação, o catálogo abriu sem login, entraram o carrinho e a área completa do administrador."
@@ -59,8 +59,8 @@ Tudo usa os dados de demonstração do [`seed.sql`](../backend/src/database/seed
 | Rolar a tela inicial até o rodapé | "Landing mais direta: produtos, como funciona o pedido, sobre a empresa e o mapa. No rodapé, o CNPJ e o WhatsApp; tiramos as redes sociais." |
 | Clicar em **Ver catálogo** | "O catálogo **abre sem login**: qualquer pessoa vê os produtos e os preços." |
 | **Saber mais** no Palete PBR → **Esc** | "O 'Saber mais' agora serve só para ver os detalhes: descrição, preço e se está disponível. A quantidade em estoque o cliente não vê: isso é informação só do dono." |
-| No plástico, digitar **50** e **Adicionar ao carrinho** | "O cliente escolhe a quantidade que quiser. Se pedir mais do que a loja tem, o servidor recusa ao enviar, sem revelar o estoque (vamos ver isso logo depois do login)." |
-| PBR: quantidade **10** → **Adicionar ao carrinho** → **Carrinho (60)** → **Ir para o carrinho e finalizar** | "Escolho a quantidade e coloco no carrinho direto do card. O carrinho mostra o total." |
+| No Palete reforçado, digitar **100** e **Adicionar ao carrinho** | "O cliente escolhe a quantidade que quiser. Se pedir mais do que a loja tem, o servidor recusa ao enviar, sem revelar o estoque." |
+| PBR: quantidade **10** → **Adicionar ao carrinho** → **Carrinho (110)** → **Ir para o carrinho e finalizar** | "Escolho a quantidade e coloco no carrinho direto do card. O carrinho mostra o total." |
 
 ### 2b. **Gustavo**: cliente com login (2 min)
 
@@ -68,8 +68,8 @@ Tudo usa os dados de demonstração do [`seed.sql`](../backend/src/database/seed
 |-------|-------|
 | Clicar em **Entrar para finalizar** → **OK** | "Para enviar, o site pede login, e **o carrinho fica guardado**." |
 | Entrar com `usuario@gmail.com` / `Cliente@123456` | "Depois do login, ele volta **direto para o carrinho**." |
-| Clicar em **Enviar pedido** (com os 50 plásticos) | "Pedi mais plástico do que a loja tem: o servidor recusa com uma mensagem clara e **não revela o estoque**. Quantidade é informação só do dono." |
-| **Remover** o plástico, escolher a data de retirada (depois de amanhã), escrever "Vou buscar com caminhão no fim da tarde." → **Enviar pedido** | "O cliente diz quando vai retirar e deixa um recado para a loja." |
+| Clicar em **Enviar pedido** (com as 100 unidades de Palete reforçado) | "Pedi mais unidades do que a loja tem: o servidor recusa com uma mensagem clara e **não revela o estoque**. Quantidade é informação só do dono." |
+| **Remover** o Palete reforçado, escolher a data de retirada (depois de amanhã), escrever "Vou buscar com caminhão no fim da tarde." → **Enviar pedido** | "O cliente diz quando vai retirar e deixa um recado para a loja." |
 | Ler o aviso "Pedido nº 16 enviado!" → **OK** | "O pedido entra como **aguardando confirmação**." |
 | Mostrar **Meus Pedidos** | "Aqui o cliente acompanha tudo: confirmado, pronto, entregue. Ele só cancela enquanto o pedido está pendente." |
 
@@ -81,7 +81,7 @@ Tudo usa os dados de demonstração do [`seed.sql`](../backend/src/database/seed
 
 | Fazer | Falar |
 |-------|-------|
-| Mostrar o **Dashboard** e clicar em **Atualizar** | "O dono abre o painel e vê o dia: **pedidos pendentes**, o que tem **para retirar hoje**, **estoque baixo** (o plástico está com 9) e **vendas do mês**." |
+| Mostrar o **Dashboard** e clicar em **Atualizar** | "O dono abre o painel e vê o dia: **pedidos pendentes**, o que tem **para retirar hoje**, **estoque baixo** (nenhum produto ativo está com 10 unidades ou menos) e **vendas do mês**." |
 | No nº 16, clicar em **10 unidades** → fechar | "Vejo os itens e o recado do cliente." |
 | **Confirmar** o nº 16 | "Ao confirmar, **o estoque baixa sozinho**, e tudo acontece numa transação no banco: ou tudo dá certo, ou nada é gravado." |
 | Ir em **Movimentações** | "Cada entrada e saída fica registrada: **quem fez, quando, por quê e de qual pedido**. Olha a saída de 10 PBR do pedido nº 16, e o saldo foi de 142 para 132." |
@@ -91,7 +91,7 @@ Tudo usa os dados de demonstração do [`seed.sql`](../backend/src/database/seed
 | Mostrar rapidamente **Pedidos** e **Usuários** | "Tabelas completas com busca, filtros e totais: pedidos por status, e clientes com quantos pedidos fizeram e quanto compraram." |
 
 > [!NOTE]
-> Se sobrar tempo: em **Movimentações**, tentar uma **saída de 20** paletes plásticos para mostrar o aviso "Estoque insuficiente" e depois registrar uma **entrada de 20** ("Chegada de lote do fornecedor"). O cartão de estoque baixo zera no Dashboard.
+> Se sobrar tempo: em **Movimentações**, tentar uma **saída de 100** paletes reforçados para mostrar o aviso "Estoque insuficiente" e depois registrar uma **entrada de 20** ("Chegada de lote do fornecedor"). O estoque do Palete reforçado passa de 65 para 85 unidades.
 
 ---
 
@@ -103,7 +103,7 @@ Tudo usa os dados de demonstração do [`seed.sql`](../backend/src/database/seed
 - "São 8 tabelas no MySQL. O coração é **pedido → venda → nota fiscal**, e o **estoque** é controlado pela tabela de **movimentações**."
 - "Tiramos tudo de cotação: tabelas, colunas e dados. O status do pedido virou **pendente → confirmado → pronto para retirada → entregue**, ou cancelado."
 - "A movimentação guarda o **pedido de origem**, o **responsável** e o **motivo**. A nota tem **status** (emitida/cancelada) e o **link do PDF**."
-- "O `seed.sql` cria dados coerentes para testar: 8 usuários, 15 pedidos em todos os status, 6 vendas, 5 notas e 24 movimentações. **O estoque de cada produto é exatamente a soma das movimentações**."
+- "O `seed.sql` cria dados coerentes para testar: 8 usuários, 4 registros de produtos (3 ativos e 1 inativo para preservar o histórico), 15 pedidos em todos os status, 6 vendas, 5 notas e 24 movimentações. **O estoque de cada produto é exatamente a soma das movimentações**."
 - "Produtos não são apagados, só desativados, para não perder o histórico de pedidos e notas."
 
 ---

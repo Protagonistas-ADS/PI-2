@@ -4,7 +4,7 @@ Passo a passo para conferir o sistema inteiro, do visitante ao administrador, us
 
 Siga **na ordem**: cada parte usa o que a anterior criou. Os valores esperados valem para um banco recém-criado com `schema.sql` + `seed.sql`.
 
-> Este roteiro foi executado de ponta a ponta em 21/11/2026, num banco recém-criado com o seed, e repetido inteiro (partes A a I, inclusive o celular em 390 × 844) no teste final da Etapa 12, também em 21/11/2026. Em 22/11/2026 o catálogo deixou de mostrar a quantidade em estoque (só o administrador vê o número), e os passos A6–A10 e C2–C4 foram refeitos com essa mudança. Os resultados abaixo são os que apareceram na tela.
+> Este roteiro foi executado de ponta a ponta em 21/11/2026, num banco recém-criado com o seed. Em 22/11/2026, o catálogo e os dados de demonstração foram atualizados: agora há três produtos ativos e um registro inativo para preservar o histórico. Os passos afetados por essa mudança precisam ser revalidados antes de considerar esta versão do roteiro totalmente testada.
 
 ---
 
@@ -34,16 +34,16 @@ Siga **na ordem**: cada parte usa o que a anterior criou. Os valores esperados v
 
 | # | Passo | Resultado esperado | ✓ |
 |:-:|-------|--------------------|:-:|
-| A1 | Abrir `/` | Tela inicial com "Paletes de madeira e plástico para a sua operação", CNPJ 30.669.871/0001-63, "Segunda a sexta, das 7h às 18h" e botões **Ver catálogo** e **Falar no WhatsApp** | |
+| A1 | Abrir `/` | Tela inicial com "Paletes de madeira para a sua operação", CNPJ 30.669.871/0001-63, "Segunda a sexta, das 7h às 18h" e botões **Ver catálogo** e **Falar no WhatsApp** | |
 | A2 | Rolar a página | Seções "Nossos paletes", "Como funciona o pedido", "Sobre a S Ferraretto" e "Onde estamos" (com mapa) | |
 | A3 | Olhar o rodapé | Telefone, e-mail, endereço, link do WhatsApp, razão social e CNPJ. **Sem** redes sociais | |
 | A4 | Clicar em **Falar no WhatsApp** | Abre o WhatsApp (`wa.me/5511964992626`) em outra aba | |
-| A5 | Ir em **Catálogo** | 4 produtos, **sem pedir login**: descartável R$ 25,00, PBR R$ 45,00, plástico R$ 120,00, reforçado R$ 75,00 | |
+| A5 | Ir em **Catálogo** | 3 produtos ativos, **sem pedir login**: descartável R$ 25,00, PBR R$ 45,00 e reforçado R$ 75,00 | |
 | A6 | Clicar em **Saber mais** no Palete PBR | Janela "Palete PBR" com descrição, preço, "Disponível para pedido" (**sem** o número do estoque, que é só do administrador) e "Voltar ao catálogo". Fecha com **Esc** | |
-| A7 | No Palete plástico, digitar **50** na quantidade e clicar **Adicionar ao carrinho** | Aviso "50x Palete plástico adicionado ao carrinho." e botão flutuante **Carrinho (50)**. A tela não mostra nem limita pelo estoque: quem confere é o servidor, ao enviar (passo C3) | |
-| A8 | No Palete PBR, digitar **10** e clicar **Adicionar ao carrinho** | Aviso "10x Palete PBR adicionado ao carrinho." e botão **Carrinho (60)** | |
-| A9 | Clicar em **Carrinho (60)** | Janela "Meu Carrinho": plástico 50 un. (R$ 6.000,00) e PBR 10 un. (R$ 450,00), valor total R$ 6.450,00, botão **Ir para o carrinho e finalizar** | |
-| A10 | Clicar em **Ir para o carrinho e finalizar** | Página `/carrinho` com os dois produtos (sem quantidade em estoque), total R$ 6.450,00, campos de data e observação e o botão **Entrar para finalizar** | |
+| A7 | No Palete reforçado, digitar **100** na quantidade e clicar **Adicionar ao carrinho** | Aviso "100x Palete reforçado adicionado ao carrinho." e botão flutuante **Carrinho (100)**. A tela não mostra nem limita pelo estoque: quem confere é o servidor, ao enviar (passo C3) | |
+| A8 | No Palete PBR, digitar **10** e clicar **Adicionar ao carrinho** | Aviso "10x Palete PBR adicionado ao carrinho." e botão **Carrinho (110)** | |
+| A9 | Clicar em **Carrinho (110)** | Janela "Meu Carrinho": reforçado 100 un. (R$ 7.500,00) e PBR 10 un. (R$ 450,00), valor total R$ 7.950,00, botão **Ir para o carrinho e finalizar** | |
+| A10 | Clicar em **Ir para o carrinho e finalizar** | Página `/carrinho` com os dois produtos (sem quantidade em estoque), total R$ 7.950,00, campos de data e observação e o botão **Entrar para finalizar** | |
 | A11 | Clicar em **Entrar para finalizar** | Aviso "Entre na sua conta (ou crie uma) para finalizar o pedido. Seu carrinho fica guardado." → **OK** leva ao login | |
 | A12 | Abrir um endereço que não existe (ex.: `/xyz`) | Página **404** "Página não encontrada" com botão para voltar | |
 
@@ -61,8 +61,8 @@ Siga **na ordem**: cada parte usa o que a anterior criou. Os valores esperados v
 |:-:|-------|--------------------|:-:|
 | C1 | Entrar com senha errada | Alerta "E-mail ou senha inválidos." | |
 | C2 | Entrar com `Cliente@123456` (vindo do carrinho, passo A11) | Volta **direto para o carrinho**, com os dois produtos ainda lá | |
-| C3 | Clicar em **Enviar pedido** (com os 50 plásticos) | Erro: *No momento não temos essa quantidade de "Palete plástico". Diminua a quantidade ou fale com a loja pelo WhatsApp.* O número do estoque **não aparece**, e o pedido não é criado | |
-| C4 | Clicar em **Remover** no Palete plástico, escolher uma data de retirada (ex.: depois de amanhã), escrever "Vou buscar com caminhão no fim da tarde." e clicar **Enviar pedido** | "Pedido nº 16 enviado! A loja vai conferir o estoque e confirmar." → **OK** abre Meus Pedidos | |
+| C3 | Clicar em **Enviar pedido** (com as 100 unidades de Palete reforçado) | Erro: *No momento não temos essa quantidade de "Palete reforçado". Diminua a quantidade ou fale com a loja pelo WhatsApp.* O número do estoque **não aparece**, e o pedido não é criado | |
+| C4 | Clicar em **Remover** no Palete reforçado, escolher uma data de retirada (ex.: depois de amanhã), escrever "Vou buscar com caminhão no fim da tarde." e clicar **Enviar pedido** | "Pedido nº 16 enviado! A loja vai conferir o estoque e confirmar." → **OK** abre Meus Pedidos | |
 | C5 | Conferir **Meus Pedidos** | "4 registros": nº 16 (R$ 450,00, Aguardando confirmação, com a data escolhida), nº 15 (pendente), nº 12 (Confirmado) e nº 7 (Entregue) | |
 | C6 | Clicar em **Cancelar** no nº 15 → **Confirmar** | O nº 15 vira **Cancelado** e o botão some. Os pedidos confirmados e entregues não têm botão | |
 | C7 | Digitar `/admin` na barra de endereço | Volta para o catálogo com o aviso "Área restrita para administradores." | |
@@ -74,7 +74,7 @@ Siga **na ordem**: cada parte usa o que a anterior criou. Os valores esperados v
 | # | Passo | Resultado esperado | ✓ |
 |:-:|-------|--------------------|:-:|
 | D1 | Entrar com `Admin@123456` | Cai no **Dashboard** (`/admin`), não no catálogo | |
-| D2 | Conferir os cartões | **Pedidos pendentes 3** (13, 14 e 16) · **A retirar hoje 2** · **Estoque baixo 1** (Palete plástico: 9 un.) · **Vendas de novembro R$ 725,00** (2 pedidos entregues; o cartão mostra o nome do mês atual) | |
+| D2 | Conferir os cartões | **Pedidos pendentes 3** (13, 14 e 16) · **A retirar hoje 2** · **Estoque baixo 0** · **Vendas de novembro R$ 725,00** (2 pedidos entregues; o cartão mostra o nome do mês atual) | |
 | D3 | Em "Pedidos em andamento", conferir o nº 16 | Cliente Teste da Silva (nome trocado no C8), a observação do cliente, a data de retirada, 10 unidades, R$ 450,00, "Aguardando confirmação" | |
 | D4 | Clicar em **10 unidades** | Janela "Produtos do pedido nº 16": Palete PBR, quantidade 10, R$ 45,00, valor total R$ 450,00 | |
 | D5 | Clicar em **Confirmar** no nº 16 | Aviso "Pedido nº 16 confirmado (estoque baixado)." · pendentes passa a **2** · status **Confirmado** com botões **Marcar pronto** e **Cancelar** | |
@@ -91,9 +91,9 @@ Siga **na ordem**: cada parte usa o que a anterior criou. Os valores esperados v
 |:-:|-------|--------------------|:-:|
 | E1 | Ir em **Movimentações** | Histórico com **Todas (25)**. A primeira linha é a saída de 10 Palete PBR, motivo "Confirmação do pedido nº 16", responsável Administrador Teste, origem "Pedido nº 16" | |
 | E2 | Abrir a lista de produtos do formulário | Palete PBR com **132 un.** (era 142) | |
-| E3 | Escolher **Saída**, Palete plástico, quantidade **20**, motivo qualquer, e clicar **Registrar saída** | Não registra: "Estoque insuficiente: há 9 un. deste produto." | |
-| E4 | Escolher **Entrada**, Palete plástico, quantidade 20, motivo "Chegada de lote do fornecedor" | A prévia mostra "Estoque fica em 29 un." | |
-| E5 | Clicar **Registrar entrada** | "Entrada de 20 un. de "Palete plástico" registrada. Estoque: 9 → 29 un." · histórico com **Todas (26)**, Entradas (9), Manuais (10) | |
+| E3 | Escolher **Saída**, Palete reforçado, quantidade **100**, motivo qualquer, e clicar **Registrar saída** | Não registra: "Estoque insuficiente: há 65 un. deste produto." | |
+| E4 | Escolher **Entrada**, Palete reforçado, quantidade 20, motivo "Chegada de lote do fornecedor" | A prévia mostra "Estoque fica em 85 un." | |
+| E5 | Clicar **Registrar entrada** | Entrada de 20 unidades de Palete reforçado registrada. Estoque: 65 → 85 un. · histórico com **Todas (26)**, Entradas (9), Manuais (10) | |
 | E6 | Voltar ao **Dashboard** | **Estoque baixo 0** · "Nenhum produto com 10 un. ou menos" | |
 
 ## F. Administrador: vendas e notas fiscais

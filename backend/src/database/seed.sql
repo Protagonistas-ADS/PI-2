@@ -32,17 +32,16 @@ INSERT INTO usuario (id, nome, email, senha, perfil, criado_em) VALUES
 -- ====================== PRODUTOS ======================
 -- Preços de exemplo (trocar pelos reais quando o cliente passar).
 -- O estoque de cada produto é EXATAMENTE a soma das movimentações do final deste arquivo
--- (entradas - saídas). A conta, por produto:
---   1 PBR:        150 inicial + 100 lote - 3 avaria - (40+10+30+20+5) pedidos 1,2,6,11,8   = 142
---   2 Descartável: 150 inicial + 100 lote - 2 ajuste - (60+20+40) pedidos 2,7,9           = 128
---   3 Reforçado:    60 inicial +  30 lote - (15+6+4) pedidos 4,10,11                      =  65
---   4 Plástico:     16 inicial - (10+4+3) pedidos 5,6,12 + 10 devolvidos (pedido 5 cancelado) = 9
---   (o plástico fica com 9: acende o cartão "Estoque baixo" do painel, que avisa com 10 ou menos)
+-- (entradas - saídas).
+--
+-- Os três primeiros produtos estão ativos e disponíveis no catálogo.
+-- O quarto registro é um produto de demonstração inativo, mantido
+-- apenas para preservar os relacionamentos dos pedidos e movimentações antigas.
 INSERT INTO produto (id, nome, descricao, preco_unitario, quantidade_estoque, ativo, imagem) VALUES
 (1, 'Palete PBR', 'Palete padrão PBR de madeira', 45.00, 142, TRUE, NULL),
 (2, 'Palete descartável', 'Palete de madeira descartável', 25.00, 128, TRUE, NULL),
 (3, 'Palete reforçado', 'Palete de madeira reforçado', 75.00, 65, TRUE, NULL),
-(4, 'Palete plástico', 'Palete plástico industrial', 120.00, 9, TRUE, NULL);
+(4, 'Produto de demonstração (inativo)', 'Registro inativo mantido para preservar dados históricos de teste.', 120.00, 9, FALSE, NULL);
 
 -- ====================== PEDIDOS ======================
 -- Fluxo: pendente -> confirmado -> pronto_retirada -> entregue (ou cancelado).
