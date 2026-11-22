@@ -86,9 +86,9 @@ O **PI-2** é uma aplicação web completa feita para um **cliente real**: a **S
 | **Razão social** | Ferraretto Comércio e Consultoria Empresarial LTDA |
 | **Nome fantasia** | S FERRARETTO |
 | **CNPJ** | 30.669.871/0001-63 |
-| **Endereço** | R. José de Alencar, 7, Vila Progresso, Salto-SP |
+| **Endereço** | R. Batalha do Tuiuti, 1850 - Distrito Industrial, Salto-SP, 13329-422 |
 | **Ramo (CNAE)** | 4744-0/02 · Comércio varejista de madeira e artefatos |
-| **Atendimento** | Segunda a sexta, das 7h às 18h · WhatsApp (11) 96499-2626 |
+| **Atendimento** | Segunda a sexta, das 7h às 18h · WhatsApp (11) 97216-7974 |
 
 </td>
 <td width="38%" valign="top">

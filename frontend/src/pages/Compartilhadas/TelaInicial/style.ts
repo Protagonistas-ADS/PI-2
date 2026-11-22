@@ -1,7 +1,8 @@
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 
-import fotoPaletes from "../../../assets/PaleteBackground.jpg";
+import fotoGalpao from "../../../assets/empresa/banner-galpao.webp";
+import fotoFachada from "../../../assets/empresa/fachada-empresa.webp";
 
 // Cores da marca (as mesmas do menu, do rodapé e do catálogo).
 const cores = {
@@ -36,7 +37,7 @@ export const Hero = styled.section`
 
     background:
         linear-gradient(90deg, rgba(20, 36, 28, 0.92) 0%, rgba(20, 36, 28, 0.75) 50%, rgba(20, 36, 28, 0.35) 100%),
-        url(${fotoPaletes}) center / cover no-repeat;
+        url(${fotoGalpao}) center / cover no-repeat;
     color: #ffffff;
 
     @media (max-width: 768px) {
@@ -44,7 +45,7 @@ export const Hero = styled.section`
         padding: 56px 16px;
         background:
             linear-gradient(rgba(20, 36, 28, 0.85), rgba(20, 36, 28, 0.85)),
-            url(${fotoPaletes}) center / cover no-repeat;
+            url(${fotoGalpao}) center / cover no-repeat;
     }
 `;
 
@@ -152,14 +153,28 @@ interface SecaoProps {
 
 export const Secao = styled.section<SecaoProps>`
     padding: 80px 8%;
-    scroll-margin-top: 90px; /* o menu fica fixo no topo */
+    scroll-margin-top: 90px;
 
-    background-color: ${({ $fundo }) =>
-        $fundo === "claro" ? cores.cremeClaro : $fundo === "escuro" ? cores.verde : "#ffffff"};
+    background: ${({ $fundo }) =>
+        $fundo === "escuro"
+            ? `
+                linear-gradient(
+                    90deg,
+                    rgba(20, 36, 28, 0.93),
+                    rgba(20, 36, 28, 0.78)
+                ),
+                url(${fotoFachada}) center / cover no-repeat
+            `
+            : $fundo === "claro"
+                ? cores.cremeClaro
+                : "#ffffff"};
+
     color: ${({ $fundo }) => ($fundo === "escuro" ? cores.creme : cores.texto)};
 
     @media (max-width: 768px) {
         padding: 56px 16px;
+
+        background-position: center;
     }
 `;
 
@@ -412,7 +427,20 @@ export const Diferencial = styled.li`
         font-size: 0.95rem;
     }
 `;
+export const ColunaSobre = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+`;
 
+export const ImagemFachada = styled.img`
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    object-position: center 55%;
+    border-radius: 10px;
+    border: 1px solid rgba(240, 230, 214, 0.2);
+`;
 /* ---------- Onde estamos ---------- */
 
 export const GradeContato = styled.div`

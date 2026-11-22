@@ -1,9 +1,10 @@
 // Dados oficiais da empresa em um só lugar.
 // Se algo mudar (telefone, e-mail, endereço, horário), basta alterar aqui.
 
-const enderecoCompleto = "R. José de Alencar, 7 - Vila Progresso, Salto - SP";
+const enderecoCompleto = "R. Batalha do Tuiuti, 1850 - Distrito Industrial, Salto - SP, 13329-422";
+
 // Texto usado para localizar a loja no Google Maps (link e mapa da landing).
-const enderecoMapa = "R. José de Alencar, 7, Vila Progresso, Salto-SP";
+const enderecoMapa = "R. Batalha do Tuiuti, 1850 - Distrito Industrial, Salto - SP, 13329-422";
 
 export const dadosEmpresa = {
     nomeFantasia: "S FERRARETTO",
@@ -14,8 +15,8 @@ export const dadosEmpresa = {
     email: "ferrarettoconsultoria@gmail.com",
     horario: "Segunda a sexta, das 7h às 18h",
     whatsapp: {
-        exibicao: "(11) 96499-2626",
-        link: "https://wa.me/5511964992626",
+        exibicao: "(11) 97216-7974",
+        link: "https://wa.me/5511972167974",
     },
     endereco: {
         exibicao: enderecoCompleto,
