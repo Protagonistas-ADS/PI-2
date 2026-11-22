@@ -827,6 +827,7 @@ Se tudo estiver certo, o terminal mostra:
 ```text
 Conexão com o banco estabelecida.
 Servidor rodando em http://localhost:3000
+Site autorizado (CORS): http://localhost:5173
 ```
 
 ### 4️⃣ Configurar e rodar o front-end
