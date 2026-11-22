@@ -280,7 +280,7 @@ function Notas() {
                                                         <div>
                                                             <strong>{nota.numero}</strong>
                                                             <span className="detalhe">
-                                                                {nota.natureza_operacao} · {formatarData(nota.data_emissao)}
+                                                                {nota.natureza_operacao} · <span className="sem-quebra">{formatarData(nota.data_emissao)}</span>
                                                             </span>
                                                         </div>
                                                     </td>

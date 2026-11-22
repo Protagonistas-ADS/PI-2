@@ -41,7 +41,7 @@ function TabelaPedidos({ pedidos, pedidoOcupado, aoMudarStatus, aoAbrirItens }: 
                                 <td data-rotulo="Pedido">
                                     <div>
                                         <strong>nº {pedido.id}</strong>
-                                        <span className="detalhe">feito em {formatarData(pedido.criado_em)}</span>
+                                        <span className="detalhe">feito em <span className="sem-quebra">{formatarData(pedido.criado_em)}</span></span>
                                     </div>
                                 </td>
                                 <td data-rotulo="Cliente" className="cliente">
