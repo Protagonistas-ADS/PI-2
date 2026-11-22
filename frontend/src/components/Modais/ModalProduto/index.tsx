@@ -50,7 +50,7 @@ function ModalProduto({ produto, aoFechar }: ModalProdutoProps) {
         event.stopPropagation();
     }
 
-    const esgotado = indisponivel || detalhes.quantidade_estoque <= 0;
+    const esgotado = indisponivel || !detalhes.disponivel;
 
     return (
         <FundoModal onClick={aoFechar}>
@@ -86,7 +86,7 @@ function ModalProduto({ produto, aoFechar }: ModalProdutoProps) {
                             ? "Produto indisponível no momento"
                             : esgotado
                                 ? "Produto esgotado"
-                                : `Em estoque: ${detalhes.quantidade_estoque} unidades`}
+                                : "Disponível para pedido"}
                     </EtiquetaEstoque>
 
                     <BotaoVoltar type="button" onClick={aoFechar}>

@@ -128,11 +128,6 @@ export const Item = styled.li`
         .preco-unitario {
             color: #333;
         }
-
-        .estoque {
-            font-size: 0.85rem;
-            color: #777;
-        }
     }
 
     .quantidade {

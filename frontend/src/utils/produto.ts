@@ -18,6 +18,10 @@ export function usarImagemPadrao(event: SyntheticEvent<HTMLImageElement>) {
     }
 }
 
+// Limite de unidades de um produto por pedido, só para evitar números absurdos na tela.
+// Se passar do estoque, quem avisa é o servidor ao enviar o pedido (sem mostrar o número).
+export const QUANTIDADE_MAXIMA_ITEM = 9999;
+
 // 45 -> "R$ 45,00"
 export function formatarPreco(valor: number) {
     return Number(valor).toLocaleString("pt-BR", {

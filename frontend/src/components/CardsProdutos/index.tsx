@@ -2,7 +2,7 @@ import { useState, type ChangeEvent } from "react";
 import { FiMinus, FiPlus, FiShoppingCart } from "react-icons/fi";
 
 import type { Produto } from "../../types/produto";
-import { formatarPreco, urlImagemProduto, usarImagemPadrao } from "../../utils/produto";
+import { formatarPreco, urlImagemProduto, usarImagemPadrao, QUANTIDADE_MAXIMA_ITEM } from "../../utils/produto";
 
 import {
     GradeProdutos,
@@ -33,17 +33,17 @@ function Card({ produto, aoSaberMais, aoAdicionar }: CardProps) {
     // Texto para permitir apagar o campo e digitar outro número
     const [quantidade, setQuantidade] = useState("1");
 
-    const estoque = produto.quantidade_estoque;
-    const esgotado = estoque <= 0;
+    // O catálogo não recebe a quantidade em estoque, só se o produto está disponível
+    const esgotado = !produto.disponivel;
     const quantidadeNumero = Number(quantidade);
-    const quantidadeValida = quantidade !== "" && quantidadeNumero >= 1 && quantidadeNumero <= estoque;
+    const quantidadeValida = quantidade !== "" && quantidadeNumero >= 1 && quantidadeNumero <= QUANTIDADE_MAXIMA_ITEM;
 
     function alterarQuantidade(event: ChangeEvent<HTMLInputElement>) {
         const valor = event.target.value;
 
-        // Só aceita dígitos e nunca passa do estoque
+        // Só aceita dígitos e nunca passa do limite por pedido
         if (valor === "" || /^\d+$/.test(valor)) {
-            setQuantidade(valor === "" ? "" : String(Math.min(Number(valor), estoque)));
+            setQuantidade(valor === "" ? "" : String(Math.min(Number(valor), QUANTIDADE_MAXIMA_ITEM)));
         }
     }
 
@@ -52,7 +52,7 @@ function Card({ produto, aoSaberMais, aoAdicionar }: CardProps) {
     }
 
     function aumentar() {
-        setQuantidade(String(Math.min(estoque, (quantidadeNumero || 0) + 1)));
+        setQuantidade(String(Math.min(QUANTIDADE_MAXIMA_ITEM, (quantidadeNumero || 0) + 1)));
     }
 
     function adicionar() {
@@ -108,7 +108,7 @@ function Card({ produto, aoSaberMais, aoAdicionar }: CardProps) {
                         <button
                             type="button"
                             onClick={aumentar}
-                            disabled={quantidadeNumero >= estoque}
+                            disabled={quantidadeNumero >= QUANTIDADE_MAXIMA_ITEM}
                             aria-label={`Aumentar quantidade de ${produto.nome}`}
                         >
                             <FiPlus />

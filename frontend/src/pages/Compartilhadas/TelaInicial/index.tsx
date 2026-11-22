@@ -128,7 +128,7 @@ function TelaInicial() {
                         <h1>Paletes de madeira e plástico para a sua operação</h1>
 
                         <p>
-                            Consulte os modelos e o estoque disponível, faça seu pedido pelo site
+                            Consulte os modelos e os preços, faça seu pedido pelo site
                             e retire na nossa loja em {dadosEmpresa.endereco.cidade}.
                         </p>
 
@@ -165,7 +165,7 @@ function TelaInicial() {
                     <ConteudoSecao>
                         <CabecalhoSecao>
                             <h2>Nossos paletes</h2>
-                            <p>Preços e quantidades atualizados direto do nosso estoque.</p>
+                            <p>Preços atualizados direto do nosso sistema.</p>
                         </CabecalhoSecao>
 
                         {estadoProdutos === "carregando" && (

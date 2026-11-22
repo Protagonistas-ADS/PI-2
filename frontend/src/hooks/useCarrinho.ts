@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import type { Produto, ItemCarrinho } from "../types/produto";
 import { swalAviso, toastSucesso } from "../utils/alertas";
+import { QUANTIDADE_MAXIMA_ITEM } from "../utils/produto";
 
 const CHAVE_CARRINHO = "carrinho";
 
@@ -33,11 +34,20 @@ export function useCarrinho() {
         const itemExistente = itens.find((item) => item.produto.id === produto.id);
         const quantidadeAtual = itemExistente?.quantidade ?? 0;
 
-        // Impede ultrapassar o estoque disponível
-        const quantidadeAdicionar = Math.min(quantidade, produto.quantidade_estoque - quantidadeAtual);
+        if (!produto.disponivel) {
+            swalAviso(`"${produto.nome}" está esgotado no momento.`);
+            return;
+        }
+
+        // O estoque não é mostrado ao cliente: aqui só há o limite por pedido.
+        // Se passar do estoque, o servidor avisa ao enviar o pedido.
+        const quantidadeAdicionar = Math.min(quantidade, QUANTIDADE_MAXIMA_ITEM - quantidadeAtual);
 
         if (quantidadeAdicionar <= 0) {
-            swalAviso(`Você já tem todo o estoque de "${produto.nome}" no carrinho (${quantidadeAtual}).`);
+            swalAviso(
+                `O limite é de ${QUANTIDADE_MAXIMA_ITEM.toLocaleString("pt-BR")} unidades de "${produto.nome}" por pedido. ` +
+                "Para quantidades maiores, fale com a loja pelo WhatsApp."
+            );
             return;
         }
 
@@ -59,7 +69,7 @@ export function useCarrinho() {
     function aumentar(id: number) {
         setItens((atuais) =>
             atuais.map((item) =>
-                item.produto.id === id && item.quantidade < item.produto.quantidade_estoque
+                item.produto.id === id && item.quantidade < QUANTIDADE_MAXIMA_ITEM
                     ? { ...item, quantidade: item.quantidade + 1 }
                     : item
             )
@@ -85,8 +95,9 @@ export function useCarrinho() {
         setItens([]);
     }
 
-    // Atualiza preço e estoque com os dados mais novos do catálogo.
-    // Tira produtos que saíram do catálogo e reduz quantidades acima do estoque.
+    // Atualiza preço e disponibilidade com os dados mais novos do catálogo.
+    // Tira produtos que saíram do catálogo ou esgotaram. A quantidade não é comparada
+    // com o estoque aqui (o cliente não sabe o número): o servidor confere ao enviar.
     // Devolve avisos em português para mostrar ao cliente.
     function sincronizar(produtosAtuais: Produto[]) {
         const avisos: string[] = [];
@@ -94,17 +105,12 @@ export function useCarrinho() {
         const atualizados = itens.flatMap((item) => {
             const atual = produtosAtuais.find((produto) => produto.id === item.produto.id);
 
-            if (!atual || atual.quantidade_estoque <= 0) {
+            if (!atual || !atual.disponivel) {
                 avisos.push(`"${item.produto.nome}" não está mais disponível e saiu do carrinho.`);
                 return [];
             }
 
-            if (item.quantidade > atual.quantidade_estoque) {
-                avisos.push(`"${atual.nome}": só há ${atual.quantidade_estoque} em estoque; a quantidade foi ajustada.`);
-                return [{ produto: atual, quantidade: atual.quantidade_estoque }];
-            }
-
-            return [{ produto: atual, quantidade: item.quantidade }];
+            return [{ produto: atual, quantidade: Math.min(item.quantidade, QUANTIDADE_MAXIMA_ITEM) }];
         });
 
         setItens(atualizados);
