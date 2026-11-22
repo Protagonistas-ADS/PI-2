@@ -10,7 +10,9 @@ export const GradeIndicadores = styled.section`
     gap: 18px;
     margin-bottom: 32px;
 
-    @media (max-width: 1200px) {
+    /* Abaixo de 1400 px (ex.: notebook ou projetor 1366 x 768) os 4 cartões
+       ficam apertados e o valor quebrava no meio: passam a 2 por linha. */
+    @media (max-width: 1400px) {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
@@ -50,9 +52,11 @@ export const CartaoIndicador = styled.article<{ $cor: string }>`
     .numero {
         margin: 4px 0;
         color: ${VERDE};
-        font-size: 1.9rem;
+        /* Diminui um pouco em telas menores e só quebra no espaço
+           ("R$" / "1.175,00"), nunca no meio do número. */
+        font-size: clamp(1.4rem, 0.5rem + 1.2vw, 1.9rem);
         font-weight: bold;
-        overflow-wrap: anywhere;
+        overflow-wrap: normal;
     }
 
     .dica,

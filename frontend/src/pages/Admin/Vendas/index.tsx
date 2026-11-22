@@ -276,7 +276,7 @@ function Vendas() {
                                                 <td data-rotulo="Venda">
                                                     <div>
                                                         <strong>nº {venda.id}</strong>
-                                                        <span className="detalhe">em {formatarData(venda.data_venda)}</span>
+                                                        <span className="detalhe">em <span className="sem-quebra">{formatarData(venda.data_venda)}</span></span>
                                                     </div>
                                                 </td>
                                                 <td data-rotulo="Pedido">

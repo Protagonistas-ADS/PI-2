@@ -423,6 +423,11 @@ export const TabelaAdmin = styled.table`
         overflow-wrap: anywhere;
     }
 
+    /* Datas nunca quebram no meio ("21/11/20" + "26") */
+    .sem-quebra {
+        white-space: nowrap;
+    }
+
     .observacao {
         display: block;
         margin-top: 6px;
