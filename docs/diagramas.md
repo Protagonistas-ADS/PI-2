@@ -13,14 +13,12 @@ Diagramas da versão final do sistema, **sem cotação**. Foram escritos em [Mer
 
 ## 1. Modelo do banco (MER / modelo lógico)
 
-Banco `PI2` (MySQL). `PK` = chave primária, `FK` = chave estrangeira, `UK` = valor único.
+Banco `PI2` (MySQL) com **8 tabelas**. `PK` = chave primária, `FK` = chave estrangeira, `UK` = valor único.
 
 ```mermaid
 erDiagram
     USUARIO ||--o{ PEDIDO : "faz"
     USUARIO ||--o{ MOVIMENTACAO_ESTOQUE : "registra (responsável)"
-    USUARIO ||--o{ TELEFONE : "tem (reservado)"
-    USUARIO ||--o{ ENDERECO : "tem (reservado)"
     PEDIDO ||--|{ PEDIDO_ITEM : "contém"
     PRODUTO ||--o{ PEDIDO_ITEM : "aparece em"
     PEDIDO ||--o| VENDA : "gera (ao ser entregue)"
@@ -97,22 +95,6 @@ erDiagram
         varchar motivo
         datetime data_mov
     }
-    TELEFONE {
-        int id PK
-        int usuario_id FK
-        varchar numero
-        enum tipo "celular | comercial | residencial"
-    }
-    ENDERECO {
-        int id PK
-        int usuario_id FK
-        varchar rua
-        varchar numero
-        varchar bairro
-        varchar cidade
-        varchar estado
-        varchar cep
-    }
 ```
 
 **Regras importantes:**
@@ -121,7 +103,7 @@ erDiagram
 - `nota` tem `status` (emitida/cancelada) e `link_pdf`. Uma venda pode ter várias notas no histórico, mas **só uma emitida**. Essa regra é conferida no backend.
 - `venda.pedido_id` é único: um pedido gera no máximo uma venda.
 - Produtos não são apagados (`ativo = false`), para não quebrar pedidos, vendas e notas antigos.
-- `telefone` e `endereco` existem no banco, mas **ainda não são usados** pelo sistema. Estão reservados para a melhoria futura de telefone no cadastro (L18).
+- `telefone` e `endereco` **não existem no banco**: estão só planejadas (comentadas no `schema.sql`) para a melhoria futura de telefone no cadastro e frete (L18).
 
 <details>
 <summary><b>📝 Lista para refazer o MER no BrModelo</b></summary>
@@ -138,8 +120,6 @@ erDiagram
 | Venda | <u>id</u>, valor_total, data_venda |
 | Nota | <u>id</u>, numero (único), natureza_operacao, valor_total, status, link_pdf, data_emissao |
 | Movimentacao_Estoque | <u>id</u>, tipo, quantidade, motivo, data_mov |
-| Telefone | <u>id</u>, numero, tipo |
-| Endereco | <u>id</u>, rua, numero, bairro, cidade, estado, cep |
 
 **Relacionamentos** (cardinalidade):
 
@@ -153,10 +133,8 @@ erDiagram
 | movimenta | Produto — Movimentacao_Estoque | 1 : N | — |
 | origina | Pedido — Movimentacao_Estoque | 0..1 : N | — |
 | registra | Usuario — Movimentacao_Estoque | 0..1 : N | — |
-| tem | Usuario — Telefone | 1 : N | — |
-| tem | Usuario — Endereco | 1 : N | — |
 
-**Não incluir:** cotação, item de cotação, status "respondido" e a ligação entre nota e movimentação.
+**Não incluir:** cotação, item de cotação, status "respondido", a ligação entre nota e movimentação e as tabelas planejadas `telefone` e `endereco` (ainda não existem no banco).
 
 </details>
 

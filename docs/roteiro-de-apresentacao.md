@@ -100,7 +100,7 @@ Tudo usa os dados de demonstração do [`seed.sql`](../backend/src/database/seed
 **Mostrar:** o diagrama do banco em [`docs/diagramas.md`](diagramas.md#1-modelo-do-banco-mer--modelo-lógico) (no GitHub) ou o modelo no BrModelo/Workbench.
 
 **Falar:**
-- "São 10 tabelas no MySQL. O coração é **pedido → venda → nota fiscal**, e o **estoque** é controlado pela tabela de **movimentações**."
+- "São 8 tabelas no MySQL. O coração é **pedido → venda → nota fiscal**, e o **estoque** é controlado pela tabela de **movimentações**."
 - "Tiramos tudo de cotação: tabelas, colunas e dados. O status do pedido virou **pendente → confirmado → pronto para retirada → entregue**, ou cancelado."
 - "A movimentação guarda o **pedido de origem**, o **responsável** e o **motivo**. A nota tem **status** (emitida/cancelada) e o **link do PDF**."
 - "O `seed.sql` cria dados coerentes para testar: 8 usuários, 15 pedidos em todos os status, 6 vendas, 5 notas e 24 movimentações. **O estoque de cada produto é exatamente a soma das movimentações**."
