@@ -111,6 +111,13 @@ function Movimentacoes() {
 
     const erros = tentouEnviar ? validar() : {};
 
+    // Saída maior que o estoque: avisa já na prévia, em vez de mostrar um estoque negativo
+    const erroQuantidade =
+        erros.quantidade ??
+        (tipo === "saida" && produtoEscolhido && numeroQuantidade > produtoEscolhido.quantidade_estoque
+            ? `Estoque insuficiente: há ${produtoEscolhido.quantidade_estoque} un. deste produto.`
+            : undefined);
+
     async function enviar(evento: FormEvent) {
         evento.preventDefault();
         setTentouEnviar(true);
@@ -269,10 +276,10 @@ function Movimentacoes() {
                                         value={quantidade}
                                         onChange={(evento) => setQuantidade(evento.target.value)}
                                         placeholder="Ex.: 50"
-                                        aria-invalid={erros.quantidade ? true : undefined}
+                                        aria-invalid={erroQuantidade ? true : undefined}
                                     />
-                                    {erros.quantidade && <span className="erro">{erros.quantidade}</span>}
-                                    {!erros.quantidade && produtoEscolhido && numeroQuantidade > 0 && Number.isInteger(numeroQuantidade) && (
+                                    {erroQuantidade && <span className="erro">{erroQuantidade}</span>}
+                                    {!erroQuantidade && produtoEscolhido && numeroQuantidade > 0 && Number.isInteger(numeroQuantidade) && (
                                         <span className="dica">
                                             Estoque fica em{" "}
                                             {tipo === "entrada"

@@ -4,7 +4,7 @@ Passo a passo para conferir o sistema inteiro, do visitante ao administrador, us
 
 Siga **na ordem**: cada parte usa o que a anterior criou. Os valores esperados valem para um banco recém-criado com `schema.sql` + `seed.sql`.
 
-> Este roteiro foi executado de ponta a ponta em 21/11/2026, num banco recém-criado com o seed. Os resultados abaixo são os que apareceram na tela (a parte I, celular, foi conferida na revisão de layout da Etapa 10 e nos prints).
+> Este roteiro foi executado de ponta a ponta em 21/11/2026, num banco recém-criado com o seed, e repetido inteiro (partes A a I, inclusive o celular em 390 × 844) no teste final da Etapa 12, também em 21/11/2026. Os resultados abaixo são os que apareceram na tela.
 
 ---
 
@@ -19,7 +19,7 @@ Siga **na ordem**: cada parte usa o que a anterior criou. Os valores esperados v
 3. Abrir **http://localhost:5173**. Use uma **janela normal** para o cliente e uma **janela anônima** para o administrador: assim as duas sessões ficam abertas ao mesmo tempo.
 
 > [!IMPORTANT]
-> As datas do seed são **relativas ao dia em que ele foi rodado** (ex.: "pedido feito há 2 dias"). Se o banco foi criado em outro dia ou em outro mês, os números de "A retirar hoje" e "Vendas do mês" podem mudar. Recrie o banco no dia do teste.
+> As datas do seed são **relativas ao dia em que ele foi rodado** (ex.: "pedido feito há 2 dias"). Se o banco foi criado em outro dia ou em outro mês, os números de "A retirar hoje" e "Vendas de (mês)" podem mudar. Recrie o banco no dia do teste.
 
 | Conta | E-mail | Senha |
 |-------|--------|-------|
@@ -73,13 +73,13 @@ Siga **na ordem**: cada parte usa o que a anterior criou. Os valores esperados v
 | # | Passo | Resultado esperado | ✓ |
 |:-:|-------|--------------------|:-:|
 | D1 | Entrar com `Admin@123456` | Cai no **Dashboard** (`/admin`), não no catálogo | |
-| D2 | Conferir os cartões | **Pedidos pendentes 3** (13, 14 e 16) · **A retirar hoje 2** · **Estoque baixo 1** (Palete plástico: 9 un.) · **Vendas do mês R$ 725,00** (2 pedidos entregues) | |
+| D2 | Conferir os cartões | **Pedidos pendentes 3** (13, 14 e 16) · **A retirar hoje 2** · **Estoque baixo 1** (Palete plástico: 9 un.) · **Vendas de novembro R$ 725,00** (2 pedidos entregues; o cartão mostra o nome do mês atual) | |
 | D3 | Em "Pedidos em andamento", conferir o nº 16 | Cliente Teste da Silva (nome trocado no C7), a observação do cliente, a data de retirada, 10 unidades, R$ 450,00, "Aguardando confirmação" | |
 | D4 | Clicar em **10 unidades** | Janela "Produtos do pedido nº 16": Palete PBR, quantidade 10, R$ 45,00, valor total R$ 450,00 | |
 | D5 | Clicar em **Confirmar** no nº 16 | Aviso "Pedido nº 16 confirmado (estoque baixado)." · pendentes passa a **2** · status **Confirmado** com botões **Marcar pronto** e **Cancelar** | |
 | D6 | Clicar em **Marcar pronto** | "Pedido nº 16 marcado como pronto para retirada." · botões **Entregue** e **Cancelar** | |
 | D7 | Clicar em **Entregue** | Pergunta "Confirmar que o pedido nº 16 foi retirado por Cliente Teste da Silva? A venda será registrada..." → **Sim, foi entregue** | |
-| D8 | Conferir depois da entrega | "Pedido nº 16 entregue (venda registrada)." · **Vendas do mês R$ 1.175,00** (3 pedidos entregues) | |
+| D8 | Conferir depois da entrega | "Pedido nº 16 entregue (venda registrada)." · **Vendas de novembro R$ 1.175,00** (3 pedidos entregues) | |
 | D9 | Na janela do cliente, atualizar **Meus Pedidos** | O nº 16 aparece como **Entregue** | |
 | D10 | Ir em **Pedidos** (menu lateral) | **Todos (16)** · Pendentes (2) · Confirmados (2) · Prontos (2) · Entregues (7) · Cancelados (3) · soma de R$ 15.315,00 | |
 | D11 | Buscar "Rota Sul" e filtrar por **Entregues** | Só os pedidos 6 e 1 da Transportadora Rota Sul · "Mostrando 2 de 16 pedidos · soma de R$ 3.630,00" | |
@@ -125,7 +125,7 @@ Pode ser feito pelos arquivos `.http` de [`backend/requests/`](../backend/reques
 | H2 | `GET /admin/resumo` com o token do cliente | `403` "Acesso permitido somente para administradores." | |
 | H3 | Qualquer rota com o token alterado | `401` "Token inválido" | |
 | H4 | `POST /usuarios` com e-mail inválido | `400` "Dados inválidos" com os detalhes | |
-| H5 | 6 logins errados seguidos (**faça por último**) | Do 1º ao 5º: `401`. No 6º: `429` "Muitas tentativas de login...". Depois disso, **nenhum login funciona nesse computador por 15 minutos** (ou até reiniciar o back-end) | |
+| H5 | 6 logins errados seguidos (**faça por último**) | Do 1º ao 5º: `401`. No 6º: `429` "Muitas tentativas de login...". O limite conta **todas** as senhas erradas dos últimos 15 minutos, inclusive a do passo C1: se o C1 foi há menos de 15 minutos, o `429` já aparece na 5ª tentativa. Depois disso, **nenhum login funciona nesse computador por 15 minutos** (ou até reiniciar o back-end) | |
 | H6 | Chamada vinda de outro site (cabeçalho `Origin` diferente do `CORS_ORIGIN`) | `403` "Acesso não permitido a partir deste endereço." | |
 
 ## I. Celular
