@@ -16,7 +16,7 @@ Projeto Integrador · FATEC · Análise e Desenvolvimento de Sistemas
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 
-![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
+![Status](https://img.shields.io/badge/status-concluído-brightgreen)
 ![Entrega](https://img.shields.io/badge/entrega-24%2F11-blue)
 ![Licença](https://img.shields.io/badge/licença-MIT-green)
 
@@ -26,9 +26,11 @@ Projeto Integrador · FATEC · Análise e Desenvolvimento de Sistemas
 [**✨ Funcionalidades**](#-funcionalidades) ·
 [**🏗️ Arquitetura**](#️-arquitetura) ·
 [**🔌 API**](#-api-back-end) ·
+[**📸 Telas**](#️-telas-front-end) ·
 [**🔐 Segurança**](#-segurança-da-informação) ·
 [**🚀 Como rodar**](#-como-rodar-o-projeto) ·
-[**📈 Roadmap**](#-status-e-roadmap) ·
+[**📐 Diagramas**](docs/diagramas.md) ·
+[**🔭 Melhorias futuras**](#-melhorias-futuras) ·
 [**👥 Equipe**](#-equipe)
 
 </div>
@@ -51,11 +53,12 @@ Projeto Integrador · FATEC · Análise e Desenvolvimento de Sistemas
 - [API (back-end)](#-api-back-end)
 - [Telas (front-end)](#️-telas-front-end)
 - [Segurança da informação](#-segurança-da-informação)
-- [Engenharia de requisitos](#-engenharia-de-requisitos)
+- [Engenharia de requisitos e diagramas](#-engenharia-de-requisitos-e-diagramas)
 - [Como rodar o projeto](#-como-rodar-o-projeto)
 - [Estrutura de pastas](#-estrutura-de-pastas)
 - [Fluxo de trabalho da equipe](#-fluxo-de-trabalho-da-equipe)
 - [Status e roadmap](#-status-e-roadmap)
+- [Melhorias futuras](#-melhorias-futuras)
 - [Equipe](#-equipe)
 - [Licença](#-licença)
 
@@ -123,7 +126,7 @@ Na entrevista com o cliente, identificamos três dores principais:
 - 💰 Tabela de vendas: total do período, média por venda, itens e botão "Emitir nota" para vendas sem nota
 - 🧾 Tabela de notas fiscais: número, status (emitida/cancelada), link do PDF no Emitte, editar link e cancelar
 - 👤 Perfil do administrador (nome e senha)
-- 📦 Gerenciamento de produtos
+- 📦 Gerenciamento de produtos pela API: cadastrar, editar e ativar/desativar (a tela própria está nas [melhorias futuras](#-melhorias-futuras))
 
 </td>
 </tr>
@@ -303,15 +306,18 @@ O banco se chama `PI2`. O script completo está em [`backend/src/database/schema
 ```mermaid
 erDiagram
     USUARIO ||--o{ PEDIDO : faz
-    PEDIDO ||--|{ PEDIDO_ITEM : contem
-    PEDIDO ||--o| VENDA : gera
-    VENDA ||--o| NOTA : emite
-    NOTA ||--|{ NOTA_ITEM : contem
+    USUARIO ||--o{ MOVIMENTACAO_ESTOQUE : "registra (responsável)"
+    PEDIDO ||--|{ PEDIDO_ITEM : contém
+    PEDIDO ||--o| VENDA : "gera (ao ser entregue)"
+    PEDIDO ||--o{ MOVIMENTACAO_ESTOQUE : origina
+    VENDA ||--o{ NOTA : "tem (só 1 emitida)"
+    NOTA ||--|{ NOTA_ITEM : contém
     PRODUTO ||--o{ PEDIDO_ITEM : "aparece em"
     PRODUTO ||--o{ NOTA_ITEM : "aparece em"
     PRODUTO ||--o{ MOVIMENTACAO_ESTOQUE : movimenta
-    NOTA ||--o{ MOVIMENTACAO_ESTOQUE : origina
 ```
+
+> O modelo completo, com todas as colunas e tipos, está em [**docs/diagramas.md**](docs/diagramas.md#1-modelo-do-banco-mer--modelo-lógico).
 
 <details>
 <summary><b>📚 Dicionário das tabelas</b></summary>
@@ -326,6 +332,7 @@ erDiagram
 | `venda` | Venda gerada a partir de um pedido |
 | `nota` / `nota_item` | Nota fiscal da venda e seus itens, com `status` (emitida/cancelada) e `link_pdf` (PDF no Emitte). Cada venda tem no máximo uma nota emitida; se ela for cancelada, dá para registrar outra |
 | `movimentacao_estoque` | Histórico de entradas e saídas por produto, com `usuario_id` (responsável), `motivo` e `pedido_id` (pedido de origem; manual = vazio) |
+| `telefone` / `endereco` | Reservadas para uma versão futura (telefone e endereço do cliente); ainda não são usadas pelo sistema |
 
 </details>
 
@@ -480,8 +487,8 @@ A nota é emitida no **Emitte**; o sistema guarda o número, o status e o link d
 |:------:|------|-----------|:----:|
 | 🟢 `GET` | `/notas` | Todas as notas (com venda, pedido e cliente) → `{ notas: [...] }` | 🔒 admin |
 | 🔵 `POST` | `/notas` | Registrar a nota de uma venda → `201` | 🔒 admin |
-| 🟡 `PATCH` | `/notas/:id/link` | Trocar ou apagar o link do PDF `{ "link_pdf": "https://..." \| null }` | 🔒 admin |
-| 🟡 `PATCH` | `/notas/:id/cancelar` | Cancelar a nota (fica no histórico) | 🔒 admin |
+| 🟠 `PATCH` | `/notas/:id/link` | Trocar ou apagar o link do PDF `{ "link_pdf": "https://..." \| null }` | 🔒 admin |
+| 🟠 `PATCH` | `/notas/:id/cancelar` | Cancelar a nota (fica no histórico) | 🔒 admin |
 
 Corpo de `POST /notas`:
 
@@ -561,6 +568,48 @@ Erros seguem o formato `{ "erro": "mensagem" }`, sempre em português. Erros de 
 | `/admin/perfil` | Perfil do administrador | 🔒 Admin |
 | qualquer outro endereço | Página 404 "Página não encontrada" com botões para voltar (o painel tem a sua própria em `/admin/...`) | 🌐 Pública |
 
+### 📸 Prints
+
+Capturas feitas com os dados de demonstração do `seed.sql` (todas as imagens estão em [`docs/prints/`](docs/prints)).
+
+<table>
+<tr>
+<td width="50%" align="center"><img src="docs/prints/01-tela-inicial.jpg" alt="Tela inicial"><br><sub><b>Tela inicial</b>: CNPJ, horário, WhatsApp e catálogo</sub></td>
+<td width="50%" align="center"><img src="docs/prints/02-catalogo.png" alt="Catálogo"><br><sub><b>Catálogo aberto</b>: quantidade e carrinho direto no card</sub></td>
+</tr>
+<tr>
+<td align="center"><img src="docs/prints/04-carrinho.png" alt="Carrinho"><br><sub><b>Carrinho</b>: data de retirada e observação</sub></td>
+<td align="center"><img src="docs/prints/05-meus-pedidos.png" alt="Meus Pedidos"><br><sub><b>Meus Pedidos</b>: histórico com status</sub></td>
+</tr>
+<tr>
+<td align="center"><img src="docs/prints/06-dashboard.png" alt="Dashboard do administrador"><br><sub><b>Dashboard</b>: indicadores e pedidos em andamento</sub></td>
+<td align="center"><img src="docs/prints/07-pedidos-admin.png" alt="Tabela de pedidos"><br><sub><b>Tabela de pedidos</b>: busca, filtros e status</sub></td>
+</tr>
+<tr>
+<td align="center"><img src="docs/prints/08-movimentacoes.png" alt="Movimentações de estoque"><br><sub><b>Movimentações</b>: quem, quando, por quê e de qual pedido</sub></td>
+<td align="center"><img src="docs/prints/09-vendas.png" alt="Tabela de vendas"><br><sub><b>Vendas</b>: total, média e "Emitir nota"</sub></td>
+</tr>
+<tr>
+<td align="center"><img src="docs/prints/10-notas.png" alt="Notas fiscais"><br><sub><b>Notas fiscais</b>: status e link do PDF no Emitte</sub></td>
+<td align="center"><img src="docs/prints/11-usuarios.png" alt="Tabela de usuários"><br><sub><b>Usuários</b>: perfil, nº de pedidos e total comprado</sub></td>
+</tr>
+</table>
+
+<details>
+<summary><b>Mais prints (login e celular)</b></summary>
+
+<br>
+
+<p align="center">
+<img src="docs/prints/03-login.png" alt="Login" width="62%">
+&nbsp;
+<img src="docs/prints/12-celular-catalogo.png" alt="Catálogo no celular" width="22%">
+</p>
+
+</details>
+
+### 🔐 Quem pode abrir cada tela
+
 Quem decide o acesso é o servidor: o front-end confere o perfil em `GET /usuarios/logado` e só ajuda na navegação. Admin que abre tela de cliente vai para `/admin`; cliente que abre `/admin` volta para o catálogo com o aviso "Área restrita"; sem login vai para `/login` e, depois de entrar, volta para a tela que tentou abrir. Se o servidor estiver fora do ar, a sessão não é apagada: a tela mostra o aviso com o botão "Tentar de novo". Mesmo que alguém force o caminho, a API responde `401`/`403`.
 
 <div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
@@ -613,7 +662,7 @@ Quem decide o acesso é o servidor: o front-end confere o perfil em `GET /usuari
 
 ---
 
-## 📋 Engenharia de requisitos
+## 📋 Engenharia de requisitos e diagramas
 
 Antes de codificar, a equipe levantou os requisitos com o cliente:
 
@@ -622,6 +671,15 @@ Antes de codificar, a equipe levantou os requisitos com o cliente:
 - 🧭 Diagrama de casos de uso
 - 🧱 Diagrama de classes
 - 🗄️ Modelagem do banco (MER no BrModelo, depois modelo lógico e físico no MySQL Workbench)
+
+Os diagramas foram refeitos para a versão final (sem cotação) e ficam versionados junto com o código em [**docs/diagramas.md**](docs/diagramas.md):
+
+| Diagrama | O que mostra |
+|----------|--------------|
+| [🗄️ Modelo do banco](docs/diagramas.md#1-modelo-do-banco-mer--modelo-lógico) | As 10 tabelas, colunas, chaves e ligações (e a lista para refazer o MER no BrModelo) |
+| [🧭 Casos de uso](docs/diagramas.md#2-diagrama-de-casos-de-uso) | O que o visitante, o cliente e o administrador podem fazer |
+| [🧱 Classes](docs/diagramas.md#3-diagrama-de-classes) | Classes do domínio, atributos, operações e como viram as camadas do back-end |
+| [🔁 Ciclo do pedido](docs/diagramas.md#4-ciclo-de-vida-do-pedido) | Os status do pedido e o que cada mudança faz no estoque e nas vendas |
 
 > [!NOTE]
 > Hoje a emissão de notas fiscais é feita pelo site **Emitte**, com clientes, produtos e transportadoras cadastrados. O sistema registra a venda e a nota para manter o estoque e o histórico organizados.
@@ -878,7 +936,7 @@ PI-2/
 │   └── src/
 │       ├── configs/        # conexão com o banco
 │       ├── controllers/
-│       ├── database/       # schema.sql e seed.sql
+│       ├── database/       # schema.sql, seed.sql e migrações
 │       ├── middlewares/
 │       ├── repositories/
 │       ├── routes/
@@ -888,13 +946,20 @@ PI-2/
 │       ├── utils/
 │       ├── app.ts
 │       └── index.ts
+│   ├── requests/           # exemplos de chamadas à API (.http)
+│   └── uploads/            # fotos dos produtos
+├── 📁 docs/
+│   ├── diagramas.md        # banco, casos de uso, classes e ciclo do pedido
+│   └── prints/             # capturas das telas
 ├── 📁 frontend/
 │   └── src/
 │       ├── assets/
 │       ├── components/     # componentes reutilizáveis
+│       ├── hooks/          # carrinho compartilhado
 │       ├── pages/          # Admin/, Cliente/ e Compartilhadas/
 │       ├── routes/
 │       ├── services/       # chamadas à API
+│       ├── types/          # tipos compartilhados
 │       ├── utils/
 │       └── App.tsx
 └── 📄 README.md
@@ -962,7 +1027,7 @@ Legenda: ✅ pronto · 🚧 em andamento · ⏳ a fazer
 | Área | Progresso | Módulos prontos |
 |------|-----------|:---------------:|
 | ⚙️ Back-end | `▰▰▰▰▰▰▰▰` | 8 de 8 |
-| 🖥️ Front-end | `▰▰▰▰▰▰▰` | 7 de 7 |
+| 🖥️ Front-end | `▰▰▰▰▰▰▰▰` | 8 de 8 |
 
 <table>
 <tr>
@@ -1001,8 +1066,6 @@ Legenda: ✅ pronto · 🚧 em andamento · ⏳ a fazer
 </tr>
 </table>
 
-**💡 Ideias futuras:** gerenciamento de compras, perfil de RH para colaboradores, gerenciamento de entregas e frete.
-
 ### 🗓️ Cronograma
 
 ```mermaid
@@ -1014,9 +1077,10 @@ gantt
     Escopo, diagramas, protótipo e MER   :done, plan, 2026-08-27, 2026-10-01
     section Desenvolvimento
     APIs, login, catálogo e perfil       :done, dev, 2026-10-15, 2026-11-14
-    Dashboard e tabelas do admin         :active, adm, 2026-11-15, 2026-11-21
+    Dashboard e tabelas do admin         :done, adm, 2026-11-15, 2026-11-20
     section Finalização
-    Testes do fluxo completo             :tst, 2026-11-22, 2026-11-23
+    Segurança, qualidade e dados de demo :done, qual, 2026-11-21, 1d
+    Documentação, testes e apresentação  :active, doc, 2026-11-21, 2026-11-23
     Entrega do projeto                   :milestone, ent, 2026-11-24, 0d
 ```
 
@@ -1024,9 +1088,30 @@ gantt
 |---------|---------|
 | 27/08 a 01/10 | Planejamento, escopo, diagramas, protótipo de telas, banco (MER) |
 | 15/10 a 14/11 | Desenvolvimento: APIs, login, catálogo, perfil, pedidos e cotações |
-| 15/11 a 21/11 | Dashboard e tabelas do administrador |
-| 22/11 a 23/11 | Testes do fluxo completo |
+| 15/11 a 20/11 | Dashboard e tabelas do administrador |
+| 21/11 | Segurança (CORS, limite de login, Helmet), qualidade do código e dados de demonstração |
+| 21/11 a 23/11 | Documentação, diagramas, testes do fluxo completo e ensaio da apresentação |
 | **24/11** | **🏁 Entrega do projeto** |
+
+<div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
+
+---
+
+## 🔭 Melhorias futuras
+
+Itens levantados durante o projeto que ficaram **fora do escopo desta entrega**, de propósito, para priorizar o que o cliente e o professor pediram:
+
+| # | Melhoria | Por que importa | Esforço |
+|:-:|----------|-----------------|:-------:|
+| L18 | Telefone do cliente no cadastro + texto de privacidade (**LGPD**) | Facilita o contato da loja e deixa claro como os dados são usados. As tabelas `telefone` e `endereco` já existem no banco | médio |
+| L19 | Tela de produtos no painel, com **upload de imagem** (`multer`) | Hoje produtos são cadastrados e editados pela API; com a tela, o próprio cliente troca fotos e preços | médio |
+| L20 | **Índices extras e regras `CHECK`** no banco (ex.: quantidade > 0) | Consultas mais rápidas com muitos dados e uma segunda barreira contra dados inválidos | baixo |
+| L21 | **Testes automatizados** (Vitest) | Conferem sozinhos, a cada mudança, que as regras de pedido, estoque e nota continuam certas | alto |
+| — | Dividir o pacote do front-end (*code splitting*) | O build avisa que o JavaScript passa de 500 KB; dividir deixa a primeira abertura mais rápida | baixo |
+| — | Publicar na internet (HTTPS, domínio, `trust proxy`, `JWT_SECRET` forte) | Hoje o sistema roda localmente; veja também as [melhorias de segurança previstas](#-segurança-da-informação) | médio |
+| — | Fotos reais dos paletes, preços reais e horário de sábado | Dependem de informações do cliente (hoje: foto padrão, preços de exemplo e "segunda a sexta, das 7h às 18h") | baixo |
+
+**💡 Ideias para versões seguintes:** gerenciamento de compras, perfil de RH para colaboradores, gerenciamento de entregas e frete.
 
 <div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
 
