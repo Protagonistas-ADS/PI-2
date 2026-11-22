@@ -197,7 +197,6 @@ function TelaInicial() {
                                         />
                                         <div>
                                             <h3>{produto.nome}</h3>
-                                            <p>{produto.descricao}</p>
                                             <strong>
                                                 {formatarPreco(produto.preco_unitario)}
                                                 <span>/ unidade</span>

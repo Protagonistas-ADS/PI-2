@@ -82,8 +82,6 @@ function Card({ produto, aoSaberMais, aoAdicionar }: CardProps) {
             <InformacoesProduto>
                 <h3>{produto.nome}</h3>
 
-                <p>{produto.descricao}</p>
-
                 <PrecoProduto>{formatarPreco(produto.preco_unitario)}</PrecoProduto>
 
                 {!esgotado && (
