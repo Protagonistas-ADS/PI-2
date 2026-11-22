@@ -1,16 +1,44 @@
-# React + Vite
+# Front-end · PI-2 (S Ferraretto)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Site do catálogo e do painel do administrador, feito com **React 19 + TypeScript + Vite**.
 
-Currently, two official plugins are available:
+> A documentação completa do projeto (funcionalidades, telas, API, banco, diagramas e equipe) está no [README principal](../README.md).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Como rodar
 
-## React Compiler
+1. Crie o arquivo `.env` nesta pasta (use o `.env.example` como modelo):
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+   ```env
+   VITE_API_URL=http://localhost:3000
+   ```
 
-## Expanding the ESLint configuration
+2. Instale as dependências e suba o servidor:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+   ```bash
+   npm install
+   npm run dev
+   ```
+
+3. Abra **http://localhost:5173**. O back-end precisa estar rodando ao mesmo tempo.
+
+## Scripts
+
+| Comando | O que faz |
+|---------|-----------|
+| `npm run dev` | Servidor de desenvolvimento |
+| `npm run build` | Confere os tipos (`tsc --noEmit`) e gera o build de produção em `dist/` |
+| `npm run typecheck` | Só confere os tipos, sem gerar arquivos |
+| `npm run lint` | Analisa o código `.ts/.tsx` com o **oxlint** (regras em `.oxlintrc.json`) |
+| `npm run preview` | Abre o build de produção localmente |
+
+## Pastas de `src/`
+
+| Pasta | Conteúdo |
+|-------|----------|
+| `pages/` | Telas: `Compartilhadas/` (inicial, login, cadastro, 404), `Cliente/` (catálogo, carrinho, pedidos, perfil) e `Admin/` (dashboard e tabelas) |
+| `components/` | Peças reutilizáveis (navbar, rodapé, janelas, rotas protegidas) |
+| `hooks/` | `useCarrinho`, o carrinho compartilhado entre catálogo e carrinho |
+| `services/` | Chamadas à API com Axios |
+| `types/` | Tipos compartilhados (usuário, produto, pedido, estoque, venda, nota, admin) |
+| `utils/` | Funções de apoio (mensagens de erro, filtros, formatação) |
+| `routes/` | Mapa de rotas públicas, de cliente e de administrador |
