@@ -30,18 +30,53 @@ INSERT INTO usuario (id, nome, email, senha, perfil, criado_em) VALUES
 -- TELEFONE e ENDEREÇO: tabelas ainda não criadas no schema (fora do escopo desta entrega)
 
 -- ====================== PRODUTOS ======================
--- Preços de exemplo (trocar pelos reais quando o cliente passar).
--- O estoque de cada produto é EXATAMENTE a soma das movimentações do final deste arquivo
--- (entradas - saídas).
+-- Produtos reais e preços fornecidos pela S Ferraretto.
+-- Os estoques iniciais são coerentes com as movimentações
+-- registradas ao final deste arquivo.
 --
--- Os três primeiros produtos estão ativos e disponíveis no catálogo.
--- O quarto registro é um produto de demonstração inativo, mantido
--- apenas para preservar os relacionamentos dos pedidos e movimentações antigas.
-INSERT INTO produto (id, nome, descricao, preco_unitario, quantidade_estoque, ativo, imagem) VALUES
-(1, 'Palete PBR', 'Palete padrão PBR de madeira', 45.00, 142, TRUE, NULL),
-(2, 'Palete descartável', 'Palete de madeira descartável', 25.00, 128, TRUE, NULL),
-(3, 'Palete reforçado', 'Palete de madeira reforçado', 75.00, 65, TRUE, NULL),
-(4, 'Produto de demonstração (inativo)', 'Registro inativo mantido para preservar dados históricos de teste.', 120.00, 9, FALSE, NULL);
+-- Os IDs 1, 2 e 3 são mantidos para preservar os relacionamentos
+-- com pedidos, notas fiscais e movimentações de demonstração.
+-- O ID 4 permanece inativo para preservar o histórico.
+
+INSERT INTO produto
+    (id, nome, descricao, preco_unitario, quantidade_estoque, ativo, imagem)
+VALUES
+(
+    1,
+    'Palete PBR',
+    'Palete de madeira amplamente utilizado na logística brasileira, possui nove blocos de apoio e quatro entradas, facilitando o transporte e a armazenagem de mercadorias.',
+    65.00,
+    142,
+    TRUE,
+    'palete-pbr.jpg'
+),
+(
+    2,
+    'Palete Cavinha',
+    'Palete de madeira compacto e versátil, ideal para armazenamento, organização e movimentação de mercadorias, especialmente em operações que necessitam de suportes menores.',
+    42.00,
+    128,
+    TRUE,
+    'palete-cavinha.jpg'
+),
+(
+    3,
+    'Palete Euro (EPAL)',
+    'Palete de madeira padronizado e reforçado, oferece resistência e estabilidade para armazenamento e transporte de mercadorias, com fácil movimentação por empilhadeiras e paleteiras.',
+    48.00,
+    65,
+    TRUE,
+    'palete-euro-epal.jpg'
+),
+(
+    4,
+    'Produto de demonstração (inativo)',
+    'Registro inativo mantido para preservar dados históricos de teste.',
+    120.00,
+    9,
+    FALSE,
+    NULL
+);
 
 -- ====================== PEDIDOS ======================
 -- Fluxo: pendente -> confirmado -> pronto_retirada -> entregue (ou cancelado).

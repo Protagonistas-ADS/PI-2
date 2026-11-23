@@ -53,7 +53,7 @@ export const CartaoIndicador = styled.article<{ $cor: string }>`
         margin: 4px 0;
         color: ${VERDE};
         /* Diminui um pouco em telas menores e só quebra no espaço
-           ("R$" / "1.175,00"), nunca no meio do número. */
+           ("R$" / "1.375,00"), nunca no meio do número. */
         font-size: clamp(1.4rem, 0.5rem + 1.2vw, 1.9rem);
         font-weight: bold;
         overflow-wrap: normal;
