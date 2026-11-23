@@ -625,7 +625,7 @@ erDiagram
 | Dado | Quantidade | Detalhe |
 |------|:----------:|---------|
 | Usuários | 8 | 1 admin + 7 clientes fictícios (empresas e pessoas, com e-mails gmail, hotmail, outlook, yahoo e `.com.br`) |
-| Produtos | 4 registros | 3 ativos no catálogo: Palete PBR (R$ 45), descartável (R$ 25) e reforçado (R$ 75). O quarto registro está inativo e preserva relacionamentos históricos de demonstração. |
+| Produtos | 4 registros | 3 ativos no catálogo: Palete Cavinha (R$ 42), Palete Euro (EPAL) (R$ 48) e Palete PBR (R$ 65). O quarto registro está inativo e preserva relacionamentos históricos de demonstração. |
 | Pedidos | 15 | Todos os status: 3 pendentes, 2 confirmados, 2 prontos, 6 entregues, 2 cancelados |
 | Vendas | 6 | 4 com nota e 2 sem nota (para mostrar "Emitir nota") |
 | Notas | 5 | NF-000001 a NF-000005, uma cancelada e reemitida |
@@ -1339,10 +1339,12 @@ PI-2/
 │       ├── app.ts           # monta o Express (helmet, cors, rotas)
 │       └── index.ts         # liga o servidor
 ├── 📁 docs/
-│   ├── diagramas.md         # banco, casos de uso, classes e ciclo do pedido
+│   ├── referencias/
+│   │   └── catalogo-paletes.xlsx  # informações comerciais e técnicas dos produtos
+│   ├── diagramas.md
 │   ├── roteiro-de-teste.md
 │   ├── roteiro-de-apresentacao.md
-│   └── prints/              # capturas das telas
+│   └── prints/                    # capturas atualizadas das telas
 ├── 📁 frontend/
 │   └── src/
 │       ├── assets/          # logo e foto de fundo

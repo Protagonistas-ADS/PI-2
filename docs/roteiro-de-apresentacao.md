@@ -59,17 +59,16 @@ Tudo usa os dados de demonstração do [`seed.sql`](../backend/src/database/seed
 | Rolar a tela inicial até o rodapé | "Landing mais direta: produtos, como funciona o pedido, sobre a empresa e o mapa. No rodapé, o CNPJ e o WhatsApp; tiramos as redes sociais." |
 | Clicar em **Ver catálogo** | "O catálogo **abre sem login**: qualquer pessoa vê os produtos e os preços." |
 | **Saber mais** no Palete PBR → **Esc** | "O 'Saber mais' agora serve só para ver os detalhes: descrição, preço e se está disponível. A quantidade em estoque o cliente não vê: isso é informação só do dono." |
-| No Palete reforçado, digitar **100** e **Adicionar ao carrinho** | "O cliente escolhe a quantidade que quiser. Se pedir mais do que a loja tem, o servidor recusa ao enviar, sem revelar o estoque." |
+| No Palete Euro (EPAL), digitar **100** e **Adicionar ao carrinho** | "O cliente escolhe a quantidade que quiser. Se pedir mais do que a loja tem, o servidor recusa ao enviar, sem revelar o estoque." |
 | PBR: quantidade **10** → **Adicionar ao carrinho** → **Carrinho (110)** → **Ir para o carrinho e finalizar** | "Escolho a quantidade e coloco no carrinho direto do card. O carrinho mostra o total." |
-
 ### 2b. **Gustavo**: cliente com login (2 min)
 
 | Fazer | Falar |
 |-------|-------|
 | Clicar em **Entrar para finalizar** → **OK** | "Para enviar, o site pede login, e **o carrinho fica guardado**." |
 | Entrar com `usuario@gmail.com` / `Cliente@123456` | "Depois do login, ele volta **direto para o carrinho**." |
-| Clicar em **Enviar pedido** (com as 100 unidades de Palete reforçado) | "Pedi mais unidades do que a loja tem: o servidor recusa com uma mensagem clara e **não revela o estoque**. Quantidade é informação só do dono." |
-| **Remover** o Palete reforçado, escolher a data de retirada (depois de amanhã), escrever "Vou buscar com caminhão no fim da tarde." → **Enviar pedido** | "O cliente diz quando vai retirar e deixa um recado para a loja." |
+| Clicar em **Enviar pedido** (com as 100 unidades de Palete Euro (EPAL)) | "Pedi mais unidades do que a loja tem: o servidor recusa com uma mensagem clara e **não revela o estoque**. Quantidade é informação só do dono." |
+| **Remover** o Palete Euro (EPAL), escolher a data de retirada (depois de amanhã), escrever "Vou buscar com caminhão no fim da tarde." → **Enviar pedido** | "O cliente diz quando vai retirar e deixa um recado para a loja." |
 | Ler o aviso "Pedido nº 16 enviado!" → **OK** | "O pedido entra como **aguardando confirmação**." |
 | Mostrar **Meus Pedidos** | "Aqui o cliente acompanha tudo: confirmado, pronto, entregue. Ele só cancela enquanto o pedido está pendente." |
 
@@ -85,13 +84,13 @@ Tudo usa os dados de demonstração do [`seed.sql`](../backend/src/database/seed
 | No nº 16, clicar em **10 unidades** → fechar | "Vejo os itens e o recado do cliente." |
 | **Confirmar** o nº 16 | "Ao confirmar, **o estoque baixa sozinho**, e tudo acontece numa transação no banco: ou tudo dá certo, ou nada é gravado." |
 | Ir em **Movimentações** | "Cada entrada e saída fica registrada: **quem fez, quando, por quê e de qual pedido**. Olha a saída de 10 PBR do pedido nº 16, e o saldo foi de 142 para 132." |
-| Voltar ao **Dashboard** → **Marcar pronto** → **Entregue** → **Sim, foi entregue** | "Separei, o cliente retirou: ao marcar entregue, **a venda é criada automaticamente**. As vendas do mês subiram para R$ 1.175." |
+| Voltar ao **Dashboard** → **Marcar pronto** → **Entregue** → **Sim, foi entregue** | "Separei, o cliente retirou: ao marcar entregue, **a venda é criada automaticamente**. As vendas do mês subiram para R$ 1.375." |
 | Ir em **Vendas** → **Emitir nota** na venda nº 7 → `NF-000006`, link `https://example.com/notas/NF-000006.pdf` → **Registrar nota** | "A nota é emitida no **Emitte**, que o cliente já usa. Aqui registramos o número e o link do PDF." |
 | Ir em **Notas fiscais** | "Notas emitidas e canceladas, com o link do PDF. Se uma nota sai errada, cancelo e emito outra." |
 | Mostrar rapidamente **Pedidos** e **Usuários** | "Tabelas completas com busca, filtros e totais: pedidos por status, e clientes com quantos pedidos fizeram e quanto compraram." |
 
 > [!NOTE]
-> Se sobrar tempo: em **Movimentações**, tentar uma **saída de 100** paletes reforçados para mostrar o aviso "Estoque insuficiente" e depois registrar uma **entrada de 20** ("Chegada de lote do fornecedor"). O estoque do Palete reforçado passa de 65 para 85 unidades.
+> Se sobrar tempo: em **Movimentações**, tentar uma **saída de 100** paletes Euro para mostrar o aviso "Estoque insuficiente" e depois registrar uma **entrada de 20** ("Chegada de lote do fornecedor"). O estoque do Palete Euro passa de 65 para 85 unidades.
 
 ---
 
