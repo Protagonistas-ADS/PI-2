@@ -22,7 +22,7 @@ export function usarImagemPadrao(event: SyntheticEvent<HTMLImageElement>) {
 // Se passar do estoque, quem avisa é o servidor ao enviar o pedido (sem mostrar o número).
 export const QUANTIDADE_MAXIMA_ITEM = 9999;
 
-// 45 -> "R$ 45,00"
+// Ex.: 65 -> "R$ 65,00"
 export function formatarPreco(valor: number) {
     return Number(valor).toLocaleString("pt-BR", {
         style: "currency",

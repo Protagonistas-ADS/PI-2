@@ -92,7 +92,7 @@ INSERT INTO pedido (id, cliente_id, status, previsao_busca, observacao, criado_e
 (3, 6, 'cancelado', NULL, NULL, NOW() - INTERVAL 55 DAY),
 (4, 5, 'entregue', TIMESTAMP(CURDATE() - INTERVAL 43 DAY, '14:00:00'), NULL, NOW() - INTERVAL 45 DAY),
 (5, 7, 'cancelado', TIMESTAMP(CURDATE() - INTERVAL 32 DAY, '08:00:00'), NULL, NOW() - INTERVAL 35 DAY),
-(6, 3, 'entregue', TIMESTAMP(CURDATE() - INTERVAL 22 DAY, '10:00:00'), NULL, NOW() - INTERVAL 25 DAY),
+(6, 3, 'entregue', TIMESTAMP(LAST_DAY(CURDATE() - INTERVAL 1 MONTH), '10:00:00'), NULL, TIMESTAMP(LAST_DAY(CURDATE() - INTERVAL 1 MONTH) - INTERVAL 2 DAY, '09:00:00')),
 (7, 1, 'entregue', TIMESTAMP(CURDATE() - INTERVAL 10 DAY, '16:00:00'), NULL, NOW() - INTERVAL 12 DAY),
 (8, 6, 'entregue', TIMESTAMP(CURDATE(), '09:00:00'), NULL, NOW() - INTERVAL 2 DAY),
 (9, 4, 'pronto_retirada', TIMESTAMP(CURDATE(), '10:00:00'), NULL, NOW() - INTERVAL 3 DAY),
@@ -131,7 +131,7 @@ INSERT INTO venda (id, pedido_id, valor_total, data_venda) VALUES
 (1, 1, 1800.00, NOW() - INTERVAL 78 DAY),
 (2, 2, 1950.00, NOW() - INTERVAL 63 DAY),
 (3, 4, 1125.00, NOW() - INTERVAL 43 DAY),
-(4, 6, 1830.00, NOW() - INTERVAL 22 DAY),
+(4, 6, 1830.00, TIMESTAMP(LAST_DAY(CURDATE() - INTERVAL 1 MONTH), '14:00:00')),
 (5, 7, 500.00, NOW() - INTERVAL 10 DAY),
 (6, 8, 225.00, NOW());
 
@@ -174,8 +174,8 @@ INSERT INTO movimentacao_estoque (produto_id, pedido_id, usuario_id, tipo, quant
 (4, 5, 2, 'entrada', 10, 'Cancelamento do pedido nº 5 (estoque devolvido)', NOW() - INTERVAL 33 DAY),
 (2, NULL, 2, 'entrada', 100, 'Chegada de lote do fornecedor', NOW() - INTERVAL 30 DAY),
 (1, NULL, 2, 'saida', 3, 'Avaria no transporte (3 paletes quebrados)', NOW() - INTERVAL 28 DAY),
-(1, 6, 2, 'saida', 30, 'Confirmação do pedido nº 6', NOW() - INTERVAL 24 DAY),
-(4, 6, 2, 'saida', 4, 'Confirmação do pedido nº 6', NOW() - INTERVAL 24 DAY),
+(1, 6, 2, 'saida', 30, 'Confirmação do pedido nº 6', TIMESTAMP(LAST_DAY(CURDATE() - INTERVAL 1 MONTH) - INTERVAL 1 DAY, '10:00:00')),
+(4, 6, 2, 'saida', 4, 'Confirmação do pedido nº 6', TIMESTAMP(LAST_DAY(CURDATE() - INTERVAL 1 MONTH) - INTERVAL 1 DAY, '10:00:00')),
 (3, NULL, 2, 'entrada', 30, 'Chegada de lote do fornecedor', NOW() - INTERVAL 15 DAY),
 (2, 7, 2, 'saida', 20, 'Confirmação do pedido nº 7', NOW() - INTERVAL 11 DAY),
 (2, NULL, 2, 'saida', 2, 'Ajuste de inventário (contagem menor que o sistema)', NOW() - INTERVAL 8 DAY),

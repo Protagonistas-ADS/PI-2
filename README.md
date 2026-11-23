@@ -1041,7 +1041,7 @@ Na reta final (20 a 22/11), o projeto passou por uma **reforma em 12 etapas** pa
 | 9 | 🖥️ **Tela do projetor** | Em 1366 px o dashboard quebrava "R$ 725,0\|0" | Cartões 2 por linha e fonte fluida (`clamp`) |
 | 10 | 📅 **Demonstração realista** | Dados com datas fixas "envelhecem" | Seed com datas relativas ao dia em que roda |
 | 11 | 🤝 **Níveis diferentes na equipe** | Nem todos tinham a mesma experiência com Git e TypeScript | Padrão de commits e PRs, documentação viva e roteiros passo a passo |
-| 12 | 📸 **Dados reais do cliente** | Fotos, preços reais e horário de sábado ainda não chegaram | Foto padrão, preços de exemplo e dados centralizados em `dadosEmpresa.ts` (trocar é rápido) |
+| 12 | 📸 **Material visual e horário** | As fotos institucionais da landing page e o horário de sábado ainda dependem de confirmação | Fotos dos produtos e preços do catálogo atualizados; imagens institucionais e horário de sábado permanecem pendentes |
 
 <div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
 
@@ -1061,7 +1061,7 @@ Somos transparentes sobre os limites atuais do sistema:
 - 📦 **Pacote JavaScript acima de 500 KB**: dividir em partes (*code splitting*) deixaria a primeira abertura mais rápida.
 - 📞 **Sem telefone e endereço** do cliente no cadastro (tabelas planejadas).
 - 🌍 **Roda só localmente**: falta publicar com domínio e HTTPS.
-- 🖼️ **Fotos e preços de exemplo** até o cliente enviar os reais.
+- 🖼️ **Fotos institucionais da landing page**: aguardam material definitivo do cliente; as fotos dos produtos e os preços do catálogo já foram atualizados.
 
 <div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
 
@@ -1344,7 +1344,7 @@ PI-2/
 │   ├── diagramas.md
 │   ├── roteiro-de-teste.md
 │   ├── roteiro-de-apresentacao.md
-│   └── prints/                    # capturas atualizadas das telas
+│   └── prints/                    # capturas de tela (atualização visual pendente)
 ├── 📁 frontend/
 │   └── src/
 │       ├── assets/          # logo e foto de fundo
@@ -1479,7 +1479,7 @@ Levantadas durante o projeto e deixadas **de propósito** fora desta entrega, pa
 | L21 | **Testes automatizados** (Vitest) | Conferem sozinhos as regras de pedido, estoque e nota a cada mudança | alto |
 | — | *Code splitting* no front-end | Primeira abertura do site mais rápida | baixo |
 | — | **Publicar** (domínio, HTTPS, `trust proxy`, `JWT_SECRET` forte) | Hoje roda localmente | médio |
-| — | Fotos reais, preços reais e horário de sábado | Dependem do cliente | baixo |
+| — | Fotos institucionais da landing page e confirmação do horário de sábado | Dependem do material e da confirmação do cliente | baixo |
 | — | Avisar o cliente por WhatsApp/e-mail quando o pedido mudar de status | Menos ligações para a loja | médio |
 | — | Gráficos de vendas por mês e produto mais vendido | Ajuda a decidir compras | médio |
 

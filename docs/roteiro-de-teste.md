@@ -37,7 +37,7 @@ Siga **na ordem**: cada parte usa o que a anterior criou. Os valores esperados v
 | A1 | Abrir `/` | Tela inicial com "Paletes de madeira para a sua operação", CNPJ 30.669.871/0001-63, "Segunda a sexta, das 7h às 18h" e botões **Ver catálogo** e **Falar no WhatsApp** | |
 | A2 | Rolar a página | Seções "Nossos paletes", "Como funciona o pedido", "Sobre a S Ferraretto" e "Onde estamos" (com mapa) | |
 | A3 | Olhar o rodapé | Telefone, e-mail, endereço, link do WhatsApp, razão social e CNPJ. **Sem** redes sociais | |
-| A4 | Clicar em **Falar no WhatsApp** | Abre o WhatsApp (`wa.me/5511964992626`) em outra aba | |
+| A4 | Clicar em **Falar no WhatsApp** | Abre o WhatsApp (`wa.me/5511972167974`) em outra aba | |
 | A5 | Ir em **Catálogo** | 3 produtos ativos, **sem pedir login**: Cavinha R$ 42,00, Euro (EPAL) R$ 48,00 e PBR R$ 65,00 | |
 | A6 | Clicar em **Saber mais** no Palete PBR | Janela "Palete PBR" com descrição, preço, "Disponível para pedido" (**sem** o número do estoque, que é só do administrador) e "Voltar ao catálogo". Fecha com **Esc** | |
 | A7 | No Palete Euro (EPAL), digitar **100** na quantidade e clicar **Adicionar ao carrinho** | Aviso "100x Palete Euro (EPAL) adicionado ao carrinho." e botão flutuante **Carrinho (100)**. A tela não mostra nem limita pelo estoque: quem confere é o servidor, ao enviar (passo C3) | |
@@ -82,7 +82,7 @@ Siga **na ordem**: cada parte usa o que a anterior criou. Os valores esperados v
 | D7 | Clicar em **Entregue** | Pergunta "Confirmar que o pedido nº 16 foi retirado por Cliente Teste da Silva? A venda será registrada..." → **Sim, foi entregue** | |
 | D8 | Conferir depois da entrega | "Pedido nº 16 entregue (venda registrada)." · **Vendas de novembro R$ 1.375,00** (3 pedidos entregues) | |
 | D9 | Na janela do cliente, atualizar **Meus Pedidos** | O nº 16 aparece como **Entregue** | |
-| D10 | Ir em **Pedidos** (menu lateral) | **Todos (16)** · Pendentes (2) · Confirmados (2) · Prontos (2) · Entregues (7) · Cancelados (3) · soma de R$ 15.315,00 | |
+| D10 | Ir em **Pedidos** (menu lateral) | **Todos (16)** · Pendentes (2) · Confirmados (2) · Prontos (2) · Entregues (7) · Cancelados (3) · soma de R$ 15.515,00 | |
 | D11 | Buscar "Rota Sul" e filtrar por **Entregues** | Só os pedidos 6 e 1 da Transportadora Rota Sul · "Mostrando 2 de 16 pedidos · soma de R$ 3.630,00" | |
 
 ## E. Administrador: estoque
@@ -100,11 +100,11 @@ Siga **na ordem**: cada parte usa o que a anterior criou. Os valores esperados v
 
 | # | Passo | Resultado esperado | ✓ |
 |:-:|-------|--------------------|:-:|
-| F1 | Ir em **Vendas** | **Todas (7)** · Com nota (4) · Sem nota (3) · total de R$ 7.880,00. A primeira é a venda nº 7 do pedido nº 16, "Sem nota" | |
+| F1 | Ir em **Vendas** | **Todas (7)** · Com nota (4) · Sem nota (3) · total de R$ 8.080,00. A primeira é a venda nº 7 do pedido nº 16, "Sem nota" | |
 | F2 | Clicar **Emitir nota** na venda nº 7 e preencher o link `javascript:alert(1)` | Não aceita: "Informe um link válido, começando com http:// ou https://." | |
 | F3 | Usar o número **NF-000005** (já existe) com um link `https://...` | A janela mostra "Já existe uma nota com o número NF-000005." | |
 | F4 | Trocar para **NF-000006** e link `https://example.com/notas/NF-000006.pdf` → **Registrar nota** | "Nota NF-000006 registrada para a venda nº 7." · Com nota (5) · Sem nota (2) | |
-| F5 | Ir em **Notas fiscais** | **Todas (6)** · Emitidas (5) · Canceladas (1) · emitidas somam R$ 5.825,00. NF-000006 no topo, **Emitida**, com "Abrir PDF" | |
+| F5 | Ir em **Notas fiscais** | **Todas (6)** · Emitidas (5) · Canceladas (1) · emitidas somam R$ 6.025,00. NF-000006 no topo, **Emitida**, com "Abrir PDF" | |
 | F6 | Na **NF-000004** (sem link), clicar **Adicionar link**, colar `https://example.com/notas/NF-000004.pdf` e clicar **Salvar link** | "Link da nota NF-000004 salvo." e aparece "Abrir PDF" | |
 | F7 | Clicar **Cancelar** na NF-000006 → **Sim, cancelar nota** | "Nota NF-000006 cancelada." · Emitidas (4) · Canceladas (2) · em **Vendas**, a venda nº 7 volta a "Sem nota" com o botão **Emitir nota** | |
 
