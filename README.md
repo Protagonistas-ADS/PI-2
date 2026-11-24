@@ -1346,15 +1346,14 @@ PI-2/
 │   ├── roteiro-de-apresentacao.md
 │   └── prints/                    # capturas de tela (atualização visual pendente)
 ├── 📁 frontend/
+│   ├── public/              # favicon e Apple Touch Icon
 │   └── src/
-│       ├── assets/          # logo e foto de fundo
+│       ├── assets/          # logos, fotos e imagens do projeto
 │       ├── components/      # Navbar, Footer, cards, janelas, rotas protegidas...
 │       ├── hooks/           # carrinho e ações de pedido do admin
 │       ├── pages/           # Admin/, Cliente/ e Compartilhadas/
 │       ├── routes/          # mapa das telas
 │       ├── services/        # chamadas à API (Axios)
-│       ├── types/           # tipos compartilhados
-│       └── utils/           # dados da empresa, alertas, filtros, erros
 ├── 📄 LICENSE
 └── 📄 README.md
 ```

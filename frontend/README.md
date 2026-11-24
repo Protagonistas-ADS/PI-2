@@ -37,7 +37,7 @@ Site do catálogo e do painel do administrador, feito com **React 19 + TypeScrip
 |-------|----------|
 | `pages/` | Telas: `Compartilhadas/` (inicial, login, cadastro, 404), `Cliente/` (catálogo, carrinho, pedidos, perfil) e `Admin/` (dashboard e tabelas) |
 | `components/` | Peças reutilizáveis (navbar, rodapé, janelas, rotas protegidas) |
-| `hooks/` | `useCarrinho`, o carrinho compartilhado entre catálogo e carrinho |
+| `hooks/` | `useCarrinho` (persistência e sincronização do carrinho) e `useAcoesPedidoAdmin` (ações administrativas de pedidos) |
 | `services/` | Chamadas à API com Axios |
 | `types/` | Tipos compartilhados (usuário, produto, pedido, estoque, venda, nota, admin) |
 | `utils/` | Funções de apoio (mensagens de erro, filtros, formatação) |
