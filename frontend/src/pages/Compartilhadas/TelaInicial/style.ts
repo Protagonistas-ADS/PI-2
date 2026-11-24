@@ -430,20 +430,7 @@ export const Diferencial = styled.li`
         font-size: 0.95rem;
     }
 `;
-export const ColunaSobre = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-`;
 
-export const ImagemFachada = styled.img`
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    object-position: center 55%;
-    border-radius: 10px;
-    border: 1px solid rgba(240, 230, 214, 0.2);
-`;
 /* ---------- Onde estamos ---------- */
 
 export const GradeContato = styled.div`
