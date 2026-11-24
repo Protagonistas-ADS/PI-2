@@ -785,7 +785,7 @@ Capturas com os dados do `seed.sql` (todas em [`docs/prints/`](docs/prints)).
 
 <table>
 <tr>
-<td width="50%" align="center"><img src="docs/prints/01-tela-inicial.jpg" alt="Tela inicial"><br><sub><b>Tela inicial</b>: CNPJ, horário, WhatsApp e catálogo</sub></td>
+<td width="50%" align="center"><img src="docs/prints/01-tela-inicial.png" alt="Tela inicial"><br><sub><b>Tela inicial</b>: CNPJ, horário, WhatsApp e catálogo</sub></td>
 <td width="50%" align="center"><img src="docs/prints/02-catalogo.png" alt="Catálogo"><br><sub><b>Catálogo aberto</b>: quantidade e carrinho direto no card</sub></td>
 </tr>
 <tr>
