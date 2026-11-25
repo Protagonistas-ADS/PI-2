@@ -1384,7 +1384,7 @@ gitGraph
     commit id: "tag v1.0-entrega" type: HIGHLIGHT
 ```
 
-- 🌳 A **`main`** é a versão oficial (a que o professor avalia). Ninguém commita direto nela.
+- 🌳 A **`main`** é a versão oficial (a que o professor avalia). A equipe não commita diretamente nela; a exceção é o GitHub Actions, que atualiza automaticamente as métricas do README.
 - 🔀 Cada etapa em uma branch (`feat/...`, `fix/...`, `docs/...`) que entra por **Pull Request**.
 - 🔄 Antes do PR: `git merge origin/main`, `npm run build` no back e no front e o checklist de teste.
 - 🏷️ Versões marcadas com *tags*: `v1.0-entrega` (21/11) e `v1.0.1-entrega` (22/11).

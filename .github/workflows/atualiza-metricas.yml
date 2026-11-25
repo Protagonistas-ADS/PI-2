@@ -6,18 +6,17 @@ on:
     branches:
       - main
 
-  # Atualiza quando um novo Pull Request é criado.
-  pull_request:
-    branches:
-      - main
+  # Conta qualquer novo Pull Request do repositório, inclusive os originados de forks.
+  # Este workflow não faz checkout nem executa código enviado pelo Pull Request.
+  pull_request_target:
     types:
       - opened
 
-  # Verificação mensal, todo dia 1, às 06:00 UTC.
+  # Verificação mensal, todo dia 1, às 06:00 UTC (03:00 em São Paulo).
   schedule:
     - cron: "0 6 1 * *"
 
-  # Permite execução manual.
+  # Permite executar manualmente pelo GitHub.
   workflow_dispatch:
 
 permissions:
@@ -76,19 +75,36 @@ jobs:
             }
 
             const readmeAtual = Buffer.from(arquivoReadme.content, "base64").toString("utf8");
+
+            // Atualiza também o badge do topo para manter os dois números sincronizados.
+            const regexBadgePullRequests =
+              /!\[PRs\]\(https:\/\/img\.shields\.io\/badge\/pull_requests-\d+-8957e5\?style=flat-square\)/g;
+            const badgesPullRequests = readmeAtual.match(regexBadgePullRequests) ?? [];
+
+            if (badgesPullRequests.length !== 1) {
+              throw new Error("Era esperado encontrar exatamente um badge de Pull Requests no README.md.");
+            }
+
+            const badgeAtualizado =
+              `![PRs](https://img.shields.io/badge/pull_requests-${totalPullRequests}-8957e5?style=flat-square)`;
+            const readmeComBadgeAtualizado = readmeAtual.replace(
+              regexBadgePullRequests,
+              badgeAtualizado
+            );
+
             const marcadorInicio = "<!-- METRICAS-AUTOMATICAS:INICIO -->";
             const marcadorFim = "<!-- METRICAS-AUTOMATICAS:FIM -->";
 
             // Exige exatamente um par de marcadores para evitar alterar a seção errada.
             if (
-              readmeAtual.split(marcadorInicio).length !== 2 ||
-              readmeAtual.split(marcadorFim).length !== 2
+              readmeComBadgeAtualizado.split(marcadorInicio).length !== 2 ||
+              readmeComBadgeAtualizado.split(marcadorFim).length !== 2
             ) {
               throw new Error("Adicione exatamente um par de marcadores de métricas ao README.md.");
             }
 
-            const inicio = readmeAtual.indexOf(marcadorInicio);
-            const fim = readmeAtual.indexOf(marcadorFim);
+            const inicio = readmeComBadgeAtualizado.indexOf(marcadorInicio);
+            const fim = readmeComBadgeAtualizado.indexOf(marcadorFim);
 
             if (fim <= inicio) {
               throw new Error("Os marcadores de métricas estão fora de ordem no README.md.");
@@ -99,9 +115,9 @@ jobs:
             const blocoNovo = `${marcadorInicio}\n${linhaMetricas}\n${marcadorFim}`;
 
             const readmeAtualizado =
-              readmeAtual.slice(0, inicio) +
+              readmeComBadgeAtualizado.slice(0, inicio) +
               blocoNovo +
-              readmeAtual.slice(fim + marcadorFim.length);
+              readmeComBadgeAtualizado.slice(fim + marcadorFim.length);
 
             if (readmeAtualizado === readmeAtual) {
               core.info(`README já está atualizado: ${totalCommits} commits e ${totalPullRequests} Pull Requests.`);
