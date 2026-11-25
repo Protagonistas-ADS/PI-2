@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS produto (
     descricao VARCHAR(255),
     preco_unitario DECIMAL(10,2) NOT NULL,
     quantidade_estoque INT NOT NULL DEFAULT 0,
-    imagem VARCHAR(255), -- só o nome do arquivo em backend/uploads (ex.: 'palete-pbr.png')
+    imagem VARCHAR(255), -- só o nome do arquivo em backend/uploads (ex.: 'palete-pbr.jpg')
     ativo BOOLEAN DEFAULT true
 );
 

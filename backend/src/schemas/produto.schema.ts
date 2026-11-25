@@ -17,7 +17,7 @@ export const ProdutoSchema = z.object({
     quantidade: z.number({ error: "A quantidade deve ser um número." })
         .int("A quantidade deve ser um número inteiro.")
         .nonnegative("A quantidade não pode ser negativa."),
-    // Nome do arquivo dentro de backend/uploads (ex.: "palete-pbr.png"). Opcional.
+    // Nome do arquivo dentro de backend/uploads (ex.: "palete-pbr.jpg"). Opcional.
     imagem: z.string()
         .trim()
         .max(255, "O nome da imagem deve ter no máximo 255 caracteres.")
