@@ -60,7 +60,7 @@ const passos = [
     {
         icone: <FiPackage aria-hidden="true" />,
         titulo: "Escolha no catálogo",
-        texto: "Veja os modelos, preços e a quantidade disponível. Não precisa de cadastro para olhar.",
+        texto: "Veja os modelos, preços e a disponibilidade. Não precisa de cadastro para olhar.",
     },
     {
         icone: <FiShoppingCart aria-hidden="true" />,
