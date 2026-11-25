@@ -21,7 +21,7 @@
 ![Entrega](https://img.shields.io/badge/entrega-24%2F11%2F2026-orange?style=flat-square)
 ![Rotas](https://img.shields.io/badge/rotas_da_API-30-informational?style=flat-square)
 ![Telas](https://img.shields.io/badge/telas-15-informational?style=flat-square)
-![PRs](https://img.shields.io/badge/pull_requests-53-8957e5?style=flat-square)
+![PRs](https://img.shields.io/badge/pull_requests-54-8957e5?style=flat-square)
 ![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-green?style=flat-square)
 
 <br>
@@ -142,7 +142,7 @@ Entregar um sistema **profissional, confiável e fácil de usar** que:
 | 🔌 Rotas da API | 🖥️ Telas | 🗄️ Tabelas | 🔀 Pull Requests | 🧾 Commits | 🪜 Etapas da reforma | 🧪 Passos no roteiro de teste |
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 <!-- METRICAS-AUTOMATICAS:INICIO -->
-| **30** | **15** | **8** | **54** | **242** | **12** | **~60** |
+| **30** | **15** | **8** | **54** | **243** | **12** | **~60** |
 <!-- METRICAS-AUTOMATICAS:FIM -->
 <sub>Commits na branch principal, excluindo as atualizações automáticas desta tabela. Pull Requests abertos e fechados.</sub>
 
