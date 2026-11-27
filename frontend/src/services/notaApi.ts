@@ -16,8 +16,3 @@ export async function registrarNota(dados: NovaNota) {
 export async function cancelarNota(id: number) {
     await api.patch(`/notas/${id}/cancelar`);
 }
-
-// Trocar o link do PDF (null apaga o link)
-export async function atualizarLinkNota(id: number, linkPdf: string | null) {
-    await api.patch(`/notas/${id}/link`, { link_pdf: linkPdf });
-}

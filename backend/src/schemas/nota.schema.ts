@@ -6,28 +6,6 @@ export type StatusNota = typeof STATUS_NOTA[number];
 
 export const NATUREZA_PADRAO = "Venda de mercadoria";
 
-// Só aceita endereço http:// ou https:// (bloqueia "javascript:..." e afins,
-// que poderiam rodar código quando o admin clicasse no link)
-function linkSeguro(texto: string) {
-    try {
-        const endereco = new URL(texto);
-        return endereco.protocol === "http:" || endereco.protocol === "https:";
-    } catch {
-        return false;
-    }
-}
-
-// Link do PDF no Emitte (opcional). Texto vazio vira null.
-const LinkPdfSchema = z.preprocess(
-    (valor) => (typeof valor === "string" && valor.trim() === "" ? null : valor),
-    z.string({ error: "O link deve ser um texto." })
-        .trim()
-        .max(500, "O link deve ter no máximo 500 caracteres.")
-        .refine(linkSeguro, "Informe um link válido, começando com http:// ou https://.")
-        .nullable()
-        .optional()
-).transform((valor) => valor ?? null);
-
 // Número da nota fiscal (mesma regra ao emitir nota e ao entregar o pedido)
 export const NumeroNotaSchema = z.string({ error: "Informe o número da nota fiscal." })
     .trim()
@@ -48,14 +26,7 @@ export const CriarNotaSchema = z.object({
         .max(100, "A natureza da operação deve ter no máximo 100 caracteres.")
         .nullable()
         .optional()
-        .transform((texto) => texto ? texto : NATUREZA_PADRAO),
-
-    link_pdf: LinkPdfSchema
+        .transform((texto) => texto ? texto : NATUREZA_PADRAO)
 });
 
 export type NovaNota = z.infer<typeof CriarNotaSchema>;
-
-// Corpo de PATCH /notas/:id/link (só administrador): trocar ou apagar o link (null)
-export const AtualizarLinkNotaSchema = z.object({
-    link_pdf: LinkPdfSchema
-});

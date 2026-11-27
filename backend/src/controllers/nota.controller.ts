@@ -34,19 +34,7 @@ const NotaController = {
         } catch (error) {
             next(error);
         }
-    },
-
-    async AtualizarLink(req: Request, res: Response, next: NextFunction) {
-        try {
-            const resultado = await NotaService.AtualizarLink(Number(req.params.id), req.body.link_pdf);
-
-            res.status(200).json(resultado);
-
-        } catch (error) {
-            next(error);
-        }
     }
-
 };
 
 export default NotaController;

@@ -17,7 +17,6 @@ export interface NotaFiscal {
     natureza_operacao: string;
     valor_total: number;
     status: StatusNota;
-    link_pdf: string | null; // endereço do PDF no Emitte
     data_emissao: string;
 }
 
@@ -26,5 +25,4 @@ export interface NovaNota {
     venda_id: number;
     numero: string;
     natureza_operacao: string | null;
-    link_pdf?: string | null; // opcional: o link pode ser adicionado depois, na tela de Notas
 }

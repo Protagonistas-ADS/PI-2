@@ -101,8 +101,8 @@ Tudo usa os dados de demonstração do [`seed.sql`](../backend/src/database/seed
 **Falar:**
 - "São 8 tabelas no MySQL. O coração é **pedido → venda → nota fiscal**, e o **estoque** é controlado pela tabela de **movimentações**."
 - "Tiramos tudo de cotação: tabelas, colunas e dados. O status do pedido virou **pendente → confirmado → pronto para retirada → entregue**, ou cancelado."
-- "A movimentação guarda o **pedido de origem**, o **responsável** e o **motivo**. A nota tem **status** (emitida/cancelada) e o **link do PDF**."
-- "O `seed.sql` cria dados coerentes para testar: 8 usuários, 4 registros de produtos (3 ativos e 1 inativo para preservar o histórico), 15 pedidos em todos os status, 6 vendas, 5 notas e 24 movimentações. **O estoque de cada produto é exatamente a soma das movimentações**."
+- "A movimentação guarda o **pedido de origem**, o **responsável** e o **motivo**. A nota tem **número** e **status** (emitida/cancelada); o PDF fica no Emitte."
+- "O `seed.sql` cria dados coerentes para testar: 8 usuários, os 3 paletes da loja, 15 pedidos em todos os status, 6 vendas (todas com nota), 7 notas e 23 movimentações. **O estoque de cada produto é exatamente a soma das movimentações**."
 - "Produtos não são apagados, só desativados, para não perder o histórico de pedidos e notas."
 
 ---
@@ -141,7 +141,7 @@ Tudo usa os dados de demonstração do [`seed.sql`](../backend/src/database/seed
 | Como garantem que o estoque não fica errado? | O estoque só muda junto com uma movimentação registrada, dentro de uma **transação** com trava na linha (`FOR UPDATE`): dois admins confirmando ao mesmo tempo não baixam o estoque duas vezes. | Henrique / Antonio |
 | E se o cliente pedir mais do que tem? | O servidor confere ao criar o pedido e responde `409` "No momento não temos essa quantidade de ...", **sem dizer o saldo**; confere de novo quando o admin confirma. O catálogo nem recebe o número: a API pública devolve só `disponivel`. | Davi / Antonio |
 | Como um administrador é criado? | Por segurança, não existe cadastro de admin pelo site: todo cadastro entra como cliente, e o admin é definido direto no banco. | Antonio |
-| A nota fiscal é emitida pelo sistema? | Não: a emissão oficial continua no Emitte. O sistema guarda o número, o status e o link do PDF, ligados à venda. | Gustavo |
+| A nota fiscal é emitida pelo sistema? | Não: a emissão oficial continua no Emitte. O sistema guarda o número e o status, ligados à venda; o PDF fica no Emitte. | Gustavo |
 | Funciona no celular? | Sim, as telas se adaptam (o menu vira ☰ e as tabelas viram cartões). | Davi |
 | O que vocês fariam com mais tempo? | As melhorias futuras do README: LGPD e telefone, upload de fotos, testes automatizados e publicação com HTTPS. | Todos |
 | Como o grupo se organizou? | Git com uma branch por etapa, Pull Requests, commits no padrão Conventional Commits e documentação atualizada a cada PR. | Yuri |

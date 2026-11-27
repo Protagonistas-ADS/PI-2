@@ -78,8 +78,7 @@ const VendaService = {
             const nota = await NotaService.RegistrarNaTransacao(conexao, {
                 venda_id: resultado.vendaId,
                 numero: notaNumero,
-                natureza_operacao: NATUREZA_PADRAO,
-                link_pdf: null
+                natureza_operacao: NATUREZA_PADRAO
             });
 
             await conexao.commit();

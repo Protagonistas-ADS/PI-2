@@ -74,7 +74,6 @@ erDiagram
         varchar natureza_operacao
         decimal valor_total
         enum status "emitida | cancelada"
-        varchar link_pdf "PDF no Emitte (http/https)"
         datetime data_emissao
     }
     NOTA_ITEM {
@@ -100,7 +99,7 @@ erDiagram
 **Regras importantes:**
 
 - `movimentacao_estoque` **não tem mais `nota_id`**. A origem é o `pedido_id` (vazio = movimentação manual), o responsável é o `usuario_id` e o `motivo` é obrigatório nas manuais.
-- `nota` tem `status` (emitida/cancelada) e `link_pdf`. Uma venda pode ter várias notas no histórico, mas **só uma emitida**. Essa regra é conferida no backend.
+- `nota` tem `status` (emitida/cancelada); o PDF fica no Emitte (o sistema guarda só o número). Uma venda pode ter várias notas no histórico, mas **só uma emitida**. Essa regra é conferida no backend.
 - `venda.pedido_id` é único: um pedido gera no máximo uma venda.
 - Produtos não são apagados (`ativo = false`), para não quebrar pedidos, vendas e notas antigos.
 - `telefone` e `endereco` **não existem no banco**: estão só planejadas (comentadas no `schema.sql`) para a melhoria futura de telefone no cadastro e frete (L18).
@@ -118,7 +117,7 @@ erDiagram
 | Produto | <u>id</u>, nome, descricao, preco_unitario, quantidade_estoque, imagem, ativo |
 | Pedido | <u>id</u>, status, previsao_busca, observacao, criado_em |
 | Venda | <u>id</u>, valor_total, data_venda |
-| Nota | <u>id</u>, numero (único), natureza_operacao, valor_total, status, link_pdf, data_emissao |
+| Nota | <u>id</u>, numero (único), natureza_operacao, valor_total, status, data_emissao |
 | Movimentacao_Estoque | <u>id</u>, tipo, quantidade, motivo, data_mov |
 
 **Relacionamentos** (cardinalidade):
@@ -169,7 +168,7 @@ flowchart LR
         UA5(["Ver histórico de movimentações"])
         UA6(["Ver vendas"])
         UA7(["Registrar nota fiscal"])
-        UA8(["Editar link / cancelar nota"])
+        UA8(["Cancelar nota"])
         UA9(["Gerenciar produtos (API)"])
         UX1(["Baixar ou devolver estoque"])
         UX2(["Gerar venda"])
@@ -263,11 +262,9 @@ classDiagram
         +string natureza_operacao
         +decimal valor_total
         +StatusNota status
-        +string link_pdf
         +Date data_emissao
-        +Criar(venda, numero, link)
+        +Criar(venda, numero)
         +Cancelar()
-        +AtualizarLink(link)
     }
     class NotaItem {
         +int quantidade
