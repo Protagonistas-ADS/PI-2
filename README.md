@@ -142,7 +142,7 @@ Entregar um sistema **profissional, confiável e fácil de usar** que:
 | 🔌 Rotas da API | 🖥️ Telas | 🗄️ Tabelas | 🔀 Pull Requests | 🧾 Commits | 🪜 Etapas da reforma | 🧪 Passos no roteiro de teste |
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 <!-- METRICAS-AUTOMATICAS:INICIO -->
-| **30** | **15** | **8** | **55** | **243** | **12** | **~60** |
+| **30** | **15** | **8** | **55** | **247** | **12** | **~60** |
 <!-- METRICAS-AUTOMATICAS:FIM -->
 <sub>Commits na branch principal, excluindo as atualizações automáticas desta tabela. Pull Requests abertos e fechados.</sub>
 
