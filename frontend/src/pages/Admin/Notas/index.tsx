@@ -89,7 +89,7 @@ function Notas() {
     async function cancelar(nota: NotaFiscal) {
         const resposta = await swalConfirmacao(
             `Cancelar a nota ${nota.numero} (venda nº ${nota.venda_id}, ${formatarPreco(nota.valor_total)})? ` +
-            "Ela continua no histórico como cancelada e a venda volta a ficar sem nota. " +
+            "Ela continua no histórico como cancelada. Depois, registre a nota substituta da venda na tela Vendas. " +
             "Lembre-se de cancelar também no Emitte.",
             "Sim, cancelar nota",
             "Voltar"

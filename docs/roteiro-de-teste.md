@@ -74,39 +74,41 @@ Siga **na ordem**: cada parte usa o que a anterior criou. Os valores esperados v
 | # | Passo | Resultado esperado | ✓ |
 |:-:|-------|--------------------|:-:|
 | D1 | Entrar com `Admin@123456` | Cai no **Dashboard** (`/admin`), não no catálogo | |
-| D2 | Conferir os cartões | **Pedidos pendentes 3** (13, 14 e 16) · **A retirar hoje 2** · **Estoque baixo 0** · **Vendas de novembro R$ 1.165,00** (2 pedidos entregues; o cartão mostra o nome do mês atual) | |
+| D2 | Conferir os cartões | **Pedidos pendentes 3** (13, 14 e 16) · **A retirar hoje 2** · **Estoque baixo 0** · **Vendas de novembro R$ 725,00** (2 pedidos entregues; o cartão mostra o nome do mês atual) | |
 | D3 | Em "Pedidos em andamento", conferir o nº 16 | Cliente Teste da Silva (nome trocado no C8), a observação do cliente, a data de retirada, 10 unidades, R$ 650,00, "Aguardando confirmação" | |
 | D4 | Clicar em **10 unidades** | Janela "Produtos do pedido nº 16": Palete PBR, quantidade 10, R$ 65,00, valor total R$ 650,00 | |
 | D5 | Clicar em **Confirmar** no nº 16 | Aviso "Pedido nº 16 confirmado (estoque baixado)." · pendentes passa a **2** · status **Confirmado** com botões **Marcar pronto** e **Cancelar** | |
 | D6 | Clicar em **Marcar pronto** | "Pedido nº 16 marcado como pronto para retirada." · botões **Entregue** e **Cancelar** | |
-| D7 | Clicar em **Entregue** | Pergunta "Confirmar que o pedido nº 16 foi retirado por Cliente Teste da Silva? A venda será registrada..." → **Sim, foi entregue** | |
-| D8 | Conferir depois da entrega | "Pedido nº 16 entregue (venda registrada)." · **Vendas de novembro R$ 1.815,00** (3 pedidos entregues) | |
+| D7 | Clicar em **Entregue**, deixar o número da nota **vazio** e clicar **Sim, foi entregue** | Janela "Entregar pedido" com o campo **Número da nota fiscal**. Não deixa seguir: "Informe o número da nota fiscal." (não existe venda sem nota) | |
+| D7b | Digitar **NF-000005** (já existe) → **Sim, foi entregue** | Erro "Já existe uma nota com o número NF-000005." e o pedido continua **Pronto para retirada** (nada foi gravado) | |
+| D7c | Clicar em **Entregue** de novo, digitar **NF-000008** → **Sim, foi entregue** | Sem campo de link: só o número | |
+| D8 | Conferir depois da entrega | "Pedido nº 16 entregue (venda registrada com a nota NF-000008)." · **Vendas de novembro R$ 1.375,00** (3 pedidos entregues) | |
 | D9 | Na janela do cliente, atualizar **Meus Pedidos** | O nº 16 aparece como **Entregue** | |
-| D10 | Ir em **Pedidos** (menu lateral) | **Todos (16)** · Pendentes (2) · Confirmados (2) · Prontos (2) · Entregues (7) · Cancelados (3) · soma de R$ 19.881,00 | |
-| D11 | Buscar "Rota Sul" e filtrar por **Entregues** | Só os pedidos 6 e 1 da Transportadora Rota Sul · "Mostrando 2 de 16 pedidos · soma de R$ 5.030,00" | |
+| D10 | Ir em **Pedidos** (menu lateral) | **Todos (16)** · Pendentes (2) · Confirmados (2) · Prontos (2) · Entregues (7) · Cancelados (3) · soma de R$ 15.515,00 | |
+| D11 | Buscar "Rota Sul" e filtrar por **Entregues** | Só os pedidos 6 e 1 da Transportadora Rota Sul · "Mostrando 2 de 16 pedidos · soma de R$ 3.630,00" | |
 
 ## E. Administrador: estoque
 
 | # | Passo | Resultado esperado | ✓ |
 |:-:|-------|--------------------|:-:|
-| E1 | Ir em **Movimentações** | Histórico com **Todas (28)**. A primeira linha é a saída de 10 Palete PBR, motivo "Confirmação do pedido nº 16", responsável Administrador Teste, origem "Pedido nº 16" | |
+| E1 | Ir em **Movimentações** | Histórico com **Todas (25)**. A primeira linha é a saída de 10 Palete PBR, motivo "Confirmação do pedido nº 16", responsável Administrador Teste, origem "Pedido nº 16" | |
 | E2 | Abrir a lista de produtos do formulário | Palete PBR com **132 un.** (era 142) | |
-| E3 | Escolher **Saída**, Palete Euro (EPAL), quantidade **100**, motivo qualquer, e clicar **Registrar saída** | Não registra: "Estoque insuficiente: há 62 un. deste produto." | |
-| E4 | Escolher **Entrada**, Palete Euro (EPAL), quantidade 20, motivo "Chegada de lote do fornecedor" | A prévia mostra "Estoque fica em 82 un." | |
-| E5 | Clicar **Registrar entrada** | Entrada de 20 unidades de Palete Euro (EPAL) registrada. Estoque: 62 → 82 un. · histórico com **Todas (29)**, Entradas (10), Manuais (13) | |
+| E3 | Escolher **Saída**, Palete Euro (EPAL), quantidade **100**, motivo qualquer, e clicar **Registrar saída** | Não registra: "Estoque insuficiente: há 65 un. deste produto." | |
+| E4 | Escolher **Entrada**, Palete Euro (EPAL), quantidade 20, motivo "Chegada de lote do fornecedor" | A prévia mostra "Estoque fica em 85 un." | |
+| E5 | Clicar **Registrar entrada** | Entrada de 20 unidades de Palete Euro (EPAL) registrada. Estoque: 65 → 85 un. · histórico com **Todas (26)**, Entradas (9), Manuais (10) | |
 | E6 | Voltar ao **Dashboard** | **Estoque baixo 0** · "Nenhum produto com 10 un. ou menos" | |
 
 ## F. Administrador: vendas e notas fiscais
 
 | # | Passo | Resultado esperado | ✓ |
 |:-:|-------|--------------------|:-:|
-| F1 | Ir em **Vendas** | **Todas (7)** · Com nota (4) · Sem nota (3) · total de R$ 10.735,00. A primeira é a venda nº 7 do pedido nº 16, "Sem nota" | |
-| F2 | Clicar **Emitir nota** na venda nº 7 e preencher o link `javascript:alert(1)` | Não aceita: "Informe um link válido, começando com http:// ou https://." | |
-| F3 | Usar o número **NF-000005** (já existe) com um link `https://...` | A janela mostra "Já existe uma nota com o número NF-000005." | |
-| F4 | Trocar para **NF-000006** e link `https://example.com/notas/NF-000006.pdf` → **Registrar nota** | "Nota NF-000006 registrada para a venda nº 7." · Com nota (5) · Sem nota (2) | |
-| F5 | Ir em **Notas fiscais** | **Todas (6)** · Emitidas (5) · Canceladas (1) · emitidas somam R$ 7.980,00. NF-000006 no topo, **Emitida**, com "Abrir PDF" | |
-| F6 | Na **NF-000004** (sem link), clicar **Adicionar link**, colar `https://example.com/notas/NF-000004.pdf` e clicar **Salvar link** | "Link da nota NF-000004 salvo." e aparece "Abrir PDF" | |
-| F7 | Clicar **Cancelar** na NF-000006 → **Sim, cancelar nota** | "Nota NF-000006 cancelada." · Emitidas (4) · Canceladas (2) · em **Vendas**, a venda nº 7 volta a "Sem nota" com o botão **Emitir nota** | |
+| F1 | Ir em **Vendas** | **Sem** os botões Todas / Com nota / Sem nota. "Mostrando 7 de 7 vendas · total de R$ 8.080,00". Todas as vendas mostram o número da nota; a primeira é a venda nº 7 do pedido nº 16, com **NF-000008** | |
+| F2 | Ir em **Notas fiscais** | **Todas (8)** · Emitidas (7) · Canceladas (1) · emitidas somam R$ 8.080,00. NF-000008 no topo, **Emitida**, "Sem link" | |
+| F3 | Na **NF-000004** (sem link), clicar **Adicionar link** e colar `javascript:alert(1)` → **Salvar link** | Não aceita: "Informe um link válido, começando com http:// ou https://." | |
+| F4 | Trocar para `https://example.com/notas/NF-000004.pdf` → **Salvar link** | "Link da nota NF-000004 salvo." e aparece "Abrir PDF" | |
+| F5 | Clicar **Cancelar** na NF-000008 → **Sim, cancelar nota** | "Nota NF-000008 cancelada." · Emitidas (6) · Canceladas (2) · em **Vendas**, a venda nº 7 mostra "Nota cancelada" e o botão **Emitir nota substituta** | |
+| F6 | Clicar **Emitir nota substituta** na venda nº 7 e usar o número **NF-000005** (já existe) → **Registrar nota** | A janela (só número e natureza, **sem link**) mostra "Já existe uma nota com o número NF-000005." | |
+| F7 | Trocar para **NF-000009** → **Registrar nota** | "Nota NF-000009 registrada para a venda nº 7." e a venda volta a mostrar **NF-000009** | |
 
 ## G. Administrador: usuários e perfil
 

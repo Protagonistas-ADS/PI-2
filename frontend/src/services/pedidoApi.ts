@@ -32,6 +32,7 @@ export async function listarItensPedidoAdmin(id: number): Promise<ItemPedido[]> 
     return response.data.produtos;
 }
 
-export async function alterarStatusPedido(id: number, status: NovoStatusPedido) {
-    await api.patch(`/pedidos/${id}/status`, { status });
+// Para "entregue", o número da nota fiscal é obrigatório (toda venda nasce com nota).
+export async function alterarStatusPedido(id: number, status: NovoStatusPedido, notaNumero?: string) {
+    await api.patch(`/pedidos/${id}/status`, { status, nota_numero: notaNumero });
 }

@@ -5,7 +5,8 @@ import type { PedidoComCliente, NovoStatusPedido, ItemJanela } from "../types/pe
 import { MENSAGEM_SUCESSO } from "../utils/pedidoAdmin";
 import { paraItensJanela } from "../utils/pedido";
 import { obterMensagemErro } from "../utils/obterMensagemErro";
-import { swalConfirmacao, swalErro, toastSucesso } from "../utils/alertas";
+import { erroNumeroNota } from "../utils/notaFiscal";
+import { swalConfirmacao, swalErro, swalNumeroNota, toastSucesso } from "../utils/alertas";
 
 // Ações do administrador sobre um pedido (mudar status e ver itens).
 // Usado no Dashboard e na tabela de Pedidos, para as duas telas agirem igual.
@@ -15,7 +16,7 @@ export function useAcoesPedidoAdmin(recarregar: () => Promise<void>) {
     const [pedidoAberto, setPedidoAberto] = useState<{ id: number; itens: ItemJanela[] } | null>(null);
 
     async function mudarStatus(pedido: PedidoComCliente, novoStatus: NovoStatusPedido) {
-        // Cancelar e entregar pedem confirmação (entregar gera a venda e não volta)
+        // Cancelar pede confirmação; entregar pede o número da nota (gera a venda e não volta)
         if (novoStatus === "cancelado") {
             const devolveEstoque = pedido.status !== "pendente";
             const resposta = await swalConfirmacao(
@@ -28,21 +29,29 @@ export function useAcoesPedidoAdmin(recarregar: () => Promise<void>) {
             if (!resposta.isConfirmed) return;
         }
 
+        // Entregar exige o número da nota fiscal: a venda e a nota nascem juntas
+        let notaNumero: string | undefined;
+
         if (novoStatus === "entregue") {
-            const resposta = await swalConfirmacao(
+            const numero = await swalNumeroNota(
                 `Confirmar que o pedido nº ${pedido.id} foi retirado por ${pedido.cliente_nome}? ` +
-                "A venda será registrada e o pedido não poderá mais ser alterado.",
-                "Sim, foi entregue",
-                "Voltar"
+                "Informe o número da nota fiscal emitida no Emitte. A venda será registrada com essa nota " +
+                "e o pedido não poderá mais ser alterado.",
+                erroNumeroNota
             );
-            if (!resposta.isConfirmed) return;
+            if (!numero) return;
+            notaNumero = numero;
         }
 
         setPedidoOcupado(pedido.id);
 
         try {
-            await alterarStatusPedido(pedido.id, novoStatus);
-            toastSucesso(`Pedido nº ${pedido.id} ${MENSAGEM_SUCESSO[novoStatus]}.`);
+            await alterarStatusPedido(pedido.id, novoStatus, notaNumero);
+            toastSucesso(
+                notaNumero
+                    ? `Pedido nº ${pedido.id} entregue (venda registrada com a nota ${notaNumero}).`
+                    : `Pedido nº ${pedido.id} ${MENSAGEM_SUCESSO[novoStatus]}.`
+            );
         } catch (error) {
             swalErro(obterMensagemErro(error, "Não foi possível alterar o status do pedido."));
         } finally {

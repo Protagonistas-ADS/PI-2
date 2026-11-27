@@ -32,13 +32,12 @@ const VendaRepository = {
 
     // Todas as vendas, da mais nova para a mais antiga.
     // A nota entra só se estiver 'emitida' (nota cancelada = venda sem nota).
-    // O valor da venda não fica guardado (atributo derivado): é a soma dos itens do pedido.
     async ListarTodas(): Promise<VendaListada[]> {
         const [resultado] = await db.execute<VendaListada[]>(`
             SELECT
                 v.id,
                 v.pedido_id,
-                (SELECT SUM(pi.quantidade * pi.preco_unitario) FROM pedido_item pi WHERE pi.pedido_id = v.pedido_id) AS valor_total,
+                v.valor_total,
                 v.data_venda,
                 u.id AS cliente_id,
                 u.nome AS cliente_nome,
@@ -88,11 +87,11 @@ const VendaRepository = {
         return resultado.length > 0;
     },
 
-    async Criar(conexao: PoolConnection, pedidoId: number): Promise<ResultSetHeader> {
+    async Criar(conexao: PoolConnection, pedidoId: number, valorTotal: number): Promise<ResultSetHeader> {
         const [resultado] = await conexao.execute<ResultSetHeader>(`
-            INSERT INTO venda (pedido_id)
-            VALUES (?);
-        `, [pedidoId]);
+            INSERT INTO venda (pedido_id, valor_total)
+            VALUES (?, ?);
+        `, [pedidoId, valorTotal]);
 
         return resultado;
     }
