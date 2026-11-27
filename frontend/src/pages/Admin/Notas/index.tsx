@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { FiRefreshCw, FiX } from "react-icons/fi";
+import { FiRefreshCw, FiX, FiExternalLink } from "react-icons/fi";
 
+import ModalNota from "../componentes/ModalNota";
 
 import { listarNotas, cancelarNota } from "../../../services/notaApi";
 import { NOME_STATUS_NOTA, type NotaFiscal, type StatusNota } from "../../../types/nota";
@@ -54,8 +55,8 @@ function ordenar(lista: NotaFiscal[], ordem: Ordem) {
     }
 }
 
-// Tabela de notas fiscais. A nota é emitida no Emitte; aqui ficam o número,
-// os dados e o status. A nota nasce na entrega do pedido; a substituta, na tela de Vendas.
+// Tabela de notas fiscais. A nota é emitida no Emitte; aqui ficam os dados,
+// o status e o link do PDF. Para registrar uma nota nova: tela de Vendas.
 function Notas() {
     const [notas, setNotas] = useState<NotaFiscal[]>([]);
     const [carregando, setCarregando] = useState(true);
@@ -67,6 +68,7 @@ function Notas() {
     const [dataFim, setDataFim] = useState("");
     const [ordem, setOrdem] = useState<Ordem>("recentes");
 
+    const [notaEditando, setNotaEditando] = useState<NotaFiscal | null>(null);
     const [notaOcupada, setNotaOcupada] = useState<number | null>(null);
 
     const carregar = useCallback(async () => {
@@ -87,7 +89,7 @@ function Notas() {
     async function cancelar(nota: NotaFiscal) {
         const resposta = await swalConfirmacao(
             `Cancelar a nota ${nota.numero} (venda nº ${nota.venda_id}, ${formatarPreco(nota.valor_total)})? ` +
-            "Ela continua no histórico como cancelada. Depois, registre a nota substituta da venda na tela Vendas. " +
+            "Ela continua no histórico como cancelada e a venda volta a ficar sem nota. " +
             "Lembre-se de cancelar também no Emitte.",
             "Sim, cancelar nota",
             "Voltar"
@@ -149,7 +151,7 @@ function Notas() {
         <>
             <CabecalhoPagina>
                 <h1>Notas fiscais</h1>
-                <p>Notas emitidas no Emitte, com o número, o valor e o status.</p>
+                <p>Notas emitidas no Emitte, com o status e o link do PDF.</p>
             </CabecalhoPagina>
 
             {carregando && <Mensagem>Carregando as notas fiscais...</Mensagem>}
@@ -169,7 +171,7 @@ function Notas() {
                         <div>
                             <h2>Lista de notas</h2>
                             <p>
-                                A nota nasce quando o pedido é marcado como entregue. Se cancelar uma nota, registre a substituta na tela de{" "}
+                                Para registrar uma nota nova, use "Emitir nota" na tela de{" "}
                                 <Link to="/admin/vendas">Vendas</Link>.
                             </p>
                         </div>
@@ -264,6 +266,7 @@ function Notas() {
                                             <th>Cliente</th>
                                             <th>Valor</th>
                                             <th>Status</th>
+                                            <th>PDF</th>
                                             <th>Ações</th>
                                         </tr>
                                     </thead>
@@ -294,9 +297,31 @@ function Notas() {
                                                             {NOME_STATUS_NOTA[nota.status]}
                                                         </span>
                                                     </td>
+                                                    <td data-rotulo="PDF">
+                                                        {nota.link_pdf ? (
+                                                            <a
+                                                                href={nota.link_pdf}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="link-pdf"
+                                                            >
+                                                                Abrir PDF <FiExternalLink aria-hidden="true" />
+                                                            </a>
+                                                        ) : (
+                                                            <span className="sem-acao">Sem link</span>
+                                                        )}
+                                                    </td>
                                                     <td data-rotulo="Ações">
                                                         {emitida ? (
                                                             <div className="acoes">
+                                                                <button
+                                                                    type="button"
+                                                                    className="acao-secundaria"
+                                                                    disabled={notaOcupada !== null}
+                                                                    onClick={() => setNotaEditando(nota)}
+                                                                >
+                                                                    {nota.link_pdf ? "Editar link" : "Adicionar link"}
+                                                                </button>
                                                                 <button
                                                                     type="button"
                                                                     className="acao-cancelar"
@@ -319,6 +344,14 @@ function Notas() {
                         </>
                     )}
                 </SecaoAdmin>
+            )}
+
+            {notaEditando && (
+                <ModalNota
+                    modo={{ tipo: "link", nota: notaEditando }}
+                    aoFechar={() => setNotaEditando(null)}
+                    aoSalvar={carregar}
+                />
             )}
         </>
     );

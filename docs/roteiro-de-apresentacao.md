@@ -84,9 +84,9 @@ Tudo usa os dados de demonstração do [`seed.sql`](../backend/src/database/seed
 | No nº 16, clicar em **10 unidades** → fechar | "Vejo os itens e o recado do cliente." |
 | **Confirmar** o nº 16 | "Ao confirmar, **o estoque baixa sozinho**, e tudo acontece numa transação no banco: ou tudo dá certo, ou nada é gravado." |
 | Ir em **Movimentações** | "Cada entrada e saída fica registrada: **quem fez, quando, por quê e de qual pedido**. Olha a saída de 10 PBR do pedido nº 16, e o saldo foi de 142 para 132." |
-| Voltar ao **Dashboard** → **Marcar pronto** → **Entregue** → digitar `NF-000008` → **Sim, foi entregue** | "Separei, o cliente retirou. Para entregar, **o sistema exige o número da nota fiscal** emitida no **Emitte**: não existe venda sem nota. A venda e a nota são criadas juntas. As vendas do mês subiram para R$ 1.375." |
-| Ir em **Vendas** | "Toda venda aparece com o número da sua nota fiscal. Não tem filtro de “sem nota”, porque venda sem nota não pode existir." |
-| Ir em **Notas fiscais** | "Notas emitidas e canceladas. Se uma nota sai errada, cancelo e registro a substituta na tela de Vendas." |
+| Voltar ao **Dashboard** → **Marcar pronto** → **Entregue** → **Sim, foi entregue** | "Separei, o cliente retirou: ao marcar entregue, **a venda é criada automaticamente**. As vendas do mês subiram para R$ 1.375." |
+| Ir em **Vendas** → **Emitir nota** na venda nº 7 → `NF-000006`, link `https://example.com/notas/NF-000006.pdf` → **Registrar nota** | "A nota é emitida no **Emitte**, que o cliente já usa. Aqui registramos o número e o link do PDF." |
+| Ir em **Notas fiscais** | "Notas emitidas e canceladas, com o link do PDF. Se uma nota sai errada, cancelo e emito outra." |
 | Mostrar rapidamente **Pedidos** e **Usuários** | "Tabelas completas com busca, filtros e totais: pedidos por status, e clientes com quantos pedidos fizeram e quanto compraram." |
 
 > [!NOTE]
@@ -101,8 +101,8 @@ Tudo usa os dados de demonstração do [`seed.sql`](../backend/src/database/seed
 **Falar:**
 - "São 8 tabelas no MySQL. O coração é **pedido → venda → nota fiscal**, e o **estoque** é controlado pela tabela de **movimentações**."
 - "Tiramos tudo de cotação: tabelas, colunas e dados. O status do pedido virou **pendente → confirmado → pronto para retirada → entregue**, ou cancelado."
-- "A movimentação guarda o **pedido de origem**, o **responsável** e o **motivo**. A nota tem **número** e **status** (emitida/cancelada); o PDF fica no Emitte."
-- "O `seed.sql` cria dados coerentes para testar: 8 usuários, os 3 paletes da loja, 15 pedidos em todos os status, 6 vendas (todas com nota), 7 notas e 23 movimentações. **O estoque de cada produto é exatamente a soma das movimentações**."
+- "A movimentação guarda o **pedido de origem**, o **responsável** e o **motivo**. A nota tem **status** (emitida/cancelada) e o **link do PDF**."
+- "O `seed.sql` cria dados coerentes para testar: 8 usuários, 4 registros de produtos (3 ativos e 1 inativo para preservar o histórico), 15 pedidos em todos os status, 6 vendas, 5 notas e 24 movimentações. **O estoque de cada produto é exatamente a soma das movimentações**."
 - "Produtos não são apagados, só desativados, para não perder o histórico de pedidos e notas."
 
 ---
@@ -141,7 +141,7 @@ Tudo usa os dados de demonstração do [`seed.sql`](../backend/src/database/seed
 | Como garantem que o estoque não fica errado? | O estoque só muda junto com uma movimentação registrada, dentro de uma **transação** com trava na linha (`FOR UPDATE`): dois admins confirmando ao mesmo tempo não baixam o estoque duas vezes. | Henrique / Antonio |
 | E se o cliente pedir mais do que tem? | O servidor confere ao criar o pedido e responde `409` "No momento não temos essa quantidade de ...", **sem dizer o saldo**; confere de novo quando o admin confirma. O catálogo nem recebe o número: a API pública devolve só `disponivel`. | Davi / Antonio |
 | Como um administrador é criado? | Por segurança, não existe cadastro de admin pelo site: todo cadastro entra como cliente, e o admin é definido direto no banco. | Antonio |
-| A nota fiscal é emitida pelo sistema? | Não: a emissão oficial continua no Emitte. O sistema guarda o número e o status, ligados à venda; o PDF fica no Emitte. | Gustavo |
+| A nota fiscal é emitida pelo sistema? | Não: a emissão oficial continua no Emitte. O sistema guarda o número, o status e o link do PDF, ligados à venda. | Gustavo |
 | Funciona no celular? | Sim, as telas se adaptam (o menu vira ☰ e as tabelas viram cartões). | Davi |
 | O que vocês fariam com mais tempo? | As melhorias futuras do README: LGPD e telefone, upload de fotos, testes automatizados e publicação com HTTPS. | Todos |
 | Como o grupo se organizou? | Git com uma branch por etapa, Pull Requests, commits no padrão Conventional Commits e documentação atualizada a cada PR. | Yuri |

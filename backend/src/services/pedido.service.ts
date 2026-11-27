@@ -2,8 +2,6 @@ import db from "../configs/db";
 import PedidoRepository, { type Pedido, type ItemPedido } from "../repositories/pedido.repository";
 import EstoqueService from "./estoque.service";
 import VendaService from "./venda.service";
-import NotaService from "./nota.service";
-import { NATUREZA_PADRAO } from "../schemas/nota.schema";
 import { criarErro } from "../utils/criarErro";
 import type { NovoPedido, StatusPedido } from "../schemas/pedido.schema";
 
@@ -167,11 +165,10 @@ const PedidoService = {
     // Administrador muda o status, seguindo o fluxo:
     // - confirmar: baixa o estoque de cada produto (saída);
     // - cancelar depois de confirmado: devolve o estoque (entrada);
-    // - entregar: registra a venda E a nota fiscal (não existe venda sem nota).
+    // - entregar: registra a venda.
     // Tudo numa transação só: se um passo falhar, nada é gravado.
     // `usuarioId` = administrador que mudou o status (vira o responsável nas movimentações).
-    // `notaNumero` = número da nota fiscal (obrigatório para 'entregue'; o Zod também confere).
-    async AlterarStatus(id: number, novoStatus: StatusPedido, usuarioId: number, notaNumero: string | null = null) {
+    async AlterarStatus(id: number, novoStatus: StatusPedido, usuarioId: number) {
         const conexao = await db.getConnection();
 
         try {
@@ -226,17 +223,7 @@ const PedidoService = {
             }
 
             if (novoStatus === "entregue") {
-                if (!notaNumero) {
-                    throw criarErro("Informe o número da nota fiscal para marcar o pedido como entregue.", 400);
-                }
-
-                const venda = await VendaService.RegistrarNaTransacao(conexao, id);
-
-                await NotaService.RegistrarNaTransacao(conexao, {
-                    venda_id: venda.vendaId,
-                    numero: notaNumero,
-                    natureza_operacao: NATUREZA_PADRAO
-                });
+                await VendaService.RegistrarNaTransacao(conexao, id);
             }
 
             await PedidoRepository.AtualizarStatus(conexao, id, novoStatus);

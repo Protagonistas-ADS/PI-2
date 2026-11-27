@@ -21,7 +21,7 @@
 ![Entrega](https://img.shields.io/badge/entrega-24%2F11%2F2026-orange?style=flat-square)
 ![Rotas](https://img.shields.io/badge/rotas_da_API-30-informational?style=flat-square)
 ![Telas](https://img.shields.io/badge/telas-15-informational?style=flat-square)
-![PRs](https://img.shields.io/badge/pull_requests-57-8957e5?style=flat-square)
+![PRs](https://img.shields.io/badge/pull_requests-54-8957e5?style=flat-square)
 ![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-green?style=flat-square)
 
 <br>
@@ -142,7 +142,7 @@ Entregar um sistema **profissional, confiável e fácil de usar** que:
 | 🔌 Rotas da API | 🖥️ Telas | 🗄️ Tabelas | 🔀 Pull Requests | 🧾 Commits | 🪜 Etapas da reforma | 🧪 Passos no roteiro de teste |
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 <!-- METRICAS-AUTOMATICAS:INICIO -->
-| **30** | **15** | **8** | **57** | **252** | **12** | **~60** |
+| **30** | **15** | **8** | **54** | **243** | **12** | **~60** |
 <!-- METRICAS-AUTOMATICAS:FIM -->
 <sub>Commits na branch principal, excluindo as atualizações automáticas desta tabela. Pull Requests abertos e fechados.</sub>
 
@@ -200,8 +200,8 @@ pie showData
 - 📋 Mudar status: confirmar → pronto → entregue, ou cancelar
 - 🔎 Tabela de **pedidos** com busca, status, período, ordenação e soma
 - 📦 **Movimentações**: histórico + entrada/saída manual com motivo
-- 💰 **Vendas**: total e média; toda venda nasce com nota fiscal (número informado ao marcar "Entregue")
-- 🧾 **Notas fiscais**: número, valor, status e cancelar
+- 💰 **Vendas**: total, média e "Emitir nota"
+- 🧾 **Notas fiscais**: status, link do PDF, editar link e cancelar
 - 👥 **Usuários**: perfil, nº de pedidos e total comprado
 - 👤 Perfil do administrador
 
@@ -220,8 +220,8 @@ pie showData
 | **Pedidos** | Todos os status; busca por nº ("12" ou "nº 12"), nome ou e-mail, sem diferenciar acento; período "Feito de / Até"; chips de status com contagem; ordenação por data ou valor; "Mostrando X de Y · soma" |
 | **Usuários** | Busca por nome/e-mail; filtro Clientes/Administradores; ordenação por cadastro, nome, mais pedidos ou maior valor comprado. A senha nunca sai do banco |
 | **Movimentações** | Formulário de entrada/saída com saldo atual, prévia "Estoque fica em X", aviso de estoque insuficiente e confirmação antes da saída; histórico com busca, produto, período e chips Todas/Entradas/Saídas/Manuais |
-| **Vendas** | Busca por venda/pedido/cliente/nota; período; total e média; itens em janela; toda venda tem nota; se a nota for cancelada, "Emitir nota substituta" |
-| **Notas fiscais** | Emitidas/Canceladas; soma das emitidas; cancelar com confirmação (depois, registrar a nota substituta em Vendas) |
+| **Vendas** | Busca por venda/pedido/cliente/nota; período; Com/Sem nota; total e média; itens em janela; "Emitir nota" para vendas sem nota |
+| **Notas fiscais** | Emitidas/Canceladas; soma das emitidas; "Abrir PDF" (nova aba, com `noopener`); adicionar/editar link; cancelar com confirmação (a venda volta a aceitar uma nota nova) |
 | **Perfil** | Trocar nome e senha (pede a senha atual); mostra a data de criação da conta |
 
 </details>
@@ -242,7 +242,7 @@ flowchart LR
     K -- "login de cliente" --> P["📦 Pedido<br/>pendente"]
     P -- "admin confirma" --> E["📉 Estoque baixa<br/>+ movimentação"]
     E --> R["📍 Pronto para<br/>retirada"] -- "cliente retira" --> VD["💰 Venda<br/>(automática)"]
-    VD --> NF["🧾 Nota fiscal<br/>(nº do Emitte)"]
+    VD --> NF["🧾 Nota fiscal<br/>(Emitte + link)"]
 
     style V fill:#e0f2fe,stroke:#0284c7,color:#111
     style P fill:#fef3c7,stroke:#d97706,color:#111
@@ -260,9 +260,10 @@ flowchart TD
     P1 -- "sim" --> C1["✅ Confirmar<br/>(estoque baixa)"]
     P1 -- "não dá para atender" --> X["❌ Cancelar"]
     C1 --> S["📦 Separar → Marcar pronto"]
-    S --> EM["🧾 Emitir a NF no Emitte"]
-    EM --> ENT["🤝 Cliente retirou → Entregue<br/>(informa o nº da nota)"]
-    ENT --> V["💰 Venda + nota criadas juntas"]
+    S --> ENT["🤝 Cliente retirou → Entregue"]
+    ENT --> V["💰 Venda criada sozinha"]
+    V --> EM["🧾 Emitir a NF no Emitte"]
+    EM --> REG["🔗 Registrar número e link do PDF"]
     D --> EB{"Estoque<br/>baixo?"}
     EB -- "sim" --> LOTE["📥 Entrada manual:<br/>'Chegada de lote do fornecedor'"]
     D --> AV["📤 Saída manual:<br/>avaria, ajuste de inventário"]
@@ -294,7 +295,7 @@ stateDiagram-v2
 | Cliente envia | Confere se cada produto existe, está ativo e tem estoque; grava `pedido` + `pedido_item` com o preço do momento. **O estoque ainda não muda** |
 | Admin **confirma** | Confere o estoque de novo e grava uma **saída** por item ("Confirmação do pedido nº X"), com o admin como responsável |
 | Admin **cancela** um confirmado/pronto | Grava uma **entrada** por item ("Cancelamento do pedido nº X (estoque devolvido)") |
-| Admin marca **entregue** (informando o nº da nota fiscal) | Cria a **venda** com o valor total do pedido **e a nota fiscal** (não existe venda sem nota) |
+| Admin marca **entregue** | Cria a **venda** com o valor total do pedido |
 | Fora da ordem (ex.: pendente → entregue) | Recusado com `409` e mensagem em português |
 
 > [!IMPORTANT]
@@ -585,6 +586,7 @@ erDiagram
         int venda_id FK
         varchar numero UK
         enum status "emitida | cancelada"
+        varchar link_pdf
     }
     MOVIMENTACAO_ESTOQUE {
         int id PK
@@ -611,7 +613,7 @@ erDiagram
 | `pedido` | Pedido do cliente | `status`: pendente, confirmado, pronto_retirada, entregue, cancelado; `previsao_busca` e `observacao` opcionais |
 | `pedido_item` | Itens do pedido | Guarda o **preço do momento** (mudar o preço depois não altera pedidos antigos) |
 | `venda` | Venda de um pedido entregue | `pedido_id` único: um pedido gera no máximo uma venda |
-| `nota` / `nota_item` | Nota fiscal emitida no Emitte | `numero` único (nem cancelada reaproveita); só **uma emitida** por venda |
+| `nota` / `nota_item` | Nota fiscal emitida no Emitte | `numero` único (nem cancelada reaproveita); só **uma emitida** por venda; `link_pdf` só `http/https` |
 | `movimentacao_estoque` | Histórico de entradas e saídas | Responsável (`usuario_id`), `motivo` e pedido de origem (`pedido_id`; manual = vazio) |
 
 `telefone` e `endereco` estão **planejadas** (comentadas no `schema.sql`) para a melhoria futura de telefone no cadastro e frete.
@@ -626,14 +628,14 @@ erDiagram
 | Dado | Quantidade | Detalhe |
 |------|:----------:|---------|
 | Usuários | 8 | 1 admin + 7 clientes fictícios (empresas e pessoas, com e-mails gmail, hotmail, outlook, yahoo e `.com.br`) |
-| Produtos | 3 | Palete Cavinha (R$ 42), Palete Euro (EPAL) (R$ 48) e Palete PBR (R$ 65): os únicos que a loja vende |
+| Produtos | 4 registros | 3 ativos no catálogo: Palete Cavinha (R$ 42), Palete Euro (EPAL) (R$ 48) e Palete PBR (R$ 65). O quarto registro está inativo e preserva relacionamentos históricos de demonstração. |
 | Pedidos | 15 | Todos os status: 3 pendentes, 2 confirmados, 2 prontos, 6 entregues, 2 cancelados |
-| Vendas | 6 | Todas com nota fiscal |
-| Notas | 7 | NF-000001 a NF-000007, uma cancelada e reemitida |
-| Movimentações | 23 | Estoque inicial, lotes, avaria, ajuste, saídas de pedidos e devolução |
+| Vendas | 6 | 4 com nota e 2 sem nota (para mostrar "Emitir nota") |
+| Notas | 5 | NF-000001 a NF-000005, uma cancelada e reemitida |
+| Movimentações | 24 | Estoque inicial, lotes, avaria, ajuste, saídas de pedidos e devolução |
 
 - As datas são **relativas ao dia em que o seed roda** (`NOW() - INTERVAL 10 DAY`): o painel sempre tem "retirar hoje" e "vendas do mês".
-- O estoque de cada produto é **exatamente** a soma das movimentações (entradas − saídas). Os três produtos aparecem no catálogo e entram no alerta de estoque baixo.
+- O estoque de cada produto é **exatamente** a soma das movimentações (entradas − saídas). Apenas os três produtos ativos aparecem no catálogo e entram no alerta de estoque baixo.
 
 </details>
 
@@ -645,7 +647,7 @@ erDiagram
 
 ## 🔌 API (back-end)
 
-**29 rotas** em 7 grupos. 🌐 = pública · 🔒 = exige `Authorization: Bearer <token>` · **Legenda:** 🟢 `GET` · 🔵 `POST` · 🟣 `PUT` · 🟠 `PATCH`
+**30 rotas** em 7 grupos. 🌐 = pública · 🔒 = exige `Authorization: Bearer <token>` · **Legenda:** 🟢 `GET` · 🔵 `POST` · 🟣 `PUT` · 🟠 `PATCH`
 
 <details open>
 <summary><b>👤 Usuários</b> (4)</summary>
@@ -690,7 +692,7 @@ erDiagram
 | 🟠 `PATCH` | `/pedidos/cancelar/:id` | Cancelar (só `pendente`) → `204` | 🔒 cliente |
 | 🟢 `GET` | `/pedidos` | Todos os pedidos, com nome e e-mail do cliente | 🔒 admin |
 | 🟢 `GET` | `/pedidos/:id/itens` | Itens de qualquer pedido | 🔒 admin |
-| 🟠 `PATCH` | `/pedidos/:id/status` | `{ "status": "confirmado" }` → `200 { id, status_anterior, status }`. Para `"entregue"`, `nota_numero` é obrigatório (cria venda + nota) | 🔒 admin |
+| 🟠 `PATCH` | `/pedidos/:id/status` | `{ "status": "confirmado" }` → `200 { id, status_anterior, status }` | 🔒 admin |
 
 Corpo de `POST /pedidos`:
 
@@ -716,10 +718,11 @@ Corpo de `POST /pedidos`:
 |:------:|------|-----------|
 | 🟢 `GET` | `/admin/resumo` | `{ pendentes, retirar_hoje, limite_estoque_baixo, estoque_baixo[], vendas_mes }` |
 | 🟢 `GET` | `/admin/usuarios` | Usuários sem senha, com `total_pedidos` e `total_comprado` |
-| 🟢 `GET` | `/vendas` | Vendas com cliente, quantidade e nota emitida (`null` só se a nota foi cancelada e falta a substituta) |
-| 🔵 `POST` | `/vendas` | Registrar venda (com nota) de um pedido `entregue` antigo que ficou sem venda `{ pedido_id, nota_numero }` |
+| 🟢 `GET` | `/vendas` | Vendas com cliente, quantidade e nota emitida (`null` = sem nota) |
+| 🔵 `POST` | `/vendas` | Registrar venda de um pedido `entregue` antigo que ficou sem venda `{ pedido_id }` |
 | 🟢 `GET` | `/notas` | Notas com venda, pedido e cliente |
-| 🔵 `POST` | `/notas` | Nota substituta (a anterior foi cancelada) `{ venda_id, numero, natureza_operacao? }` → `201` |
+| 🔵 `POST` | `/notas` | `{ venda_id, numero, natureza_operacao?, link_pdf? }` → `201` |
+| 🟠 `PATCH` | `/notas/:id/link` | Trocar ou apagar o link do PDF |
 | 🟠 `PATCH` | `/notas/:id/cancelar` | Cancelar a nota (fica no histórico) |
 | 🟢 `GET` | `/estoque` | Saldo de todos os produtos |
 | 🟢 `GET` | `/estoque/movimentacoes` | Histórico com `responsavel_nome`, `motivo` e `pedido_id` |
@@ -727,7 +730,7 @@ Corpo de `POST /pedidos`:
 | 🔵 `POST` | `/estoque/entrada` | `{ produto_id, quantidade, motivo }` (motivo de 3 a 255 caracteres) |
 | 🔵 `POST` | `/estoque/saida` | Mesmo corpo; saída maior que o saldo → `409` |
 
-Regras das notas: número até 30 caracteres (letras, números, `.`, `/`, `-`) e nunca repetido → `409`; entregar pedido sem número da nota → `400`; venda que já tem nota emitida → `409`. O responsável de cada movimentação vem **do token**, nunca do corpo da requisição.
+Regras das notas: número até 30 caracteres (letras, números, `.`, `/`, `-`) e nunca repetido → `409`; `link_pdf` só aceita `http://` ou `https://` (bloqueia `javascript:`) → `400`; venda que já tem nota emitida → `409`. O responsável de cada movimentação vem **do token**, nunca do corpo da requisição.
 
 </details>
 
@@ -798,10 +801,10 @@ Capturas com os dados do `seed.sql` (todas em [`docs/prints/`](docs/prints)).
 </tr>
 <tr>
 <td align="center"><img src="docs/prints/08-movimentacoes.png" alt="Movimentações"><br><sub><b>Movimentações</b>: quem, quando, por quê e de qual pedido</sub></td>
-<td align="center"><img src="docs/prints/09-vendas.png" alt="Vendas"><br><sub><b>Vendas</b>: total, média e nota fiscal de cada venda</sub></td>
+<td align="center"><img src="docs/prints/09-vendas.png" alt="Vendas"><br><sub><b>Vendas</b>: total, média e "Emitir nota"</sub></td>
 </tr>
 <tr>
-<td align="center"><img src="docs/prints/10-notas.png" alt="Notas fiscais"><br><sub><b>Notas fiscais</b>: número, valor e status</sub></td>
+<td align="center"><img src="docs/prints/10-notas.png" alt="Notas fiscais"><br><sub><b>Notas fiscais</b>: status e link do PDF no Emitte</sub></td>
 <td align="center"><img src="docs/prints/11-usuarios.png" alt="Usuários"><br><sub><b>Usuários</b>: perfil, nº de pedidos e total comprado</sub></td>
 </tr>
 </table>
@@ -865,7 +868,7 @@ flowchart TD
 | 🛑 **Força bruta** | **5 tentativas erradas em 15 min** por IP → `429` (`express-rate-limit`); logins certos não contam | Adivinhar senhas por tentativa e erro |
 | 🌐 **CORS** | Só o endereço do site (`CORS_ORIGIN`) chama a API pelo navegador; outro site → `403` | Site malicioso usar a API com a sessão do usuário |
 | 🪖 **Cabeçalhos** | **Helmet** (CSP, `X-Frame-Options`, `nosniff`, HSTS...) e sem `X-Powered-By` | Clickjacking, *sniffing* e exposição da tecnologia |
-| 🔗 **Links** | Links externos (WhatsApp, mapa) com `noopener noreferrer` | *Tabnabbing* |
+| 🔗 **Links** | `link_pdf` só aceita `http/https`; links externos com `noopener noreferrer` | Links `javascript:` (XSS) e *tabnabbing* |
 | 🙈 **Sigilo comercial** | A quantidade em estoque só aparece nas rotas de admin | Concorrente descobrir o estoque pelo catálogo |
 | 🔒 **Concorrência** | Transações com `SELECT ... FOR UPDATE` | Dois admins baixarem o mesmo estoque duas vezes |
 | 🗝️ **Segredos** | `.env` no `.gitignore`; o repositório só traz `.env.example` | Senha do banco e `JWT_SECRET` no GitHub |
@@ -964,7 +967,7 @@ Na reta final (20 a 22/11), o projeto passou por uma **reforma em 12 etapas** pa
 | **Painel do admin** completo (7 telas) | Gestão: dashboard, pedidos, notas, vendas, movimentações, usuários e perfil |
 | Baixa de estoque na **confirmação** | Estoque sempre coerente com os pedidos |
 | Movimentação com **responsável, motivo e pedido** | Rastreabilidade |
-| Nota com **número e status do Emitte** | Integra com o que a loja já usa |
+| Nota com **status e link do Emitte** | Integra com o que a loja já usa |
 | **Segurança**: CORS, Helmet, limite de login | Proteção desde a base |
 | Seed rico, prints, diagramas e roteiros | Demonstração e documentação |
 
@@ -1012,7 +1015,7 @@ Na reta final (20 a 22/11), o projeto passou por uma **reforma em 12 etapas** pa
 | Baixar estoque na **confirmação** (não no pedido) | Pedido pode não ser aceito | Não "prende" estoque de pedido que não vai sair | O estoque pode acabar entre pedir e confirmar (o servidor confere de novo) |
 | **Esconder** o estoque do cliente | Sigilo comercial | Concorrente não descobre o estoque | O cliente só sabe que não tem a quantidade ao enviar |
 | **Desativar** em vez de apagar produto | Preservar o histórico | Pedidos e notas antigos continuam certos | A tabela só cresce |
-| Nota no **Emitte** (só o número) | Emitir NF-e exige certificado digital e SEFAZ | Usa o que a loja já usa, sem risco fiscal | Um passo manual para o admin |
+| Nota no **Emitte** + link | Emitir NF-e exige certificado digital e SEFAZ | Usa o que a loja já usa, sem risco fiscal | Um passo manual para o admin |
 | **Retirada na loja**, sem pagamento online | Venda B2B com retirada e pagamento combinado | Fluxo simples e real | Sem pagamento pelo site |
 | Limite de login **em memória** | Sem servidor extra (Redis) | Zero configuração | Zera ao reiniciar; não serve para vários servidores |
 | Filtros **na tela**, sem paginação | Volume pequeno de dados | Busca instantânea, sem rotas novas | Não escala para milhares de registros |
@@ -1110,7 +1113,7 @@ flowchart LR
 </details>
 
 > [!NOTE]
-> A emissão oficial da nota fiscal continua no **Emitte** (que a loja já usa, com clientes, produtos e transportadoras cadastrados). O sistema guarda o número e o status, ligados à venda; o PDF fica no Emitte.
+> A emissão oficial da nota fiscal continua no **Emitte** (que a loja já usa, com clientes, produtos e transportadoras cadastrados). O sistema guarda o número, o status e o link do PDF, ligados à venda.
 
 <div align="right"><a href="#topo">⬆️ voltar ao topo</a></div>
 
@@ -1159,8 +1162,8 @@ Scripts em `backend/src/database/`:
 | Arquivo | O que faz | Quando rodar |
 |---------|-----------|:------------:|
 | `schema.sql` | Cria o banco `PI2` e as tabelas | ✅ Sempre |
-| `seed.sql` | Dados de demonstração (8 usuários, 3 produtos, 15 pedidos, 6 vendas, 7 notas, 23 movimentações) | ✅ Recomendado |
-| `migracao-*.sql` (6 arquivos) | Atualizam bancos **antigos** sem apagar dados (remover cotação, imagens, status do pedido, foto padrão, movimentação/nota, remover link do PDF) | Só se o banco é antigo |
+| `seed.sql` | Dados de demonstração (8 usuários, 4 registros de produtos — 3 ativos e 1 inativo —, 15 pedidos, 6 vendas, 5 notas, 24 movimentações) | ✅ Recomendado |
+| `migracao-*.sql` (5 arquivos) | Atualizam bancos **antigos** sem apagar dados (remover cotação, imagens, status do pedido, foto padrão, movimentação/nota) | Só se o banco é antigo |
 
 **Pelo MySQL Workbench (recomendado):**
 
@@ -1425,7 +1428,7 @@ gitGraph
 | Área | Progresso | Pronto |
 |------|-----------|:------:|
 | 🗄️ Banco de dados | `▰▰▰▰▰▰▰▰▰▰` 100% | 8 de 8 tabelas |
-| ⚙️ Back-end | `▰▰▰▰▰▰▰▰▰▰` 100% | 29 de 29 rotas |
+| ⚙️ Back-end | `▰▰▰▰▰▰▰▰▰▰` 100% | 30 de 30 rotas |
 | 🖥️ Front-end | `▰▰▰▰▰▰▰▰▰▰` 100% | 15 de 15 telas |
 | 📝 Documentação | `▰▰▰▰▰▰▰▰▰▰` 100% | README, diagramas, roteiros e prints |
 | 🔭 Melhorias futuras | `▱▱▱▱▱▱▱▱▱▱` | [ver lista](#melhorias-futuras) |

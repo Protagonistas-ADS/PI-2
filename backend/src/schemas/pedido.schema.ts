@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { NumeroNotaSchema } from "./nota.schema";
 
 // Fluxo do pedido: pendente -> confirmado -> pronto_retirada -> entregue (ou cancelado).
 // Mesmos valores do ENUM da coluna pedido.status no banco.
@@ -76,13 +75,8 @@ export type NovoItemPedido = NovoPedido["itens"][number];
 
 // Corpo de PATCH /pedidos/:id/status (só administrador).
 // 'pendente' fica de fora: nenhum pedido volta para o começo.
-// Para 'entregue', o número da nota fiscal é OBRIGATÓRIO: não existe venda sem nota.
 export const AlterarStatusPedidoSchema = z.object({
     status: z.enum(["confirmado", "pronto_retirada", "entregue", "cancelado"], {
         error: "Status inválido. Use: confirmado, pronto_retirada, entregue ou cancelado."
-    }),
-    nota_numero: NumeroNotaSchema.optional()
-}).refine(
-    (dados) => dados.status !== "entregue" || Boolean(dados.nota_numero),
-    { message: "Informe o número da nota fiscal para marcar o pedido como entregue.", path: ["nota_numero"] }
-);
+    })
+});

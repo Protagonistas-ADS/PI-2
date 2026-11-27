@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS venda (
 );
 
 -- ====================== NOTA FISCAL ======================
--- A nota é emitida no Emitte; aqui o sistema guarda o número, os dados e os itens.
+-- A nota é emitida no Emitte; aqui o sistema guarda os dados e o link do PDF.
 -- Uma venda pode ter só UMA nota 'emitida' (regra conferida no backend);
 -- se ela for cancelada, dá para registrar outra para a mesma venda.
 CREATE TABLE IF NOT EXISTS nota (
@@ -100,6 +100,7 @@ CREATE TABLE IF NOT EXISTS nota (
     natureza_operacao VARCHAR(100) DEFAULT 'Venda de mercadoria',
     valor_total DECIMAL(10,2) NOT NULL,
     status ENUM('emitida','cancelada') NOT NULL DEFAULT 'emitida',
+    link_pdf VARCHAR(500) DEFAULT NULL, -- endereço da nota no Emitte (http/https)
     data_emissao DATETIME DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_nota_venda (venda_id),
     CONSTRAINT fk_nota_venda

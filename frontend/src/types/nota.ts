@@ -17,12 +17,14 @@ export interface NotaFiscal {
     natureza_operacao: string;
     valor_total: number;
     status: StatusNota;
+    link_pdf: string | null; // endereço do PDF no Emitte
     data_emissao: string;
 }
 
-// Corpo de POST /notas (nota substituta de uma nota cancelada)
+// Corpo de POST /notas
 export interface NovaNota {
     venda_id: number;
     numero: string;
     natureza_operacao: string | null;
+    link_pdf: string | null;
 }

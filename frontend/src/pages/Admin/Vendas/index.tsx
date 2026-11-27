@@ -20,6 +20,8 @@ import {
     CabecalhoPagina,
     SecaoAdmin,
     TopoSecao,
+    Filtros,
+    BotaoFiltro,
     BotaoAtualizar,
     BarraBusca,
     ResumoLista,
@@ -28,6 +30,13 @@ import {
     TabelaAdmin
 } from "../style";
 
+type FiltroNota = "todas" | "com_nota" | "sem_nota";
+
+const NOME_FILTRO: Record<FiltroNota, string> = {
+    todas: "Todas",
+    com_nota: "Com nota",
+    sem_nota: "Sem nota"
+};
 
 type Ordem = "recentes" | "antigas" | "maior_valor" | "menor_valor";
 
@@ -58,13 +67,13 @@ function temNota(venda: Venda) {
 }
 
 // Tabela de vendas: cada pedido entregue vira uma venda (automático).
-// Toda venda nasce com nota fiscal (informada ao marcar o pedido como entregue).
-// Se a nota for cancelada, o admin registra aqui a nota substituta.
+// Daqui o admin registra a nota fiscal emitida no Emitte.
 function Vendas() {
     const [vendas, setVendas] = useState<Venda[]>([]);
     const [carregando, setCarregando] = useState(true);
     const [erroCarregamento, setErroCarregamento] = useState("");
 
+    const [filtroNota, setFiltroNota] = useState<FiltroNota>("todas");
     const [busca, setBusca] = useState("");
     const [dataInicio, setDataInicio] = useState("");
     const [dataFim, setDataFim] = useState("");
@@ -101,7 +110,7 @@ function Vendas() {
         }
     }
 
-    // Busca e período
+    // Busca e período valem para tudo; o filtro de nota é aplicado por último
     const vendasBuscadas = useMemo(() => {
         const termo = termoDeBusca(busca);
 
@@ -115,14 +124,26 @@ function Vendas() {
         });
     }, [vendas, busca, dataInicio, dataFim]);
 
-    const vendasVisiveis = useMemo(() => ordenar(vendasBuscadas, ordem), [vendasBuscadas, ordem]);
+    const vendasVisiveis = useMemo(() => {
+        const filtradas = vendasBuscadas.filter((venda) =>
+            filtroNota === "todas" || (filtroNota === "com_nota" ? temNota(venda) : !temNota(venda))
+        );
 
-    const temFiltro = busca.trim() !== "" || dataInicio !== "" || dataFim !== "";
+        return ordenar(filtradas, ordem);
+    }, [vendasBuscadas, filtroNota, ordem]);
+
+    function contar(opcao: FiltroNota) {
+        if (opcao === "todas") return vendasBuscadas.length;
+        return vendasBuscadas.filter((venda) => (opcao === "com_nota" ? temNota(venda) : !temNota(venda))).length;
+    }
+
+    const temFiltro = filtroNota !== "todas" || busca.trim() !== "" || dataInicio !== "" || dataFim !== "";
     const periodoInvalido = dataInicio !== "" && dataFim !== "" && dataInicio > dataFim;
     const valorVisivel = vendasVisiveis.reduce((total, venda) => total + venda.valor_total, 0);
     const ticketMedio = vendasVisiveis.length > 0 ? valorVisivel / vendasVisiveis.length : 0;
 
     function limparFiltros() {
+        setFiltroNota("todas");
         setBusca("");
         setDataInicio("");
         setDataFim("");
@@ -133,7 +154,7 @@ function Vendas() {
         <>
             <CabecalhoPagina>
                 <h1>Vendas</h1>
-                <p>Cada pedido entregue vira uma venda automaticamente, já com a nota fiscal informada na entrega.</p>
+                <p>Cada pedido entregue vira uma venda automaticamente. Registre aqui a nota fiscal emitida no Emitte.</p>
             </CabecalhoPagina>
 
             {carregando && <Mensagem>Carregando as vendas...</Mensagem>}
@@ -152,7 +173,7 @@ function Vendas() {
                     <TopoSecao>
                         <div>
                             <h2>Lista de vendas</h2>
-                            <p>Se a nota de uma venda for cancelada, use "Emitir nota substituta".</p>
+                            <p>Vendas sem nota mostram o botão "Emitir nota".</p>
                         </div>
                         <BotaoAtualizar type="button" onClick={carregar}>
                             <FiRefreshCw /> Atualizar
@@ -200,6 +221,20 @@ function Vendas() {
                             <FiX /> Limpar
                         </BotaoAtualizar>
                     </BarraBusca>
+
+                    <Filtros role="group" aria-label="Filtrar vendas pela nota fiscal">
+                        {(Object.keys(NOME_FILTRO) as FiltroNota[]).map((opcao) => (
+                            <BotaoFiltro
+                                key={opcao}
+                                type="button"
+                                $ativo={filtroNota === opcao}
+                                aria-pressed={filtroNota === opcao}
+                                onClick={() => setFiltroNota(opcao)}
+                            >
+                                {NOME_FILTRO[opcao]} ({contar(opcao)})
+                            </BotaoFiltro>
+                        ))}
+                    </Filtros>
 
                     {periodoInvalido ? (
                         <Mensagem>A data inicial é depois da data final. Ajuste o período.</Mensagem>
@@ -266,7 +301,7 @@ function Vendas() {
                                                 <td data-rotulo="Nota fiscal">
                                                     {temNota(venda)
                                                         ? <span className="status status-emitida">{venda.nota_numero}</span>
-                                                        : <span className="status status-sem-nota">Nota cancelada</span>}
+                                                        : <span className="status status-sem-nota">Sem nota</span>}
                                                 </td>
                                                 <td data-rotulo="Ações">
                                                     {temNota(venda) ? (
@@ -278,7 +313,7 @@ function Vendas() {
                                                                 className="acao-avancar"
                                                                 onClick={() => setVendaParaNota(venda)}
                                                             >
-                                                                Emitir nota substituta
+                                                                Emitir nota
                                                             </button>
                                                         </div>
                                                     )}
@@ -295,7 +330,7 @@ function Vendas() {
 
             {vendaParaNota && (
                 <ModalNota
-                    venda={vendaParaNota}
+                    modo={{ tipo: "emitir", venda: vendaParaNota }}
                     aoFechar={() => setVendaParaNota(null)}
                     aoSalvar={carregar}
                 />
