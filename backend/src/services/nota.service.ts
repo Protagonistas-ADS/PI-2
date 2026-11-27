@@ -54,14 +54,17 @@ const NotaService = {
                     throw criarErro("A venda não possui produtos.", 400);
                 }
 
-                const valorTotal = Number(venda.valor_total);
+                // O valor não vai para o banco (atributo derivado); só é devolvido na resposta.
+                const valorTotal = itens.reduce(
+                    (total, item) => total + Number(item.preco_unitario) * item.quantidade,
+                    0
+                );
 
                 const resultadoNota = await NotaRepository.Criar(
                     conexao,
                     dados.venda_id,
                     dados.numero,
                     dados.natureza_operacao,
-                    valorTotal,
                     dados.link_pdf
                 );
 

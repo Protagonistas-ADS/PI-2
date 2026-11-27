@@ -71,8 +71,9 @@ CREATE TABLE IF NOT EXISTS pedido_item (
     pedido_id INT NOT NULL,
     produto_id INT NOT NULL,
     quantidade INT NOT NULL,
+    -- Preço do produto NO DIA do pedido (o preço do catálogo pode mudar depois).
+    -- O subtotal (quantidade x preço) NÃO é guardado: é atributo derivado, calculado no SELECT.
     preco_unitario DECIMAL(10,2) NOT NULL,
-    subtotal DECIMAL(10, 2) NOT NULL,
     CONSTRAINT fk_pedido_item_pedido
     FOREIGN KEY (pedido_id) REFERENCES pedido(id) ON DELETE CASCADE,
     CONSTRAINT fk_pedido_item_produto
@@ -80,10 +81,11 @@ CREATE TABLE IF NOT EXISTS pedido_item (
 );
 
 -- ====================== VENDA ======================
+-- O valor da venda NÃO é guardado (atributo derivado):
+-- é a soma de quantidade x preco_unitario dos itens do pedido (pedido_item).
 CREATE TABLE IF NOT EXISTS venda (
     id INT AUTO_INCREMENT PRIMARY KEY,
     pedido_id INT NOT NULL UNIQUE,
-    valor_total DECIMAL(10,2) NOT NULL,
     data_venda DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_venda_pedido
     FOREIGN KEY (pedido_id) REFERENCES pedido(id)
@@ -93,12 +95,12 @@ CREATE TABLE IF NOT EXISTS venda (
 -- A nota é emitida no Emitte; aqui o sistema guarda os dados e o link do PDF.
 -- Uma venda pode ter só UMA nota 'emitida' (regra conferida no backend);
 -- se ela for cancelada, dá para registrar outra para a mesma venda.
+-- O valor da nota NÃO é guardado (atributo derivado): é a soma dos itens da nota (nota_item).
 CREATE TABLE IF NOT EXISTS nota (
     id INT AUTO_INCREMENT PRIMARY KEY,
     venda_id INT NOT NULL,
     numero VARCHAR(30) NOT NULL UNIQUE,
     natureza_operacao VARCHAR(100) DEFAULT 'Venda de mercadoria',
-    valor_total DECIMAL(10,2) NOT NULL,
     status ENUM('emitida','cancelada') NOT NULL DEFAULT 'emitida',
     link_pdf VARCHAR(500) DEFAULT NULL, -- endereço da nota no Emitte (http/https)
     data_emissao DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -112,8 +114,7 @@ CREATE TABLE IF NOT EXISTS nota_item (
     nota_id INT NOT NULL,
     produto_id INT NOT NULL,
     quantidade INT NOT NULL,
-    preco_unitario DECIMAL(10,2) NOT NULL,
-    subtotal DECIMAL(10,2) NOT NULL,
+    preco_unitario DECIMAL(10,2) NOT NULL, -- subtotal = quantidade x preço, calculado no SELECT
     CONSTRAINT fk_nota_item_nota FOREIGN KEY (nota_id) REFERENCES nota(id) ON DELETE CASCADE,
     CONSTRAINT fk_nota_item_produto FOREIGN KEY (produto_id) REFERENCES produto(id)
 );

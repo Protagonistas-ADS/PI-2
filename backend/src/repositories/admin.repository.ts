@@ -68,13 +68,17 @@ const AdminRepository = {
         return resultado;
     },
 
-    // Vendas (pedidos entregues) do mês atual
+    // Vendas (pedidos entregues) do mês atual.
+    // O valor vem dos itens do pedido (quantidade x preço), porque a venda não guarda o total.
     async SomarVendasDoMes(): Promise<{ quantidade: number; valor_total: number }> {
         const [resultado] = await db.execute<TotaisVendas[]>(`
-            SELECT COUNT(*) AS quantidade, COALESCE(SUM(valor_total), 0) AS valor_total
-            FROM venda
-            WHERE data_venda >= DATE_FORMAT(CURDATE(), '%Y-%m-01')
-              AND data_venda < DATE_FORMAT(CURDATE() + INTERVAL 1 MONTH, '%Y-%m-01');
+            SELECT
+                COUNT(DISTINCT v.id) AS quantidade,
+                COALESCE(SUM(pi.quantidade * pi.preco_unitario), 0) AS valor_total
+            FROM venda v
+            INNER JOIN pedido_item pi ON pi.pedido_id = v.pedido_id
+            WHERE v.data_venda >= DATE_FORMAT(CURDATE(), '%Y-%m-01')
+              AND v.data_venda < DATE_FORMAT(CURDATE() + INTERVAL 1 MONTH, '%Y-%m-01');
         `);
 
         return {
@@ -95,9 +99,10 @@ const AdminRepository = {
                 u.criado_em,
                 (SELECT COUNT(*) FROM pedido p WHERE p.cliente_id = u.id) AS total_pedidos,
                 (
-                    SELECT COALESCE(SUM(v.valor_total), 0)
+                    SELECT COALESCE(SUM(pi.quantidade * pi.preco_unitario), 0)
                     FROM venda v
                     INNER JOIN pedido p ON p.id = v.pedido_id
+                    INNER JOIN pedido_item pi ON pi.pedido_id = v.pedido_id
                     WHERE p.cliente_id = u.id
                 ) AS total_comprado
             FROM usuario u

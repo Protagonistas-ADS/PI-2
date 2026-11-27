@@ -42,7 +42,8 @@ export interface ProdutoParaPedido extends RowDataPacket {
     ativo: number;
 }
 
-// Colunas e totais usados nas duas listagens (cliente e administrador)
+// Colunas e totais usados nas duas listagens (cliente e administrador).
+// Subtotal e total não ficam guardados no banco (atributos derivados): são calculados aqui.
 const CAMPOS_PEDIDO = `
     p.id,
     p.status,
@@ -50,7 +51,7 @@ const CAMPOS_PEDIDO = `
     p.observacao,
     p.criado_em,
     SUM(pi.quantidade) AS quantidade_total,
-    SUM(pi.subtotal) AS valor_total
+    SUM(pi.quantidade * pi.preco_unitario) AS valor_total
 `;
 
 const PedidoRepository = {
@@ -93,7 +94,7 @@ const PedidoRepository = {
                 p.nome AS produto_nome,
                 pi.quantidade,
                 pi.preco_unitario,
-                pi.subtotal
+                pi.quantidade * pi.preco_unitario AS subtotal
             FROM pedido_item pi
             INNER JOIN produto p ON p.id = pi.produto_id
             INNER JOIN pedido pe ON pe.id = pi.pedido_id
@@ -113,7 +114,7 @@ const PedidoRepository = {
                 p.nome AS produto_nome,
                 pi.quantidade,
                 pi.preco_unitario,
-                pi.subtotal
+                pi.quantidade * pi.preco_unitario AS subtotal
             FROM pedido_item pi
             INNER JOIN produto p ON p.id = pi.produto_id
             WHERE pi.pedido_id = ?;
@@ -179,9 +180,9 @@ const PedidoRepository = {
         preco_unitario: number
     ): Promise<void> {
         await conexao.execute(`
-            INSERT INTO pedido_item (pedido_id, produto_id, quantidade, preco_unitario, subtotal)
-            VALUES (?, ?, ?, ?, ?);
-        `, [pedido_id, produto_id, quantidade, preco_unitario, preco_unitario * quantidade]);
+            INSERT INTO pedido_item (pedido_id, produto_id, quantidade, preco_unitario)
+            VALUES (?, ?, ?, ?);
+        `, [pedido_id, produto_id, quantidade, preco_unitario]);
     },
 
     // "FOR UPDATE" trava o pedido até o fim da transação:
@@ -204,7 +205,7 @@ const PedidoRepository = {
                 p.nome AS produto_nome,
                 pi.quantidade,
                 pi.preco_unitario,
-                pi.subtotal
+                pi.quantidade * pi.preco_unitario AS subtotal
             FROM pedido_item pi
             INNER JOIN produto p ON p.id = pi.produto_id
             WHERE pi.pedido_id = ?;

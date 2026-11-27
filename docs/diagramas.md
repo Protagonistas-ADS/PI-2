@@ -59,12 +59,10 @@ erDiagram
         int produto_id FK
         int quantidade
         decimal preco_unitario "preço no dia do pedido"
-        decimal subtotal
     }
     VENDA {
         int id PK
         int pedido_id FK,UK
-        decimal valor_total
         datetime data_venda
     }
     NOTA {
@@ -72,7 +70,6 @@ erDiagram
         int venda_id FK
         varchar numero UK
         varchar natureza_operacao
-        decimal valor_total
         enum status "emitida | cancelada"
         varchar link_pdf "PDF no Emitte (http/https)"
         datetime data_emissao
@@ -83,7 +80,6 @@ erDiagram
         int produto_id FK
         int quantidade
         decimal preco_unitario
-        decimal subtotal
     }
     MOVIMENTACAO_ESTOQUE {
         int id PK
@@ -99,6 +95,7 @@ erDiagram
 
 **Regras importantes:**
 
+- **Sem atributos derivados:** o banco não guarda subtotal nem valor total. O subtotal de um item é `quantidade × preco_unitario` e o total de um pedido, venda ou nota é a soma dos seus itens. Esses valores são calculados nas consultas (`SUM(quantidade * preco_unitario)`). O `preco_unitario` do item **fica guardado** porque é o preço no dia da compra (o preço do catálogo pode mudar depois), então ele não é derivado.
 - `movimentacao_estoque` **não tem mais `nota_id`**. A origem é o `pedido_id` (vazio = movimentação manual), o responsável é o `usuario_id` e o `motivo` é obrigatório nas manuais.
 - `nota` tem `status` (emitida/cancelada) e `link_pdf`. Uma venda pode ter várias notas no histórico, mas **só uma emitida**. Essa regra é conferida no backend.
 - `venda.pedido_id` é único: um pedido gera no máximo uma venda.
@@ -117,8 +114,8 @@ erDiagram
 | Usuario | <u>id</u>, nome, email (único), senha, perfil, criado_em |
 | Produto | <u>id</u>, nome, descricao, preco_unitario, quantidade_estoque, imagem, ativo |
 | Pedido | <u>id</u>, status, previsao_busca, observacao, criado_em |
-| Venda | <u>id</u>, valor_total, data_venda |
-| Nota | <u>id</u>, numero (único), natureza_operacao, valor_total, status, link_pdf, data_emissao |
+| Venda | <u>id</u>, data_venda |
+| Nota | <u>id</u>, numero (único), natureza_operacao, status, link_pdf, data_emissao |
 | Movimentacao_Estoque | <u>id</u>, tipo, quantidade, motivo, data_mov |
 
 **Relacionamentos** (cardinalidade):
@@ -126,10 +123,10 @@ erDiagram
 | Relacionamento | Entre | Cardinalidade | Atributos do relacionamento |
 |---|---|---|---|
 | faz | Usuario — Pedido | 1 : N | — |
-| contém (pedido_item) | Pedido — Produto | N : N | quantidade, preco_unitario, subtotal |
+| contém (pedido_item) | Pedido — Produto | N : N | quantidade, preco_unitario |
 | gera | Pedido — Venda | 1 : 0..1 | — |
 | tem | Venda — Nota | 1 : N | — |
-| contém (nota_item) | Nota — Produto | N : N | quantidade, preco_unitario, subtotal |
+| contém (nota_item) | Nota — Produto | N : N | quantidade, preco_unitario |
 | movimenta | Produto — Movimentacao_Estoque | 1 : N | — |
 | origina | Pedido — Movimentacao_Estoque | 0..1 : N | — |
 | registra | Usuario — Movimentacao_Estoque | 0..1 : N | — |
@@ -246,12 +243,12 @@ classDiagram
     class PedidoItem {
         +int quantidade
         +decimal preco_unitario
-        +decimal subtotal
+        +subtotal() decimal
     }
     class Venda {
         +int id
         +int pedido_id
-        +decimal valor_total
+        +valorTotal() decimal
         +Date data_venda
         +RegistrarNaTransacao(pedido)
         +ListarTodas()
@@ -261,7 +258,7 @@ classDiagram
         +int venda_id
         +string numero
         +string natureza_operacao
-        +decimal valor_total
+        +valorTotal() decimal
         +StatusNota status
         +string link_pdf
         +Date data_emissao
@@ -272,7 +269,7 @@ classDiagram
     class NotaItem {
         +int quantidade
         +decimal preco_unitario
-        +decimal subtotal
+        +subtotal() decimal
     }
     class MovimentacaoEstoque {
         +int id

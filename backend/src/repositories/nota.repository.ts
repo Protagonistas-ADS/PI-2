@@ -5,14 +5,12 @@ import type { StatusNota } from "../schemas/nota.schema";
 
 interface VendaParaNota extends RowDataPacket {
     id: number;
-    valor_total: number;
 }
 
 interface ItemVenda extends RowDataPacket {
     produto_id: number;
     quantidade: number;
     preco_unitario: number;
-    subtotal: number;
 }
 
 interface NotaBloqueada extends RowDataPacket {
@@ -38,7 +36,7 @@ export interface NotaListada extends RowDataPacket {
 const NotaRepository = {
     async BuscarVenda(conexao: PoolConnection, vendaId: number): Promise<VendaParaNota | null> {
         const [resultado] = await conexao.execute<VendaParaNota[]>(
-            `SELECT id, valor_total
+            `SELECT id
              FROM venda
              WHERE id = ?
              FOR UPDATE`,
@@ -50,7 +48,7 @@ const NotaRepository = {
 
     async BuscarItensVenda(conexao: PoolConnection, vendaId: number): Promise<ItemVenda[]> {
         const [resultado] = await conexao.execute<ItemVenda[]>(
-            `SELECT pi.produto_id, pi.quantidade, pi.preco_unitario, pi.subtotal
+            `SELECT pi.produto_id, pi.quantidade, pi.preco_unitario
              FROM pedido_item pi
              INNER JOIN venda v ON v.pedido_id = pi.pedido_id
              WHERE v.id = ?`,
@@ -84,13 +82,12 @@ const NotaRepository = {
         vendaId: number,
         numero: string,
         naturezaOperacao: string,
-        valorTotal: number,
         linkPdf: string | null
     ): Promise<ResultSetHeader> {
         const [resultado] = await conexao.execute<ResultSetHeader>(
-            `INSERT INTO nota (venda_id, numero, natureza_operacao, valor_total, status, link_pdf)
-             VALUES (?, ?, ?, ?, 'emitida', ?)`,
-            [vendaId, numero, naturezaOperacao, valorTotal, linkPdf]
+            `INSERT INTO nota (venda_id, numero, natureza_operacao, status, link_pdf)
+             VALUES (?, ?, ?, 'emitida', ?)`,
+            [vendaId, numero, naturezaOperacao, linkPdf]
         );
 
         return resultado;
@@ -103,14 +100,13 @@ const NotaRepository = {
     ): Promise<ResultSetHeader> {
         const [resultado] = await conexao.execute<ResultSetHeader>(
             `INSERT INTO nota_item
-             (nota_id, produto_id, quantidade, preco_unitario, subtotal)
-             VALUES (?, ?, ?, ?, ?)`,
+             (nota_id, produto_id, quantidade, preco_unitario)
+             VALUES (?, ?, ?, ?)`,
             [
                 notaId,
                 item.produto_id,
                 item.quantidade,
-                item.preco_unitario,
-                item.subtotal
+                item.preco_unitario
             ]
         );
 
@@ -145,7 +141,8 @@ const NotaRepository = {
         return resultado;
     },
 
-    // Todas as notas, da mais nova para a mais antiga, com o pedido e o cliente
+    // Todas as notas, da mais nova para a mais antiga, com o pedido e o cliente.
+    // O valor da nota não fica guardado (atributo derivado): é a soma dos itens da nota.
     async Listar(): Promise<NotaListada[]> {
         const [resultado] = await db.execute<NotaListada[]>(
             `SELECT
@@ -155,7 +152,7 @@ const NotaRepository = {
                 u.nome AS cliente_nome,
                 n.numero,
                 n.natureza_operacao,
-                n.valor_total,
+                (SELECT SUM(ni.quantidade * ni.preco_unitario) FROM nota_item ni WHERE ni.nota_id = n.id) AS valor_total,
                 n.status,
                 n.link_pdf,
                 n.data_emissao

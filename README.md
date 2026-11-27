@@ -536,7 +536,9 @@ mindmap
 
 ## 🗄️ Banco de dados
 
-Banco **MySQL** chamado `PI2`, com **8 tabelas** em uso. Script completo em [`schema.sql`](backend/src/database/schema.sql) e dados de demonstração em [`seed.sql`](backend/src/database/seed.sql).
+Banco **MySQL** chamado `PI2`, com **8 tabelas** em uso. DDL em [`schema.sql`](backend/src/database/schema.sql), DML (dados de demonstração) em [`seed.sql`](backend/src/database/seed.sql) e DQL (consultas da loja) em [`consultas.sql`](backend/src/database/consultas.sql).
+
+> **Sem atributos derivados:** o banco não guarda subtotal nem valor total. Eles são calculados nas consultas com `SUM(quantidade * preco_unitario)`. O `preco_unitario` de cada item fica guardado porque é o preço **no dia da compra**.
 
 ```mermaid
 erDiagram
@@ -578,7 +580,6 @@ erDiagram
     VENDA {
         int id PK
         int pedido_id FK,UK
-        decimal valor_total
         datetime data_venda
     }
     NOTA {
@@ -628,11 +629,12 @@ erDiagram
 | Dado | Quantidade | Detalhe |
 |------|:----------:|---------|
 | Usuários | 8 | 1 admin + 7 clientes fictícios (empresas e pessoas, com e-mails gmail, hotmail, outlook, yahoo e `.com.br`) |
-| Produtos | 4 registros | 3 ativos no catálogo: Palete Cavinha (R$ 42), Palete Euro (EPAL) (R$ 48) e Palete PBR (R$ 65). O quarto registro está inativo e preserva relacionamentos históricos de demonstração. |
+| Produtos | 5 | 3 ativos no catálogo: Palete Cavinha (R$ 42), Palete Euro (EPAL) (R$ 48) e Palete PBR (R$ 65). Palete plástico e Palete descartável saíram de linha (inativos, estoque 0): guardam o histórico e não aparecem no catálogo |
 | Pedidos | 15 | Todos os status: 3 pendentes, 2 confirmados, 2 prontos, 6 entregues, 2 cancelados |
 | Vendas | 6 | 4 com nota e 2 sem nota (para mostrar "Emitir nota") |
 | Notas | 5 | NF-000001 a NF-000005, uma cancelada e reemitida |
-| Movimentações | 24 | Estoque inicial, lotes, avaria, ajuste, saídas de pedidos e devolução |
+| Movimentações | 27 | Estoque inicial, lotes, avaria, ajuste, saídas de pedidos, devolução e produtos que saíram de linha |
+| Itens | 19 + 7 | Itens dos pedidos e itens das notas (todas as 8 tabelas têm 5 registros ou mais) |
 
 - As datas são **relativas ao dia em que o seed roda** (`NOW() - INTERVAL 10 DAY`): o painel sempre tem "retirar hoje" e "vendas do mês".
 - O estoque de cada produto é **exatamente** a soma das movimentações (entradas − saídas). Apenas os três produtos ativos aparecem no catálogo e entram no alerta de estoque baixo.
@@ -1162,8 +1164,9 @@ Scripts em `backend/src/database/`:
 | Arquivo | O que faz | Quando rodar |
 |---------|-----------|:------------:|
 | `schema.sql` | Cria o banco `PI2` e as tabelas | ✅ Sempre |
-| `seed.sql` | Dados de demonstração (8 usuários, 4 registros de produtos — 3 ativos e 1 inativo —, 15 pedidos, 6 vendas, 5 notas, 24 movimentações) | ✅ Recomendado |
-| `migracao-*.sql` (5 arquivos) | Atualizam bancos **antigos** sem apagar dados (remover cotação, imagens, status do pedido, foto padrão, movimentação/nota) | Só se o banco é antigo |
+| `seed.sql` | DML: dados de demonstração (8 usuários, 5 produtos — 3 ativos e 2 inativos —, 15 pedidos, 6 vendas, 5 notas, 27 movimentações) | ✅ Recomendado |
+| `consultas.sql` | DQL: 7 consultas da loja (faturamento mensal, mais vendidos, melhores clientes, pedidos em andamento, estoque abaixo da média, conferência do estoque, notas com valor) | Opcional |
+| `migracao-*.sql` (6 arquivos) | Atualizam bancos **antigos** sem apagar dados (remover cotação, imagens, status do pedido, foto padrão, movimentação/nota, remover atributos derivados) | Só se o banco é antigo |
 
 **Pelo MySQL Workbench (recomendado):**
 
@@ -1332,7 +1335,7 @@ PI-2/
 │   └── src/
 │       ├── configs/         # banco (pool), CORS e idioma do Zod
 │       ├── controllers/     # recebem a requisição e respondem
-│       ├── database/        # schema.sql, seed.sql e migrações
+│       ├── database/        # schema.sql (DDL), seed.sql (DML), consultas.sql (DQL) e migrações
 │       ├── middlewares/     # login, perfil, validação, limite e erros
 │       ├── repositories/    # consultas SQL
 │       ├── routes/          # endereços da API
