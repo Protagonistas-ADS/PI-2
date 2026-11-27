@@ -1,6 +1,8 @@
 import type { PoolConnection } from "mysql2/promise";
 import db from "../configs/db";
 import VendaRepository from "../repositories/venda.repository";
+import NotaService from "./nota.service";
+import { NATUREZA_PADRAO } from "../schemas/nota.schema";
 import { criarErro } from "../utils/criarErro";
 
 // A venda nasce quando o pedido é entregue.
@@ -53,9 +55,9 @@ const VendaService = {
         };
     },
 
-    // POST /vendas: registra a venda de um pedido já entregue que ficou sem venda
+    // POST /vendas: registra a venda (com a nota fiscal) de um pedido já entregue que ficou sem venda
     // (ex.: pedidos antigos). Pedidos entregues pelo sistema já ganham a venda sozinhos.
-    async Criar(pedidoId: number) {
+    async Criar(pedidoId: number, notaNumero: string) {
         const conexao = await db.getConnection();
 
         try {
@@ -73,9 +75,16 @@ const VendaService = {
 
             const resultado = await VendaService.RegistrarNaTransacao(conexao, pedidoId);
 
+            const nota = await NotaService.RegistrarNaTransacao(conexao, {
+                venda_id: resultado.vendaId,
+                numero: notaNumero,
+                natureza_operacao: NATUREZA_PADRAO,
+                link_pdf: null
+            });
+
             await conexao.commit();
 
-            return resultado;
+            return { ...resultado, notaId: nota.nota_id, notaNumero: nota.numero };
 
         } catch (error) {
             await conexao.rollback();

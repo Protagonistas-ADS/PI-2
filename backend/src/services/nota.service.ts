@@ -30,61 +30,67 @@ async function emTransacao<T>(passo: (conexao: PoolConnection) => Promise<T>): P
 // A nota fiscal é emitida no Emitte; o sistema guarda os dados, o status e o link do PDF.
 const NotaService = {
 
-    // POST /notas: registra a nota de uma venda (os dados já chegam limpos pelo Zod)
+    // POST /notas: registra a nota substituta de uma venda cuja nota foi cancelada
+    // (os dados já chegam limpos pelo Zod). A primeira nota nasce junto com a venda,
+    // quando o pedido é marcado como entregue (PedidoService.AlterarStatus).
     async Criar(dados: NovaNota) {
         try {
-            return await emTransacao(async (conexao) => {
-                const venda = await NotaRepository.BuscarVenda(conexao, dados.venda_id);
-
-                if (!venda) {
-                    throw criarErro("Venda não encontrada.", 404);
-                }
-
-                if (await NotaRepository.VerificarNotaEmitida(conexao, dados.venda_id)) {
-                    throw criarErro("Esta venda já possui uma nota fiscal emitida. Cancele-a antes de registrar outra.", 409);
-                }
-
-                if (await NotaRepository.VerificarNumeroExistente(conexao, dados.numero)) {
-                    throw criarErro(`Já existe uma nota com o número ${dados.numero}.`, 409);
-                }
-
-                const itens = await NotaRepository.BuscarItensVenda(conexao, dados.venda_id);
-
-                if (itens.length === 0) {
-                    throw criarErro("A venda não possui produtos.", 400);
-                }
-
-                const valorTotal = Number(venda.valor_total);
-
-                const resultadoNota = await NotaRepository.Criar(
-                    conexao,
-                    dados.venda_id,
-                    dados.numero,
-                    dados.natureza_operacao,
-                    valorTotal,
-                    dados.link_pdf
-                );
-
-                for (const item of itens) {
-                    await NotaRepository.CriarItem(conexao, resultadoNota.insertId, item);
-                }
-
-                return {
-                    nota_id: resultadoNota.insertId,
-                    venda_id: dados.venda_id,
-                    numero: dados.numero,
-                    valor_total: valorTotal,
-                    status: "emitida" as const,
-                    link_pdf: dados.link_pdf,
-                    quantidade_itens: itens.length
-                };
-            });
+            return await emTransacao((conexao) => NotaService.RegistrarNaTransacao(conexao, dados));
         } catch (erro) {
             if (numeroRepetido(erro)) {
                 throw criarErro(`Já existe uma nota com o número ${dados.numero}.`, 409);
             }
             throw erro;
         }
+    },
+
+    // Registra a nota usando a transação de quem chamou
+    // (POST /notas ou a entrega do pedido, que cria a venda e a nota juntas).
+    async RegistrarNaTransacao(conexao: PoolConnection, dados: NovaNota) {
+        const venda = await NotaRepository.BuscarVenda(conexao, dados.venda_id);
+
+        if (!venda) {
+            throw criarErro("Venda não encontrada.", 404);
+        }
+
+        if (await NotaRepository.VerificarNotaEmitida(conexao, dados.venda_id)) {
+            throw criarErro("Esta venda já possui uma nota fiscal emitida. Cancele-a antes de registrar outra.", 409);
+        }
+
+        if (await NotaRepository.VerificarNumeroExistente(conexao, dados.numero)) {
+            throw criarErro(`Já existe uma nota com o número ${dados.numero}.`, 409);
+        }
+
+        const itens = await NotaRepository.BuscarItensVenda(conexao, dados.venda_id);
+
+        if (itens.length === 0) {
+            throw criarErro("A venda não possui produtos.", 400);
+        }
+
+        const valorTotal = Number(venda.valor_total);
+
+        const resultadoNota = await NotaRepository.Criar(
+            conexao,
+            dados.venda_id,
+            dados.numero,
+            dados.natureza_operacao,
+            valorTotal,
+            dados.link_pdf
+        );
+
+        for (const item of itens) {
+            await NotaRepository.CriarItem(conexao, resultadoNota.insertId, item);
+        }
+
+        return {
+            nota_id: resultadoNota.insertId,
+            venda_id: dados.venda_id,
+            numero: dados.numero,
+            valor_total: valorTotal,
+            status: "emitida" as const,
+            link_pdf: dados.link_pdf,
+            quantidade_itens: itens.length
+        };
     },
 
     // GET /notas: tabela de notas do painel (o MySQL devolve DECIMAL como texto)
@@ -105,7 +111,8 @@ const NotaService = {
         }));
     },
 
-    // PATCH /notas/:id/cancelar: a nota cancelada fica no histórico e a venda volta a ficar sem nota
+    // PATCH /notas/:id/cancelar: a nota cancelada fica no histórico;
+    // o admin registra a nota substituta da venda (POST /notas)
     async Cancelar(id: number) {
         return await emTransacao(async (conexao) => {
             const nota = await NotaRepository.BuscarParaAtualizar(conexao, id);

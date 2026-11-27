@@ -200,7 +200,7 @@ pie showData
 - 📋 Mudar status: confirmar → pronto → entregue, ou cancelar
 - 🔎 Tabela de **pedidos** com busca, status, período, ordenação e soma
 - 📦 **Movimentações**: histórico + entrada/saída manual com motivo
-- 💰 **Vendas**: total, média e "Emitir nota"
+- 💰 **Vendas**: total e média; toda venda nasce com nota fiscal (número informado ao marcar "Entregue")
 - 🧾 **Notas fiscais**: status, link do PDF, editar link e cancelar
 - 👥 **Usuários**: perfil, nº de pedidos e total comprado
 - 👤 Perfil do administrador
@@ -220,7 +220,7 @@ pie showData
 | **Pedidos** | Todos os status; busca por nº ("12" ou "nº 12"), nome ou e-mail, sem diferenciar acento; período "Feito de / Até"; chips de status com contagem; ordenação por data ou valor; "Mostrando X de Y · soma" |
 | **Usuários** | Busca por nome/e-mail; filtro Clientes/Administradores; ordenação por cadastro, nome, mais pedidos ou maior valor comprado. A senha nunca sai do banco |
 | **Movimentações** | Formulário de entrada/saída com saldo atual, prévia "Estoque fica em X", aviso de estoque insuficiente e confirmação antes da saída; histórico com busca, produto, período e chips Todas/Entradas/Saídas/Manuais |
-| **Vendas** | Busca por venda/pedido/cliente/nota; período; Com/Sem nota; total e média; itens em janela; "Emitir nota" para vendas sem nota |
+| **Vendas** | Busca por venda/pedido/cliente/nota; período; total e média; itens em janela; toda venda tem nota; se a nota for cancelada, "Emitir nota substituta" |
 | **Notas fiscais** | Emitidas/Canceladas; soma das emitidas; "Abrir PDF" (nova aba, com `noopener`); adicionar/editar link; cancelar com confirmação (a venda volta a aceitar uma nota nova) |
 | **Perfil** | Trocar nome e senha (pede a senha atual); mostra a data de criação da conta |
 
@@ -295,7 +295,7 @@ stateDiagram-v2
 | Cliente envia | Confere se cada produto existe, está ativo e tem estoque; grava `pedido` + `pedido_item` com o preço do momento. **O estoque ainda não muda** |
 | Admin **confirma** | Confere o estoque de novo e grava uma **saída** por item ("Confirmação do pedido nº X"), com o admin como responsável |
 | Admin **cancela** um confirmado/pronto | Grava uma **entrada** por item ("Cancelamento do pedido nº X (estoque devolvido)") |
-| Admin marca **entregue** | Cria a **venda** com o valor total do pedido |
+| Admin marca **entregue** (informando o nº da nota fiscal) | Cria a **venda** com o valor total do pedido **e a nota fiscal** (não existe venda sem nota) |
 | Fora da ordem (ex.: pendente → entregue) | Recusado com `409` e mensagem em português |
 
 > [!IMPORTANT]
@@ -630,8 +630,8 @@ erDiagram
 | Usuários | 8 | 1 admin + 7 clientes fictícios (empresas e pessoas, com e-mails gmail, hotmail, outlook, yahoo e `.com.br`) |
 | Produtos | 4 registros | 3 ativos no catálogo: Palete Cavinha (R$ 42), Palete Euro (EPAL) (R$ 48) e Palete PBR (R$ 65). O quarto registro está inativo e preserva relacionamentos históricos de demonstração. |
 | Pedidos | 15 | Todos os status: 3 pendentes, 2 confirmados, 2 prontos, 6 entregues, 2 cancelados |
-| Vendas | 6 | 4 com nota e 2 sem nota (para mostrar "Emitir nota") |
-| Notas | 5 | NF-000001 a NF-000005, uma cancelada e reemitida |
+| Vendas | 6 | Todas com nota fiscal |
+| Notas | 7 | NF-000001 a NF-000007, uma cancelada e reemitida |
 | Movimentações | 24 | Estoque inicial, lotes, avaria, ajuste, saídas de pedidos e devolução |
 
 - As datas são **relativas ao dia em que o seed roda** (`NOW() - INTERVAL 10 DAY`): o painel sempre tem "retirar hoje" e "vendas do mês".
@@ -692,7 +692,7 @@ erDiagram
 | 🟠 `PATCH` | `/pedidos/cancelar/:id` | Cancelar (só `pendente`) → `204` | 🔒 cliente |
 | 🟢 `GET` | `/pedidos` | Todos os pedidos, com nome e e-mail do cliente | 🔒 admin |
 | 🟢 `GET` | `/pedidos/:id/itens` | Itens de qualquer pedido | 🔒 admin |
-| 🟠 `PATCH` | `/pedidos/:id/status` | `{ "status": "confirmado" }` → `200 { id, status_anterior, status }` | 🔒 admin |
+| 🟠 `PATCH` | `/pedidos/:id/status` | `{ "status": "confirmado" }` → `200 { id, status_anterior, status }`. Para `"entregue"`, `nota_numero` é obrigatório (cria venda + nota) | 🔒 admin |
 
 Corpo de `POST /pedidos`:
 
@@ -718,10 +718,10 @@ Corpo de `POST /pedidos`:
 |:------:|------|-----------|
 | 🟢 `GET` | `/admin/resumo` | `{ pendentes, retirar_hoje, limite_estoque_baixo, estoque_baixo[], vendas_mes }` |
 | 🟢 `GET` | `/admin/usuarios` | Usuários sem senha, com `total_pedidos` e `total_comprado` |
-| 🟢 `GET` | `/vendas` | Vendas com cliente, quantidade e nota emitida (`null` = sem nota) |
-| 🔵 `POST` | `/vendas` | Registrar venda de um pedido `entregue` antigo que ficou sem venda `{ pedido_id }` |
+| 🟢 `GET` | `/vendas` | Vendas com cliente, quantidade e nota emitida (`null` só se a nota foi cancelada e falta a substituta) |
+| 🔵 `POST` | `/vendas` | Registrar venda (com nota) de um pedido `entregue` antigo que ficou sem venda `{ pedido_id, nota_numero }` |
 | 🟢 `GET` | `/notas` | Notas com venda, pedido e cliente |
-| 🔵 `POST` | `/notas` | `{ venda_id, numero, natureza_operacao?, link_pdf? }` → `201` |
+| 🔵 `POST` | `/notas` | Nota substituta (a anterior foi cancelada) `{ venda_id, numero, natureza_operacao?, link_pdf? }` → `201` |
 | 🟠 `PATCH` | `/notas/:id/link` | Trocar ou apagar o link do PDF |
 | 🟠 `PATCH` | `/notas/:id/cancelar` | Cancelar a nota (fica no histórico) |
 | 🟢 `GET` | `/estoque` | Saldo de todos os produtos |
@@ -801,7 +801,7 @@ Capturas com os dados do `seed.sql` (todas em [`docs/prints/`](docs/prints)).
 </tr>
 <tr>
 <td align="center"><img src="docs/prints/08-movimentacoes.png" alt="Movimentações"><br><sub><b>Movimentações</b>: quem, quando, por quê e de qual pedido</sub></td>
-<td align="center"><img src="docs/prints/09-vendas.png" alt="Vendas"><br><sub><b>Vendas</b>: total, média e "Emitir nota"</sub></td>
+<td align="center"><img src="docs/prints/09-vendas.png" alt="Vendas"><br><sub><b>Vendas</b>: total, média e nota fiscal de cada venda</sub></td>
 </tr>
 <tr>
 <td align="center"><img src="docs/prints/10-notas.png" alt="Notas fiscais"><br><sub><b>Notas fiscais</b>: status e link do PDF no Emitte</sub></td>

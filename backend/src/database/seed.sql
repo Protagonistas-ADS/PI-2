@@ -139,13 +139,15 @@ INSERT INTO venda (id, pedido_id, valor_total, data_venda) VALUES
 -- Só os dados + link do PDF no Emitte. Os links usam example.com (endereço reservado para exemplos).
 --   NF-000002 foi cancelada (valor errado) e reemitida como NF-000003.
 --   NF-000004 está sem link (serve para demonstrar "Adicionar link").
---   As vendas 4 e 6 estão sem nota (servem para demonstrar "Emitir nota").
+--   Toda venda tem nota (não existe venda sem nota). As notas 6 e 7 ainda estão sem link.
 INSERT INTO nota (id, venda_id, numero, natureza_operacao, valor_total, status, link_pdf, data_emissao) VALUES
 (1, 1, 'NF-000001', 'Venda de mercadoria', 1800.00, 'emitida', 'https://example.com/notas/NF-000001.pdf', NOW() - INTERVAL 78 DAY),
 (2, 2, 'NF-000002', 'Venda de mercadoria', 1950.00, 'cancelada', 'https://example.com/notas/NF-000002.pdf', NOW() - INTERVAL 63 DAY),
 (3, 2, 'NF-000003', 'Venda de mercadoria', 1950.00, 'emitida', 'https://example.com/notas/NF-000003.pdf', NOW() - INTERVAL 62 DAY),
 (4, 3, 'NF-000004', 'Venda de mercadoria', 1125.00, 'emitida', NULL, NOW() - INTERVAL 43 DAY),
-(5, 5, 'NF-000005', 'Venda de mercadoria', 500.00, 'emitida', 'https://example.com/notas/NF-000005.pdf', NOW() - INTERVAL 10 DAY);
+(5, 5, 'NF-000005', 'Venda de mercadoria', 500.00, 'emitida', 'https://example.com/notas/NF-000005.pdf', NOW() - INTERVAL 10 DAY),
+(6, 4, 'NF-000006', 'Venda de mercadoria', 1830.00, 'emitida', NULL, TIMESTAMP(LAST_DAY(CURDATE() - INTERVAL 1 MONTH), '14:00:00')),
+(7, 6, 'NF-000007', 'Venda de mercadoria', 225.00, 'emitida', NULL, NOW());
 
 -- ITENS DAS NOTAS (iguais aos itens do pedido da venda)
 INSERT INTO nota_item (nota_id, produto_id, quantidade, preco_unitario, subtotal) VALUES
@@ -155,7 +157,10 @@ INSERT INTO nota_item (nota_id, produto_id, quantidade, preco_unitario, subtotal
 (3, 2, 60, 25.00, 1500.00),
 (3, 1, 10, 45.00, 450.00),
 (4, 3, 15, 75.00, 1125.00),
-(5, 2, 20, 25.00, 500.00);
+(5, 2, 20, 25.00, 500.00),
+(6, 1, 30, 45.00, 1350.00),
+(6, 4, 4, 120.00, 480.00),
+(7, 1, 5, 45.00, 225.00);
 
 -- ====================== MOVIMENTAÇÕES DE ESTOQUE ======================
 -- Responsável: administrador 2. Em ordem de data.

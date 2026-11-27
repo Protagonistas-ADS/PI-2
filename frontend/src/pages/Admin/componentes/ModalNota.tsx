@@ -10,10 +10,11 @@ import type { NotaFiscal } from "../../../types/nota";
 import { obterMensagemErro } from "../../../utils/obterMensagemErro";
 import { formatarPreco } from "../../../utils/produto";
 import { toastSucesso } from "../../../utils/alertas";
+import { erroNumeroNota as erroNumero } from "../../../utils/notaFiscal";
 
 import { FormularioAdmin, CabecalhoJanela } from "../style";
 
-// "emitir": registrar a nota de uma venda (número, natureza, link)
+// "emitir": registrar a nota substituta de uma venda cuja nota foi cancelada (número e natureza)
 // "link": trocar ou apagar o link do PDF de uma nota emitida
 type ModoJanela =
     | { tipo: "emitir"; venda: Venda }
@@ -27,13 +28,6 @@ interface ModalNotaProps {
 
 const NATUREZA_PADRAO = "Venda de mercadoria";
 
-// As mesmas regras do backend (que confere de novo: é ele que protege de verdade)
-function erroNumero(numero: string) {
-    if (!numero.trim()) return "Informe o número da nota fiscal.";
-    if (numero.trim().length > 30) return "O número deve ter no máximo 30 caracteres.";
-    if (!/^[A-Za-z0-9./-]+$/.test(numero.trim())) return "Use só letras, números, ponto, barra ou hífen.";
-    return "";
-}
 
 function erroLink(link: string) {
     if (!link.trim()) return "";
@@ -67,14 +61,14 @@ function ModalNota({ modo, aoFechar, aoSalvar }: ModalNotaProps) {
     }, [aoFechar, salvando]);
 
     const avisoNumero = modo.tipo === "emitir" && tentouEnviar ? erroNumero(numero) : "";
-    const avisoLink = tentouEnviar ? erroLink(link) : "";
+    const avisoLink = modo.tipo === "link" && tentouEnviar ? erroLink(link) : "";
 
     async function enviar(evento: FormEvent) {
         evento.preventDefault();
         setTentouEnviar(true);
         setErroServidor("");
 
-        if ((modo.tipo === "emitir" && erroNumero(numero)) || erroLink(link)) return;
+        if (modo.tipo === "emitir" ? erroNumero(numero) : erroLink(link)) return;
 
         setSalvando(true);
 
@@ -83,8 +77,7 @@ function ModalNota({ modo, aoFechar, aoSalvar }: ModalNotaProps) {
                 await registrarNota({
                     venda_id: modo.venda.id,
                     numero: numero.trim(),
-                    natureza_operacao: natureza.trim() || null,
-                    link_pdf: link.trim() || null
+                    natureza_operacao: natureza.trim() || null
                 });
                 toastSucesso(`Nota ${numero.trim()} registrada para a venda nº ${modo.venda.id}.`);
             } else {
@@ -107,7 +100,7 @@ function ModalNota({ modo, aoFechar, aoSalvar }: ModalNotaProps) {
                 <div>
                     {modo.tipo === "emitir" ? (
                         <>
-                            <h2 id="titulo-janela-nota">Emitir nota da venda nº {modo.venda.id}</h2>
+                            <h2 id="titulo-janela-nota">Emitir nota substituta da venda nº {modo.venda.id}</h2>
                             <p>
                                 Pedido nº {modo.venda.pedido_id} · {modo.venda.cliente_nome} ·{" "}
                                 {formatarPreco(modo.venda.valor_total)}
@@ -129,7 +122,7 @@ function ModalNota({ modo, aoFechar, aoSalvar }: ModalNotaProps) {
                 {modo.tipo === "emitir" && (
                     <>
                         <p className="dica">
-                            Emita a nota no Emitte e registre aqui o número e o link do PDF.
+                            A nota anterior desta venda foi cancelada. Emita a nota substituta no Emitte e registre aqui o número.
                             Os produtos e o valor vêm da venda.
                         </p>
                         <div className="linha">
@@ -157,9 +150,10 @@ function ModalNota({ modo, aoFechar, aoSalvar }: ModalNotaProps) {
                     </>
                 )}
 
+                {modo.tipo === "link" && (
                 <label>
                     <span>
-                        Link do PDF no Emitte {modo.tipo === "emitir" && <span className="dica">(opcional)</span>}
+                        Link do PDF no Emitte
                     </span>
                     <input
                         type="url"
@@ -167,11 +161,12 @@ function ModalNota({ modo, aoFechar, aoSalvar }: ModalNotaProps) {
                         onChange={(evento) => setLink(evento.target.value)}
                         placeholder="https://..."
                         maxLength={500}
-                        autoFocus={modo.tipo === "link"}
+                        autoFocus
                         aria-invalid={avisoLink ? true : undefined}
                     />
                     {avisoLink && <span className="erro">{avisoLink}</span>}
                 </label>
+                )}
 
                 {erroServidor && <p className="erro" role="alert">{erroServidor}</p>}
 

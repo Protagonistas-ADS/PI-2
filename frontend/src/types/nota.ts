@@ -21,10 +21,10 @@ export interface NotaFiscal {
     data_emissao: string;
 }
 
-// Corpo de POST /notas
+// Corpo de POST /notas (nota substituta de uma nota cancelada)
 export interface NovaNota {
     venda_id: number;
     numero: string;
     natureza_operacao: string | null;
-    link_pdf: string | null;
+    link_pdf?: string | null; // opcional: o link pode ser adicionado depois, na tela de Notas
 }

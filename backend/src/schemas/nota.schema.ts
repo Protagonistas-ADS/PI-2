@@ -28,17 +28,20 @@ const LinkPdfSchema = z.preprocess(
         .optional()
 ).transform((valor) => valor ?? null);
 
-// Corpo de POST /notas (só administrador)
+// Número da nota fiscal (mesma regra ao emitir nota e ao entregar o pedido)
+export const NumeroNotaSchema = z.string({ error: "Informe o número da nota fiscal." })
+    .trim()
+    .min(1, "Informe o número da nota fiscal.")
+    .max(30, "O número da nota deve ter no máximo 30 caracteres.")
+    .regex(/^[A-Za-z0-9./-]+$/, "Use só letras, números, ponto, barra ou hífen no número da nota.");
+
+// Corpo de POST /notas (só administrador): nota substituta de uma nota cancelada
 export const CriarNotaSchema = z.object({
     venda_id: z.number({ error: "Informe a venda." })
         .int("Identificação da venda inválida.")
         .positive("Identificação da venda inválida."),
 
-    numero: z.string({ error: "Informe o número da nota fiscal." })
-        .trim()
-        .min(1, "Informe o número da nota fiscal.")
-        .max(30, "O número da nota deve ter no máximo 30 caracteres.")
-        .regex(/^[A-Za-z0-9./-]+$/, "Use só letras, números, ponto, barra ou hífen no número da nota."),
+    numero: NumeroNotaSchema,
 
     natureza_operacao: z.string({ error: "A natureza da operação deve ser um texto." })
         .trim()

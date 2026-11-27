@@ -84,9 +84,9 @@ Tudo usa os dados de demonstração do [`seed.sql`](../backend/src/database/seed
 | No nº 16, clicar em **10 unidades** → fechar | "Vejo os itens e o recado do cliente." |
 | **Confirmar** o nº 16 | "Ao confirmar, **o estoque baixa sozinho**, e tudo acontece numa transação no banco: ou tudo dá certo, ou nada é gravado." |
 | Ir em **Movimentações** | "Cada entrada e saída fica registrada: **quem fez, quando, por quê e de qual pedido**. Olha a saída de 10 PBR do pedido nº 16, e o saldo foi de 142 para 132." |
-| Voltar ao **Dashboard** → **Marcar pronto** → **Entregue** → **Sim, foi entregue** | "Separei, o cliente retirou: ao marcar entregue, **a venda é criada automaticamente**. As vendas do mês subiram para R$ 1.375." |
-| Ir em **Vendas** → **Emitir nota** na venda nº 7 → `NF-000006`, link `https://example.com/notas/NF-000006.pdf` → **Registrar nota** | "A nota é emitida no **Emitte**, que o cliente já usa. Aqui registramos o número e o link do PDF." |
-| Ir em **Notas fiscais** | "Notas emitidas e canceladas, com o link do PDF. Se uma nota sai errada, cancelo e emito outra." |
+| Voltar ao **Dashboard** → **Marcar pronto** → **Entregue** → digitar `NF-000008` → **Sim, foi entregue** | "Separei, o cliente retirou. Para entregar, **o sistema exige o número da nota fiscal** emitida no **Emitte**: não existe venda sem nota. A venda e a nota são criadas juntas. As vendas do mês subiram para R$ 1.375." |
+| Ir em **Vendas** | "Toda venda aparece com o número da sua nota fiscal. Não tem filtro de “sem nota”, porque venda sem nota não pode existir." |
+| Ir em **Notas fiscais** | "Notas emitidas e canceladas. Se uma nota sai errada, cancelo e registro a substituta na tela de Vendas." |
 | Mostrar rapidamente **Pedidos** e **Usuários** | "Tabelas completas com busca, filtros e totais: pedidos por status, e clientes com quantos pedidos fizeram e quanto compraram." |
 
 > [!NOTE]
