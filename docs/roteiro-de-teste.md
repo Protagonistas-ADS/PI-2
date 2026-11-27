@@ -4,7 +4,7 @@ Passo a passo para conferir o sistema inteiro, do visitante ao administrador, us
 
 Siga **na ordem**: cada parte usa o que a anterior criou. Os valores esperados valem para um banco recém-criado com `schema.sql` + `seed.sql`.
 
-> Este roteiro foi executado de ponta a ponta em 21/11/2026, num banco recém-criado com o seed. Em 22/11/2026, o catálogo e os dados de demonstração foram atualizados: agora há três produtos ativos e um registro inativo para preservar o histórico. Os passos afetados por essa mudança precisam ser revalidados antes de considerar esta versão do roteiro totalmente testada.
+> Este roteiro foi executado de ponta a ponta em 21/11/2026, num banco recém-criado com o seed. Em 22/11/2026, o catálogo e os dados de demonstração foram atualizados: agora há só os três produtos da loja. Em 26/11/2026, as notas passaram a ser obrigatórias na entrega (sem link de PDF) e os valores abaixo foram conferidos de novo pelo sistema.
 
 ---
 
@@ -84,31 +84,29 @@ Siga **na ordem**: cada parte usa o que a anterior criou. Os valores esperados v
 | D7c | Clicar em **Entregue** de novo, digitar **NF-000008** → **Sim, foi entregue** | Sem campo de link: só o número | |
 | D8 | Conferir depois da entrega | "Pedido nº 16 entregue (venda registrada com a nota NF-000008)." · **Vendas de novembro R$ 1.375,00** (3 pedidos entregues) | |
 | D9 | Na janela do cliente, atualizar **Meus Pedidos** | O nº 16 aparece como **Entregue** | |
-| D10 | Ir em **Pedidos** (menu lateral) | **Todos (16)** · Pendentes (2) · Confirmados (2) · Prontos (2) · Entregues (7) · Cancelados (3) · soma de R$ 15.515,00 | |
-| D11 | Buscar "Rota Sul" e filtrar por **Entregues** | Só os pedidos 6 e 1 da Transportadora Rota Sul · "Mostrando 2 de 16 pedidos · soma de R$ 3.630,00" | |
+| D10 | Ir em **Pedidos** (menu lateral) | **Todos (16)** · Pendentes (2) · Confirmados (2) · Prontos (2) · Entregues (7) · Cancelados (3) · soma de R$ 13.900,00 | |
+| D11 | Buscar "Rota Sul" e filtrar por **Entregues** | Só os pedidos 6 e 1 da Transportadora Rota Sul · "Mostrando 2 de 16 pedidos · soma de R$ 3.250,00" | |
 
 ## E. Administrador: estoque
 
 | # | Passo | Resultado esperado | ✓ |
 |:-:|-------|--------------------|:-:|
-| E1 | Ir em **Movimentações** | Histórico com **Todas (25)**. A primeira linha é a saída de 10 Palete PBR, motivo "Confirmação do pedido nº 16", responsável Administrador Teste, origem "Pedido nº 16" | |
+| E1 | Ir em **Movimentações** | Histórico com **Todas (24)**. A primeira linha é a saída de 10 Palete PBR, motivo "Confirmação do pedido nº 16", responsável Administrador Teste, origem "Pedido nº 16" | |
 | E2 | Abrir a lista de produtos do formulário | Palete PBR com **132 un.** (era 142) | |
 | E3 | Escolher **Saída**, Palete Euro (EPAL), quantidade **100**, motivo qualquer, e clicar **Registrar saída** | Não registra: "Estoque insuficiente: há 65 un. deste produto." | |
 | E4 | Escolher **Entrada**, Palete Euro (EPAL), quantidade 20, motivo "Chegada de lote do fornecedor" | A prévia mostra "Estoque fica em 85 un." | |
-| E5 | Clicar **Registrar entrada** | Entrada de 20 unidades de Palete Euro (EPAL) registrada. Estoque: 65 → 85 un. · histórico com **Todas (26)**, Entradas (9), Manuais (10) | |
+| E5 | Clicar **Registrar entrada** | Entrada de 20 unidades de Palete Euro (EPAL) registrada. Estoque: 65 → 85 un. · histórico com **Todas (25)**, Entradas (8), Manuais (9) | |
 | E6 | Voltar ao **Dashboard** | **Estoque baixo 0** · "Nenhum produto com 10 un. ou menos" | |
 
 ## F. Administrador: vendas e notas fiscais
 
 | # | Passo | Resultado esperado | ✓ |
 |:-:|-------|--------------------|:-:|
-| F1 | Ir em **Vendas** | **Sem** os botões Todas / Com nota / Sem nota. "Mostrando 7 de 7 vendas · total de R$ 8.080,00". Todas as vendas mostram o número da nota; a primeira é a venda nº 7 do pedido nº 16, com **NF-000008** | |
-| F2 | Ir em **Notas fiscais** | **Todas (8)** · Emitidas (7) · Canceladas (1) · emitidas somam R$ 8.080,00. NF-000008 no topo, **Emitida**, "Sem link" | |
-| F3 | Na **NF-000004** (sem link), clicar **Adicionar link** e colar `javascript:alert(1)` → **Salvar link** | Não aceita: "Informe um link válido, começando com http:// ou https://." | |
-| F4 | Trocar para `https://example.com/notas/NF-000004.pdf` → **Salvar link** | "Link da nota NF-000004 salvo." e aparece "Abrir PDF" | |
-| F5 | Clicar **Cancelar** na NF-000008 → **Sim, cancelar nota** | "Nota NF-000008 cancelada." · Emitidas (6) · Canceladas (2) · em **Vendas**, a venda nº 7 mostra "Nota cancelada" e o botão **Emitir nota substituta** | |
-| F6 | Clicar **Emitir nota substituta** na venda nº 7 e usar o número **NF-000005** (já existe) → **Registrar nota** | A janela (só número e natureza, **sem link**) mostra "Já existe uma nota com o número NF-000005." | |
-| F7 | Trocar para **NF-000009** → **Registrar nota** | "Nota NF-000009 registrada para a venda nº 7." e a venda volta a mostrar **NF-000009** | |
+| F1 | Ir em **Vendas** | **Sem** os botões Todas / Com nota / Sem nota. "Mostrando 7 de 7 vendas · total de R$ 7.700,00". Todas as vendas mostram o número da nota; a primeira é a venda nº 7 do pedido nº 16, com **NF-000008** | |
+| F2 | Ir em **Notas fiscais** | **Todas (8)** · Emitidas (7) · Canceladas (1) · emitidas somam R$ 7.700,00. NF-000008 no topo, **Emitida**. **Sem** coluna de PDF ou link | |
+| F3 | Clicar **Cancelar** na NF-000008 → **Sim, cancelar nota** | "Nota NF-000008 cancelada." · Emitidas (6) · Canceladas (2) · em **Vendas**, a venda nº 7 mostra "Nota cancelada" e o botão **Emitir nota substituta** | |
+| F4 | Clicar **Emitir nota substituta** na venda nº 7 e usar o número **NF-000005** (já existe) → **Registrar nota** | A janela (só número e natureza, **sem link**) mostra "Já existe uma nota com o número NF-000005." | |
+| F5 | Trocar para **NF-000009** → **Registrar nota** | "Nota NF-000009 registrada para a venda nº 7." e a venda volta a mostrar **NF-000009** | |
 
 ## G. Administrador: usuários e perfil
 

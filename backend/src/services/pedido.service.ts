@@ -235,8 +235,7 @@ const PedidoService = {
                 await NotaService.RegistrarNaTransacao(conexao, {
                     venda_id: venda.vendaId,
                     numero: notaNumero,
-                    natureza_operacao: NATUREZA_PADRAO,
-                    link_pdf: null
+                    natureza_operacao: NATUREZA_PADRAO
                 });
             }
 

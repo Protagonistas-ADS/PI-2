@@ -31,7 +31,6 @@ export interface NotaListada extends RowDataPacket {
     natureza_operacao: string;
     valor_total: string | number;
     status: StatusNota;
-    link_pdf: string | null;
     data_emissao: Date;
 }
 
@@ -84,13 +83,12 @@ const NotaRepository = {
         vendaId: number,
         numero: string,
         naturezaOperacao: string,
-        valorTotal: number,
-        linkPdf: string | null
+        valorTotal: number
     ): Promise<ResultSetHeader> {
         const [resultado] = await conexao.execute<ResultSetHeader>(
-            `INSERT INTO nota (venda_id, numero, natureza_operacao, valor_total, status, link_pdf)
-             VALUES (?, ?, ?, ?, 'emitida', ?)`,
-            [vendaId, numero, naturezaOperacao, valorTotal, linkPdf]
+            `INSERT INTO nota (venda_id, numero, natureza_operacao, valor_total, status)
+             VALUES (?, ?, ?, ?, 'emitida')`,
+            [vendaId, numero, naturezaOperacao, valorTotal]
         );
 
         return resultado;
@@ -136,15 +134,6 @@ const NotaRepository = {
         return resultado;
     },
 
-    async AtualizarLink(conexao: PoolConnection, id: number, linkPdf: string | null): Promise<ResultSetHeader> {
-        const [resultado] = await conexao.execute<ResultSetHeader>(
-            `UPDATE nota SET link_pdf = ? WHERE id = ?`,
-            [linkPdf, id]
-        );
-
-        return resultado;
-    },
-
     // Todas as notas, da mais nova para a mais antiga, com o pedido e o cliente
     async Listar(): Promise<NotaListada[]> {
         const [resultado] = await db.execute<NotaListada[]>(
@@ -157,7 +146,6 @@ const NotaRepository = {
                 n.natureza_operacao,
                 n.valor_total,
                 n.status,
-                n.link_pdf,
                 n.data_emissao
              FROM nota n
              INNER JOIN venda v ON v.id = n.venda_id

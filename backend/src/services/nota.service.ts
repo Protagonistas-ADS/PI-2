@@ -27,7 +27,7 @@ async function emTransacao<T>(passo: (conexao: PoolConnection) => Promise<T>): P
     }
 }
 
-// A nota fiscal é emitida no Emitte; o sistema guarda os dados, o status e o link do PDF.
+// A nota fiscal é emitida no Emitte; o sistema guarda o número, os dados e o status.
 const NotaService = {
 
     // POST /notas: registra a nota substituta de uma venda cuja nota foi cancelada
@@ -74,8 +74,7 @@ const NotaService = {
             dados.venda_id,
             dados.numero,
             dados.natureza_operacao,
-            valorTotal,
-            dados.link_pdf
+            valorTotal
         );
 
         for (const item of itens) {
@@ -88,7 +87,6 @@ const NotaService = {
             numero: dados.numero,
             valor_total: valorTotal,
             status: "emitida" as const,
-            link_pdf: dados.link_pdf,
             quantidade_itens: itens.length
         };
     },
@@ -106,7 +104,6 @@ const NotaService = {
             natureza_operacao: nota.natureza_operacao,
             valor_total: Number(nota.valor_total),
             status: nota.status,
-            link_pdf: nota.link_pdf,
             data_emissao: nota.data_emissao
         }));
     },
@@ -128,25 +125,6 @@ const NotaService = {
             await NotaRepository.Cancelar(conexao, id);
 
             return { id, numero: nota.numero, status: "cancelada" as const };
-        });
-    },
-
-    // PATCH /notas/:id/link: trocar ou apagar o link do PDF (só de nota emitida)
-    async AtualizarLink(id: number, linkPdf: string | null) {
-        return await emTransacao(async (conexao) => {
-            const nota = await NotaRepository.BuscarParaAtualizar(conexao, id);
-
-            if (!nota) {
-                throw criarErro("Nota fiscal não encontrada.", 404);
-            }
-
-            if (nota.status === "cancelada") {
-                throw criarErro(`A nota ${nota.numero} está cancelada e não pode ser alterada.`, 409);
-            }
-
-            await NotaRepository.AtualizarLink(conexao, id, linkPdf);
-
-            return { id, link_pdf: linkPdf };
         });
     }
 };

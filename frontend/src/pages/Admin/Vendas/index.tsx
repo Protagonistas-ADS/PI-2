@@ -295,7 +295,7 @@ function Vendas() {
 
             {vendaParaNota && (
                 <ModalNota
-                    modo={{ tipo: "emitir", venda: vendaParaNota }}
+                    venda={vendaParaNota}
                     aoFechar={() => setVendaParaNota(null)}
                     aoSalvar={carregar}
                 />
