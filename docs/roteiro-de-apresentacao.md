@@ -84,7 +84,7 @@ Tudo usa os dados de demonstração do [`seed.sql`](../backend/src/database/seed
 | No nº 16, clicar em **10 unidades** → fechar | "Vejo os itens e o recado do cliente." |
 | **Confirmar** o nº 16 | "Ao confirmar, **o estoque baixa sozinho**, e tudo acontece numa transação no banco: ou tudo dá certo, ou nada é gravado." |
 | Ir em **Movimentações** | "Cada entrada e saída fica registrada: **quem fez, quando, por quê e de qual pedido**. Olha a saída de 10 PBR do pedido nº 16, e o saldo foi de 142 para 132." |
-| Voltar ao **Dashboard** → **Marcar pronto** → **Entregue** → **Sim, foi entregue** | "Separei, o cliente retirou: ao marcar entregue, **a venda é criada automaticamente**. As vendas do mês subiram para R$ 1.815." |
+| Voltar ao **Dashboard** → **Marcar pronto** → **Entregue** → **Sim, foi entregue** | "Separei, o cliente retirou: ao marcar entregue, **a venda é criada automaticamente**. As vendas do mês subiram para R$ 1.375." |
 | Ir em **Vendas** → **Emitir nota** na venda nº 7 → `NF-000006`, link `https://example.com/notas/NF-000006.pdf` → **Registrar nota** | "A nota é emitida no **Emitte**, que o cliente já usa. Aqui registramos o número e o link do PDF." |
 | Ir em **Notas fiscais** | "Notas emitidas e canceladas, com o link do PDF. Se uma nota sai errada, cancelo e emito outra." |
 | Mostrar rapidamente **Pedidos** e **Usuários** | "Tabelas completas com busca, filtros e totais: pedidos por status, e clientes com quantos pedidos fizeram e quanto compraram." |
@@ -102,9 +102,7 @@ Tudo usa os dados de demonstração do [`seed.sql`](../backend/src/database/seed
 - "São 8 tabelas no MySQL. O coração é **pedido → venda → nota fiscal**, e o **estoque** é controlado pela tabela de **movimentações**."
 - "Tiramos tudo de cotação: tabelas, colunas e dados. O status do pedido virou **pendente → confirmado → pronto para retirada → entregue**, ou cancelado."
 - "A movimentação guarda o **pedido de origem**, o **responsável** e o **motivo**. A nota tem **status** (emitida/cancelada) e o **link do PDF**."
-- "O `seed.sql` cria dados coerentes para testar: 8 usuários, 5 produtos (3 ativos e 2 que saíram de linha, para preservar o histórico), 15 pedidos em todos os status, 6 vendas, 5 notas e 27 movimentações: todas as 8 tabelas têm 5 registros ou mais. **O estoque de cada produto é exatamente a soma das movimentações**."
-- "Seguimos a regra de **não guardar atributo derivado**: subtotal e valor total não ficam no banco, são calculados na consulta com `SUM(quantidade * preco_unitario)`. O preço unitário do item fica guardado porque é o preço **do dia da compra**: se o catálogo mudar, o pedido antigo não muda."
-- "No `consultas.sql` estão 7 consultas úteis para a loja (faturamento mensal, produtos mais vendidos, melhores clientes, estoque abaixo da média, conferência do estoque...), usando JOIN, WHERE, GROUP BY com HAVING, ORDER BY e subconsulta."
+- "O `seed.sql` cria dados coerentes para testar: 8 usuários, 4 registros de produtos (3 ativos e 1 inativo para preservar o histórico), 15 pedidos em todos os status, 6 vendas, 5 notas e 24 movimentações. **O estoque de cada produto é exatamente a soma das movimentações**."
 - "Produtos não são apagados, só desativados, para não perder o histórico de pedidos e notas."
 
 ---

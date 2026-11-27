@@ -40,12 +40,11 @@ const VendaService = {
             throw criarErro("O pedido não possui produtos.", 400);
         }
 
-        // O valor não vai para o banco (atributo derivado); só é devolvido na resposta.
         const valorTotal = itens.reduce((total, item) => {
             return total + Number(item.preco_unitario) * item.quantidade;
         }, 0);
 
-        const resultadoVenda = await VendaRepository.Criar(conexao, pedidoId);
+        const resultadoVenda = await VendaRepository.Criar(conexao, pedidoId, valorTotal);
 
         return {
             vendaId: resultadoVenda.insertId,
